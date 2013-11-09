@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">车位易</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="ys_slogan">去到哪，停到哪</string>
+    
+    <!-- 错误信息 -->
+    <string name="ys_connection_error">连接服务器失败，请稍后再试</string>
+    <string name="ys_connection_no_open">网络连接不可用，请检查网络配置</string>
+    
+    <!-- 其他字符串 -->
+    <string name="ys_login">登录</string>
+    <string name="ys_register_num">注册号</string>
+    <string name="ys_user_identity_num">身份证号</string>
+    <string name="ys_user_phone">手机号</string>
+    <string name="ys_user_car_num">车牌号</string>
+    <string name="ys_user_email">邮箱地址</string>
+    <string name="ys_user_name">姓名</string>
+    <string name="ys_user_password">登录密码</string>
+    
+</resources>
