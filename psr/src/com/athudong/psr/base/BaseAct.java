@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
+import android.widget.Toast;
 
 /**
  * activity的基类，封装了通用的方法
@@ -14,7 +16,13 @@ public class BaseAct extends Activity {
 	private BaseTaskPool taskPool;
 	
 	public BaseAct(){
+		
 		taskPool = new BaseTaskPool(this);
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected <T extends View> T getView(int id) {
+		return (T) findViewById(id);
 	}
 	
 	protected void forward(Class<?> classObj){
@@ -23,6 +31,14 @@ public class BaseAct extends Activity {
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 		this.startActivity(intent);
 		this.finish();
+	}
+	
+	public void showToast(String result) {
+		Toast.makeText(this,result,Toast.LENGTH_SHORT).show();
+	}
+
+	public void showLongToast(String result) {
+		Toast.makeText(this,result,Toast.LENGTH_LONG).show();
 	}
 	
 	/**异步任务执行完毕使用handle返回主线程进行处理*/

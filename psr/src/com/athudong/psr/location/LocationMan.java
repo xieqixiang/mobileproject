@@ -13,7 +13,6 @@ import com.baidu.location.LocationClientOption;
 
 /**
  * 使用百度提供的SDK，获取当前位置信息
- * 
  * @author 谢启祥
  */
 public class LocationMan {

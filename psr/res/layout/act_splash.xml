@@ -17,7 +17,7 @@
         android:layout_below="@id/ai_app_name"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:text="@string/ys_slogan"
+        android:text="@string/as_asslogan"
         android:textSize="18sp"
          android:textColor="@android:color/white" />
 

@@ -45,7 +45,7 @@ public class TaskNetworkThread implements Runnable {
 					break;
 				}
 			}else{
-				baseTask.onError(context.getString(R.string.ys_connection_no_open));
+				baseTask.onError(context.getString(R.string.as_connection_error));
 			}
 		} catch (InterruptedException e) {
 			String errorMessage = e.getMessage();
