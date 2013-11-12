@@ -8,6 +8,7 @@ public class C {
 	
 	/**查询网络状态信息的content*/
 	public static final String APN_URI = "content://telephony/carriers/preferapn";
+	public static final String CLAUSE_URL = "http://www.baidu.com";
 	
 	/**任务标记*/
 	public class task {

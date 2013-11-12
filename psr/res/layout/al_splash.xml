@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/math_width_hight"
-    android:background="@color/yc_blue"
+    android:background="@color/ac_blue"
     tools:context=".ActSplash" >
 
     <TextView

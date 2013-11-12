@@ -27,12 +27,21 @@ public class BaseAct extends Activity {
 		return (T) findViewById(id);
 	}
 	
+	/**跳转到另一个activity,同时把当前activity finish*/
 	protected void forward(Class<?> classObj){
 		Intent intent = new Intent(Intent.ACTION_VIEW);
 		intent.setClass(this, classObj);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 		this.startActivity(intent);
 		this.finish();
+	}
+	
+	/**跳转到另一个activity*/
+	protected void overLayer(Class<?> classObje){
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setClass(this,classObje);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+		this.startActivity(intent);
 	}
 	
 	public void showToast(String result) {

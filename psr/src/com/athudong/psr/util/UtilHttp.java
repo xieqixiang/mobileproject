@@ -43,4 +43,10 @@ public class UtilHttp {
 		}
 	    return null;
 	}
+	
+	
+	private Object xmlParse(InputStream stream,int taskId){
+		XmlParse parse = new XmlParse();
+		return parse.readXml(stream);
+	}
 }
