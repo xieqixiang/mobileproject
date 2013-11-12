@@ -19,7 +19,7 @@ public class BaseTaskPool {
 	
 	public BaseTaskPool(BaseAct act){
 		context = act;
-		taskPool = Executors.newCachedThreadPool();
+		taskPool = Executors.newFixedThreadPool(10);
 	}
 	
 	/**访问网络的异步任务*/

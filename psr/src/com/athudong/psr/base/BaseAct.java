@@ -1,5 +1,7 @@
 package com.athudong.psr.base;
 
+import java.util.HashMap;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -73,5 +75,25 @@ public class BaseAct extends Activity {
 				sendMessage(BaseTask.TASK_NETWORK, this.getId(), error,this.getHandler());
 			}
 		}, delayTime);
+	}
+	
+	public  void doNetworkTaskAsync(int taskId, Handler handler,int delayTime,HashMap<String,String> requestParams) {
+		taskPool.addNetworkTask(taskId, new BaseTask(handler) {
+
+			@Override
+			public void onComplete(Object httpResut) {
+				sendMessage(BaseTask.TASK_COMPLETE, this.getId(), httpResut,this.getHandler());
+			}
+
+			@Override
+			public void onComplete() {
+				sendMessage(BaseTask.TASK_COMPLETE, this.getId(), null,this.getHandler());
+			}
+
+			@Override
+			public void onError(String error) {
+				sendMessage(BaseTask.TASK_NETWORK, this.getId(), error,this.getHandler());
+			}
+		}, delayTime,requestParams);
 	}
 }

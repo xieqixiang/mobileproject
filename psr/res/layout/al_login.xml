@@ -15,8 +15,8 @@
         android:inputType="text"
         android:maxLength="15"
         android:paddingLeft="5dp"
-        android:textColor="@android:color/white"
-        android:textSize="20sp" />
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
 
     <EditText
         android:id="@+id/ai_user_name"
@@ -28,8 +28,8 @@
         android:inputType="text"
         android:maxLength="15"
         android:paddingLeft="5dp"
-        android:textColor="@android:color/white"
-        android:textSize="20sp" />
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
 
     <EditText
         android:id="@+id/ai_password"
@@ -41,8 +41,8 @@
         android:inputType="textPassword"
         android:maxLength="15"
         android:paddingLeft="5dp"
-        android:textColor="@android:color/white"
-        android:textSize="20sp" />
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
 
     <EditText
         android:id="@+id/ai_email"
@@ -54,8 +54,8 @@
         android:inputType="textEmailAddress"
         android:maxLength="15"
         android:paddingLeft="5dp"
-        android:textColor="@android:color/white"
-        android:textSize="20sp" />
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -65,29 +65,32 @@
 
         <Button
             android:id="@+id/ai_login"
-            android:layout_width="140dp"
-            android:layout_height="35dp"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
             android:onClick="controlClick"
             android:text="@string/as_login"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/ai_register"
-            android:layout_width="140dp"
-            android:layout_height="35dp"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
             android:layout_marginRight="10dp"
             android:layout_toRightOf="@id/ai_login"
             android:onClick="controlClick"
             android:text="@string/as_register"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
     </RelativeLayout>
 
     <Button
         android:id="@+id/ai_forget_pass"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:onClick="controlClick"
-        android:text="@string/as_forget_password" />
+        android:text="@string/as_forget_password"
+        android:textSize="18sp" />
 
 </LinearLayout>

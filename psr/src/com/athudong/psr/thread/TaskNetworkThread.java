@@ -2,10 +2,10 @@ package com.athudong.psr.thread;
 
 import java.util.HashMap;
 import android.content.Context;
-
 import com.athudong.psr.R;
 import com.athudong.psr.base.BaseTask;
 import com.athudong.psr.base.C;
+import com.athudong.psr.service.UserService;
 import com.athudong.psr.util.Logger;
 import com.athudong.psr.util.UtilHttpStatus;
 
@@ -14,11 +14,10 @@ import com.athudong.psr.util.UtilHttpStatus;
  */
 public class TaskNetworkThread implements Runnable {
 
-	private String taskMethod;
 	private HashMap<String,String> taskArgs;
 	private BaseTask baseTask;
 	private int delayTime = 0;
-	private int taskId = 0;
+	private int taskId ;
 	private String requesXml;
 	private Context context;
 	
@@ -41,13 +40,16 @@ public class TaskNetworkThread implements Runnable {
 			if(UtilHttpStatus.detect(context)){
 				switch(taskId){
 				case C.task.complete:
+					UserService userService = new UserService(taskArgs);
+					requesXml = userService.requestXml();
+					Logger.d("TaskNetwork",requesXml);
 					baseTask.onComplete(httpResult);
 					break;
 				}
 			}else{
 				baseTask.onError(context.getString(R.string.as_connection_error));
 			}
-		} catch (InterruptedException e) {
+		}catch (InterruptedException e) {
 			String errorMessage = e.getMessage();
 			baseTask.onError(errorMessage);
 			Logger.e("TaskNetworkThread",e.getMessage(),e);

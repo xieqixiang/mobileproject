@@ -2,4 +2,5 @@
 <resources>
     <color  name="yc_blue">#09B4EC</color>
     <color name="yc_grey">#EFEFEF</color>
+    <color name="yc_dark_grey">#575757</color>
 </resources>

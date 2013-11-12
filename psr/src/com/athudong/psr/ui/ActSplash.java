@@ -19,7 +19,7 @@ public class ActSplash extends BaseAct {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.act_splash);
+		setContentView(R.layout.al_splash);
 		this.doTaskAsync(C.task.splash, new IndexHandle(this),3000);
 	}
 

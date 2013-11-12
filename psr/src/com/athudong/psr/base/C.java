@@ -20,4 +20,10 @@ public class C {
 	public class key {
 		public static final String result = "10";
 	}
+	
+	public class action{
+		public static final String login = "Login";
+		public static final String register = "New";
+		public static final String one = "reg";
+	}
 }

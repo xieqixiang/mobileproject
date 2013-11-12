@@ -10,9 +10,10 @@
     <string name="as_connection_error">连接服务器失败，请稍后再试</string>
     <string name="as_connection_no_open">网络连接不可用，请检查网络配置</string>
     <string name="as_empty_error">请输入完整信息</string>
+    <string name="as_no_match_email">请输入正确的邮箱地址</string>
     
     <!-- 其他字符串 -->
-    <string name="as_login">登陆</string>
+    <string name="as_login">登录</string>
     <string name="as_register">注册</string>
     <string name="as_forget_password">忘记密码</string>
     <string name="as_register_num">注册号</string>
@@ -22,5 +23,8 @@
     <string name="as_user_email">邮箱地址</string>
     <string name="as_user_name">姓名</string>
     <string name="as_user_password">登录密码</string>
+    <string name="as_sure">确定</string>
+    <string name="as_cancel">取消</string>
+    <string name="as_logining">正在登录...</string>
     
 </resources>
