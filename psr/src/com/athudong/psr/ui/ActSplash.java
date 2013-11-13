@@ -46,7 +46,7 @@ public class ActSplash extends BaseAct {
 			case BaseTask.TASK_COMPLETE:
 				int taskId = bundle.getInt(C.key.result);
 				if(taskId==C.task.splash){
-					actSplash.forward(ActLogin.class);
+					actSplash.forward(ActLogin.class,actSplash);
 				}
 				break;
 			}

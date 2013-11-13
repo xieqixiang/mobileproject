@@ -57,7 +57,7 @@ public class ActLogin extends BaseAct {
 			requestParams.put("password",md5Pass);
 			requestParams.put("class",C.action.one);
 			requestParams.put("action",C.action.login);
-			this.doNetworkTaskAsync(C.task.complete,new IndexHandler(this),0,requestParams);
+			this.doNetworkTaskAsync(C.task.complete,new IndexHandler(this),3000,requestParams);
 			break;
 		case R.id.ai_register:
 			overLayer(ActRegister.class);
@@ -82,7 +82,8 @@ public class ActLogin extends BaseAct {
 		  ActLogin actLogin = sf.get();
 		  switch(what){
 		  case BaseTask.TASK_COMPLETE:
-			  actLogin.forward(ActMain.class);
+			  DialogManager.progressDialogdimiss();
+			  actLogin.forward(ActMain.class,actLogin);
 			  break;
 		  case BaseTask.TASK_ERROR:
 			  DialogManager.progressDialogdimiss();
@@ -91,7 +92,6 @@ public class ActLogin extends BaseAct {
 			  }
 			  break;
 		  }
-			super.handleMessage(msg);
 		}
 	}
 }

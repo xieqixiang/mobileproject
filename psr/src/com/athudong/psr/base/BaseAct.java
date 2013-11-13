@@ -28,12 +28,13 @@ public class BaseAct extends Activity {
 	}
 	
 	/**跳转到另一个activity,同时把当前activity finish*/
-	protected void forward(Class<?> classObj){
+	protected void forward(Class<?> classObj,BaseAct act){
 		Intent intent = new Intent(Intent.ACTION_VIEW);
 		intent.setClass(this, classObj);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-		this.startActivity(intent);
-		this.finish();
+		act.startActivity(intent);
+		BaseApp.activities.remove(act);
+		act.finish();
 	}
 	
 	/**跳转到另一个activity*/
