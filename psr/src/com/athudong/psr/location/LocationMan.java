@@ -24,7 +24,6 @@ public class LocationMan {
 	private TextView tvAddress;
 	private ProgressBar pBar;
 	private Button getCurrentPosi;
-    private BaseAct context;
 	
 	public void setGetCurrentPosi(Button getCurrentPosi) {
 		this.getCurrentPosi = getCurrentPosi;
@@ -55,7 +54,7 @@ public class LocationMan {
 	}
 
 	public LocationMan(BaseAct context) {
-		this.context = context;
+		//this.context = context;
 		mLocationClient = new LocationClient(context);
 		mLocationClient.registerLocationListener(myLocationListener);
 		getLocation(context);
