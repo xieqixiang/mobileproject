@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="210dip"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ad_dialog_shape"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/ai_error_title"
+        android:layout_width="fill_parent"
+        android:layout_height="35dip"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/ai_fail_message"
+        android:layout_width="210dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:singleLine="false"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" >
+    </TextView>
+
+    <Button
+        android:id="@+id/ai_suer"
+        android:layout_width="180dip"
+        android:layout_height="35dip"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/ad_selector_bg"
+        android:text="@string/as_sure"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+
+</LinearLayout>

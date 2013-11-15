@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <include layout="@layout/al_head" />
+
+    <EditText
+        android:id="@+id/ai_reg_phone"
+        style="@style/complete"
+        android:digits="0123456789"
+        android:hint="@string/as_user_phone"
+        android:inputType="phone" />
+
+    <EditText
+        android:id="@+id/ai_reg_pass"
+        style="@style/complete"
+        android:hint="@string/as_user_password"
+        android:inputType="textPassword"
+        android:singleLine="true" />
+
+    <EditText
+        android:id="@+id/ai_reg_confirm_pass"
+        style="@style/complete"
+        android:hint="@string/as_confim_pass"
+        android:inputType="textPassword"
+        android:paddingLeft="5dp" />
+
+    <EditText
+        android:id="@+id/ai_reg_car_num"
+        style="@style/complete"
+        android:hint="@string/as_user_car_num"
+        android:inputType="text"
+        android:singleLine="true" />
+
+    <EditText
+        android:id="@+id/ai_reg_email"
+        style="@style/complete"
+        android:hint="@string/as_user_email"
+        android:inputType="textEmailAddress"
+        android:singleLine="true" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp" >
+
+        <CheckBox
+            android:id="@+id/ai_reg_consent"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:checked="true" />
+
+        <TextView
+            android:id="@+id/ai_reg_tv_consent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/ai_reg_consent"
+            android:text="@string/as_consent"
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/ai_reg_app_clause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/ai_reg_tv_consent"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:onClick="controlClick"
+            android:text="@string/as_clause"
+            android:textColor="@color/ac_blue"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/ai_reg_submit"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:onClick="controlClick"
+        android:text="@string/as_submit"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+</LinearLayout>
