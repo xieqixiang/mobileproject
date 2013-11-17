@@ -17,11 +17,11 @@ public class BaseApp extends Application {
 	/** 存放所有已打开的activity */
 	public static ArrayList<Activity> activities;
 
-	private BMapManager mBMapManager = null;
+	public BMapManager mBMapManager = null;
 	private static BaseApp mInstance = null;
 	public boolean m_bKeyRight = true;
 
-	public static final String strKey = "AC2375aa2ade6425fbf3c290596aa54d";
+	public static final String strKey = "A2bdc11b54ed000060af179a5f2850b2";
 
 	@Override
 	public void onCreate() {
@@ -30,6 +30,8 @@ public class BaseApp extends Application {
 		mInstance = this;
 		initEngineManager(this);
 	}
+	
+	
 
 	public void initEngineManager(Context context) {
 		if (mBMapManager == null) {
@@ -51,11 +53,9 @@ public class BaseApp extends Application {
 		@Override
 		public void onGetNetworkState(int iError) {
 			if (iError == MKEvent.ERROR_NETWORK_CONNECT) {
-				Toast.makeText(BaseApp.getInstance().getApplicationContext(),
-						"您的网络出错啦！", Toast.LENGTH_LONG).show();
+				Toast.makeText(BaseApp.getInstance().getApplicationContext(),"您的网络出错啦！", Toast.LENGTH_LONG).show();
 			} else if (iError == MKEvent.ERROR_NETWORK_DATA) {
-				Toast.makeText(BaseApp.getInstance().getApplicationContext(),
-						"输入正确的检索条件！", Toast.LENGTH_LONG).show();
+				Toast.makeText(BaseApp.getInstance().getApplicationContext(),"输入正确的检索条件！", Toast.LENGTH_LONG).show();
 			}
 			// ...
 		}
@@ -64,9 +64,7 @@ public class BaseApp extends Application {
 		public void onGetPermissionState(int iError) {
 			if (iError == MKEvent.ERROR_PERMISSION_DENIED) {
 				// 授权Key错误：
-				Toast.makeText(BaseApp.getInstance().getApplicationContext(),
-						"请在 DemoApplication.java文件输入正确的授权Key！",
-						Toast.LENGTH_LONG).show();
+				Toast.makeText(BaseApp.getInstance().getApplicationContext(),"请在 DemoApplication.java文件输入正确的授权Key！",Toast.LENGTH_LONG).show();
 				BaseApp.getInstance().m_bKeyRight = false;
 			}
 		}

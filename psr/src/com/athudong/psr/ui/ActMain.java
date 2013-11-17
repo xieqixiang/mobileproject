@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import com.athudong.psr.R;
 import com.athudong.psr.adapter.AdapFragmentPager;
+import com.athudong.psr.base.BaseApp;
 import com.athudong.psr.fragment.SampleListFragment;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.app.SlidingFragmentActivity;
@@ -80,7 +81,16 @@ public class ActMain extends SlidingFragmentActivity {
 			@Override
 			public void onPageScrollStateChanged(int arg0) {}
 		});
+	}
 	
+	@Override
+	protected void onDestroy() {
+		BaseApp app = (BaseApp) this.getApplication();
+		if(app.mBMapManager !=null){
+			app.mBMapManager.destroy();
+			app.mBMapManager = null;
+		}
+		super.onDestroy();
 	}
 
 	/** 设置选中效果 */
