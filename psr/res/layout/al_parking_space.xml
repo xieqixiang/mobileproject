@@ -7,6 +7,7 @@
     android:orientation="vertical" >
 
     <LinearLayout
+        android:id="@+id/ai_ps_ll_history_look"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -37,6 +38,7 @@
         android:background="@color/ac_blue" />
 
     <LinearLayout
+        android:id="@+id/ai_ps_ll_parking_map"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -73,6 +75,7 @@
         android:orientation="horizontal" >
 
         <LinearLayout
+            android:id="@+id/ai_ps_ll_reserve"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -101,6 +104,7 @@
             android:background="@color/ac_blue" />
 
         <LinearLayout
+            android:id="@+id/ai_ps_ll_nearby_sp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

@@ -9,7 +9,7 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 import android.widget.Button;
 import com.athudong.psr.R;
-import com.athudong.psr.adapter.FragmentPagerAdapter;
+import com.athudong.psr.adapter.AdapFragmentPager;
 import com.athudong.psr.fragment.SampleListFragment;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.app.SlidingFragmentActivity;
@@ -19,7 +19,7 @@ import com.slidingmenu.lib.app.SlidingFragmentActivity;
  */
 public class ActMain extends SlidingFragmentActivity {
 	private ViewPager vp;
-	FragmentPagerAdapter mPagerAdapter;
+	AdapFragmentPager mPagerAdapter;
 	protected ListFragment mFragment;
 	private SlidingMenu sm ;
 	private Button btn1, btn2;
@@ -57,9 +57,8 @@ public class ActMain extends SlidingFragmentActivity {
 		
 		setSlidingActionBarEnabled(false);
 		
-		mPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager());
+		mPagerAdapter = new AdapFragmentPager(getSupportFragmentManager());
 		vp.setAdapter(mPagerAdapter);
-		
 		vp.setCurrentItem(0);
 	}
 

@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 /**
  * ViewPager adapter
  */
-public class AdapterPageView extends PagerAdapter {
+public class AdapPageView extends PagerAdapter {
 
 	private ArrayList<View> pageViews ;
 	

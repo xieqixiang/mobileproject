@@ -2,9 +2,9 @@ package com.athudong.psr.location;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.athudong.psr.base.BaseAct;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -19,18 +19,12 @@ public class LocationMan {
 
 	private LocationClient mLocationClient = null;
 	private MyLocationListener myLocationListener = new MyLocationListener();
-	private String strAddress;
-	private String strTime;
-	private TextView tvAddress;
 	private ProgressBar pBar;
-	private Button getCurrentPosi;
+	private TextView tvAler;
 	
-	public void setGetCurrentPosi(Button getCurrentPosi) {
-		this.getCurrentPosi = getCurrentPosi;
-	}
-
-	public void setTvAddress(TextView tvAddress) {
-		this.tvAddress = tvAddress;
+	
+	public void setTvAler(TextView tvAler) {
+		this.tvAler = tvAler;
 	}
 
 	public void setpBar(ProgressBar pBar) {
@@ -39,14 +33,6 @@ public class LocationMan {
 
 	public LocationClient getmLocationClient() {
 		return mLocationClient;
-	}
-
-	public String getStrAddress() {
-		return strAddress;
-	}
-
-	public String getStrTime() {
-		return strTime;
 	}
 
 	public MyLocationListener getMyLocationListener() {
@@ -69,15 +55,11 @@ public class LocationMan {
 				mLocationClient.requestLocation();
 				return;
 			}
+			double longitude = location.getLongitude();//经度
+			double latitude = location.getLatitude();//纬度
 			pBar.setVisibility(View.GONE);
-			getCurrentPosi.setVisibility(View.VISIBLE);
-			strAddress = location.getAddrStr();
-			strTime = location.getTime();
-			if (strAddress==null || strAddress.trim().equals("")) {
-				//LocationMan.this.context.showToast("无法定位，请检查网络环境");
-			} else {
-				tvAddress.setText(strAddress);
-			}
+			
+			
 		}
 
 		@Override
@@ -86,14 +68,7 @@ public class LocationMan {
 				return;
 			}
 			pBar.setVisibility(View.GONE);
-			getCurrentPosi.setVisibility(View.VISIBLE);
-			strAddress = poiLocation.getAddrStr();
-			strTime = poiLocation.getTime();
-			if (strAddress==null || strAddress.trim().equals("")) {
-				//LocationMan.this.context.showToast("无法定位，请检查网络环境");
-			} else {
-				tvAddress.setText(strAddress);
-			}
+			
 		}
 	}
 

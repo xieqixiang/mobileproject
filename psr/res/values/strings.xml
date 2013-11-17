@@ -37,8 +37,11 @@
     <string name="as_history">历史信息查看</string>
     <string name="as_sparing_space_map">车位地图查看</string>
     <string name="as_sp_reserve">车位搜索预订</string>
-    <string name="as_nearby_sp">(附近)快速预顶</string>
+    <string name="as_nearby_sp">(附近)快速预定</string>
     <string name="as_rent_out">放租管理 </string>
     <string name="as_earning_report">收益报表</string>
+    <string name="as_quick_reserve">一键预订</string>
+    <string name="as_loading_location">正在定位</string>
+    <string name="as_loading_map">正在加载图片</string>
     
 </resources>
