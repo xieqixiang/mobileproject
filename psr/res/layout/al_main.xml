@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@color/ac_blue" >
+        android:background="@color/blue" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,7 +34,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@id/ai_main_menu"
-            android:background="@color/ac_drak_blue" />
+            android:background="@color/drak_blue" />
     </RelativeLayout>
 
     <android.support.v4.view.ViewPager
@@ -46,7 +46,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/ac_light_grey"
+        android:background="@color/light_grey"
         android:orientation="horizontal" >
 
         <Button

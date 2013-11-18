@@ -2,11 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="220dip"
     android:layout_height="120dp"
-    android:orientation="vertical"
     android:background="@drawable/ad_dialog_shape"
-    >
-    
-    
+    android:orientation="vertical" >
 
     <TextView
         android:id="@+id/ai_alert_title"
@@ -20,8 +17,8 @@
         android:id="@+id/ai_alert_message"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:gravity="center"
+        android:padding="10dp"
         android:textColor="@android:color/black"
         android:textSize="18sp" >
     </TextView>
@@ -41,8 +38,8 @@
             android:layout_marginRight="10dp"
             android:background="@drawable/ad_btn_cancel_selected"
             android:onClick="controlClick"
-            android:text="@string/as_cancel"
-            android:textColor="@color/ac_dark_grey"
+            android:text="@string/cancel"
+            android:textColor="@color/dark_grey"
             android:textSize="18sp" />
 
         <Button
@@ -53,9 +50,9 @@
             android:layout_marginLeft="10dp"
             android:background="@drawable/ad_selector_bg"
             android:onClick="controlClick"
-            android:text="@string/as_sure"
+            android:text="@string/sure"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
     </LinearLayout>
-    
+
 </LinearLayout>

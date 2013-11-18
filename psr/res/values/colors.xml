@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color  name="ac_blue">#09B4EC</color>
-    <color name="ac_dark_grey">#575757</color>
-    <color name="ac_black">#000000</color>
-    <color name="ac_light_grey">#EFEFEF</color>
-    <color name="ac_drak_blue">#49788A</color>
+    <color  name="blue">#09B4EC</color>
+    <color name="dark_grey">#575757</color>
+    <color name="black">#000000</color>
+    <color name="light_grey">#EFEFEF</color>
+    <color name="drak_blue">#49788A</color>
+
 </resources>

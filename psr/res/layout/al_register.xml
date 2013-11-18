@@ -75,7 +75,7 @@
             android:gravity="center"
             android:onClick="controlClick"
             android:text="@string/as_clause"
-            android:textColor="@color/ac_blue"
+            android:textColor="@color/blue"
             android:textSize="14sp" />
     </RelativeLayout>
 

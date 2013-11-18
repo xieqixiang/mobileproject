@@ -64,8 +64,8 @@ public class ActMain extends SlidingFragmentActivity {
 	}
 
 	private void initData() {
-		btn1.setTextColor(resources.getColor(R.color.ac_blue));
-		btn2.setTextColor(resources.getColor(R.color.ac_black));
+		btn1.setTextColor(resources.getColor(R.color.blue));
+		btn2.setTextColor(resources.getColor(R.color.black));
 	}
 
 	private void initListener() {
@@ -98,13 +98,13 @@ public class ActMain extends SlidingFragmentActivity {
 		switch(id){
 		case 0:
 			sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
-			btn1.setTextColor(resources.getColor(R.color.ac_blue));
-			btn2.setTextColor(resources.getColor(R.color.ac_black));
+			btn1.setTextColor(resources.getColor(R.color.blue));
+			btn2.setTextColor(resources.getColor(R.color.black));
 			break;
 		case 1:
 			sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-			btn2.setTextColor(resources.getColor(R.color.ac_blue));
-			btn1.setTextColor(resources.getColor(R.color.ac_black));
+			btn2.setTextColor(resources.getColor(R.color.blue));
+			btn1.setTextColor(resources.getColor(R.color.black));
 			break;
 		}
 	}

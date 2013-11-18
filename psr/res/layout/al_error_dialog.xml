@@ -32,7 +32,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/ad_selector_bg"
-        android:text="@string/as_sure"
+        android:text="@string/sure"
         android:textColor="@android:color/white"
         android:textSize="18sp" />
 
