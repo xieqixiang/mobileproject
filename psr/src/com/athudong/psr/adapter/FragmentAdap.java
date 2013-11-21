@@ -10,8 +10,8 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.athudong.psr.R;
-import com.athudong.psr.ui.ParkingSerachAct;
-import com.athudong.psr.ui.QuickReserveAct;
+import com.athudong.psr.activity.ParkingSerachAct;
+import com.athudong.psr.activity.QuickReserveAct;
 import com.athudong.psr.util.Logger;
 
 /**

@@ -53,7 +53,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".ui.SplashAct"
+            android:name="com.athudong.psr.activity.SplashAct"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
@@ -65,7 +65,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.LoginAct"
+            android:name="com.athudong.psr.activity.LoginAct"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
@@ -77,7 +77,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.RegisterAct"
+            android:name="com.athudong.psr.activity.RegisterAct"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
@@ -89,7 +89,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.MainAct"
+            android:name="com.athudong.psr.activity.MainAct"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
@@ -100,7 +100,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.PackingSpaceAct"
+            android:name="com.athudong.psr.activity.PackingSpaceAct"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
@@ -111,7 +111,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.RentPackingSpaceAct"
+            android:name="com.athudong.psr.activity.RentPackingSpaceAct"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
@@ -122,7 +122,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.QuickReserveAct"
+            android:name="com.athudong.psr.activity.QuickReserveAct"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="com.athudong.psr.activity.ParkingSerachAct"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar" >

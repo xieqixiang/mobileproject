@@ -1,4 +1,4 @@
-package com.athudong.psr.ui;
+package com.athudong.psr.activity;
 
 import java.lang.ref.SoftReference;
 import com.athudong.psr.R;

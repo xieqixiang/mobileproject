@@ -1,4 +1,4 @@
-package com.athudong.psr.ui;
+package com.athudong.psr.activity;
 
 import android.os.Bundle;
 
@@ -6,15 +6,14 @@ import com.athudong.psr.R;
 import com.athudong.psr.base.BaseAct;
 
 /**
- * 放租车位
+ * 租车位
  */
-public class RentPackingSpaceAct extends BaseAct {
+public class PackingSpaceAct extends BaseAct {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-	
+		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.al_rent_parking_space);
+		setContentView(R.layout.al_parking_space);
 	}
-	
 }

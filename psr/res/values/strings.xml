@@ -44,6 +44,7 @@
     <string name="as_loading_location">正在定位</string>
     <string name="as_loading_map">正在加载图片</string>
     <string name="as_destination">请输入您的目的地</string>
+   
 
     <!-- 通用的字符串 -->
     <string name="start_time">起始时间</string>

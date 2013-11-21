@@ -1,4 +1,4 @@
-package com.athudong.psr.ui;
+package com.athudong.psr.activity;
 
 import android.os.Bundle;
 import android.view.View;

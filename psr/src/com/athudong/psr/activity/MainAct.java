@@ -1,4 +1,4 @@
-package com.athudong.psr.ui;
+package com.athudong.psr.activity;
 
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -55,9 +55,7 @@ public class MainAct extends SlidingFragmentActivity {
 		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
 		sm.setBehindOffsetRes(R.dimen.actionbar_home_width);
 		sm.setFadeDegree(0.35f);
-		
 		setSlidingActionBarEnabled(false);
-		
 		mPagerAdapter = new FragmentPagerAdap(getSupportFragmentManager());
 		vp.setAdapter(mPagerAdapter);
 		vp.setCurrentItem(0);
