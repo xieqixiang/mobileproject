@@ -13,7 +13,7 @@ import com.baidu.location.LocationClient;
 /**
  * ¿ìËÙÔ¤¶©
  */
-public class ActQuickReserve extends BaseAct {
+public class QuickReserveAct extends BaseAct {
 
 	private TextView tvTitle, tvParkingDescribe, tvSpacePrice, tvLoadingAlert;
 	private MyLocationMapView mMapView = null;// µØÍ¼view

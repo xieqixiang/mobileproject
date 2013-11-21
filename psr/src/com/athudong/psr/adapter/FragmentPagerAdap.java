@@ -6,17 +6,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-public class AdapFragmentPager extends FragmentStatePagerAdapter {
+public class FragmentPagerAdap extends FragmentStatePagerAdapter {
 
-	public AdapFragmentPager(FragmentManager fm) {
+	public FragmentPagerAdap(FragmentManager fm) {
 		super(fm);
 	}
 
 	@Override
 	public Fragment getItem(int arg0) {
-		Fragment fragment = new AdapFragment();
+		Fragment fragment = new FragmentAdap();
 		Bundle args = new Bundle();
-		args.putInt(AdapFragment.ARG_OBJECT,arg0);
+		args.putInt(FragmentAdap.ARG_OBJECT,arg0);
 		fragment.setArguments(args);
 		return fragment;
 	}

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/math_width_hight"
     android:background="@color/blue"
-    tools:context=".ActSplash" >
+    tools:context=".SplashAct" >
 
     <TextView
         android:id="@+id/ai_app_name"

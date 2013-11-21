@@ -19,7 +19,7 @@
 
             <EditText
                 android:id="@+id/ai_ps_destination"
-                android:layout_width="260dp"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dp"
@@ -28,10 +28,10 @@
                 android:inputType="text"
                 android:singleLine="true"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="16sp" />
 
             <LinearLayout
-                android:layout_width="260dp"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:orientation="horizontal" >
@@ -41,21 +41,51 @@
                     android:layout_height="wrap_content"
                     android:text="@string/start_time"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
 
                 <EditText
                     android:id="@+id/ai_ps_et_start_time"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="left|center_vertical"
                     android:inputType="datetime"
+                    android:paddingLeft="5dp"
                     android:singleLine="true"
+                    android:text="2013年9月12日 下午2:45分"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/stop_time"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/ai_ps_et_stop_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left|center_vertical"
+                    android:inputType="datetime"
+                    android:paddingLeft="5dp"
+                    android:singleLine="true"
+                    android:text="2013年9月13日 下午2:45分"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
             </LinearLayout>
             
-            
-            
+            <include layout="@layout/data_picker"
+                android:layout_marginTop="10dp"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

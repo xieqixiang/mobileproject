@@ -19,7 +19,7 @@ import com.athudong.psr.view.manager.DialogManager;
  * µÇÂ¼
  * @author Ð»ÆôÏé
  */
-public class ActLogin extends BaseAct {
+public class LoginAct extends BaseAct {
 	
 	private EditText etUser,etUserPass;
 	
@@ -60,7 +60,7 @@ public class ActLogin extends BaseAct {
 			this.doNetworkTaskAsync(C.task.complete,new IndexHandler(this),3000,requestParams);
 			break;
 		case R.id.ai_register:
-			overLayer(ActRegister.class);
+			overLayer(RegisterAct.class);
 			break;
 		case R.id.ai_forget_pass:
 			
@@ -69,21 +69,21 @@ public class ActLogin extends BaseAct {
 	}
 	
 	private static class IndexHandler extends BaseHandle{
-		SoftReference<ActLogin> sf = null;
-		public IndexHandler(ActLogin actLogin){
+		SoftReference<LoginAct> sf = null;
+		public IndexHandler(LoginAct actLogin){
 			super(actLogin);
-			sf = new SoftReference<ActLogin>(actLogin);
+			sf = new SoftReference<LoginAct>(actLogin);
 		}
 		
 		@Override
 		public void handleMessage(Message msg) {
 		  int what = msg.what;
 		  Bundle bundle = msg.getData();
-		  ActLogin actLogin = sf.get();
+		  LoginAct actLogin = sf.get();
 		  switch(what){
 		  case BaseTask.TASK_COMPLETE:
 			  DialogManager.progressDialogdimiss();
-			  actLogin.forward(ActMain.class,actLogin);
+			  actLogin.forward(MainAct.class,actLogin);
 			  break;
 		  case BaseTask.TASK_ERROR:
 			  DialogManager.progressDialogdimiss();

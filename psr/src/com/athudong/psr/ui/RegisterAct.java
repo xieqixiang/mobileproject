@@ -22,7 +22,7 @@ import com.athudong.psr.view.manager.DialogManager;
 /**
  * зЂВс
  */
-public class ActRegister extends BaseAct implements OnClickListener {
+public class RegisterAct extends BaseAct implements OnClickListener {
 	private EditText etPhone,etPass,etConfim,etCarNum,etEmail;
 	private CheckBox cbConsent;
 	
@@ -94,14 +94,14 @@ public class ActRegister extends BaseAct implements OnClickListener {
 	}
 	
 	private static class IndexHandler extends BaseHandle{
-		private SoftReference<ActRegister> sf;
-		public IndexHandler(ActRegister actRegister){
-			sf = new SoftReference<ActRegister>(actRegister);
+		private SoftReference<RegisterAct> sf;
+		public IndexHandler(RegisterAct actRegister){
+			sf = new SoftReference<RegisterAct>(actRegister);
 		}
 		
 		@Override
 		public void handleMessage(Message msg) {
-			ActRegister actRegister = sf.get();
+			RegisterAct actRegister = sf.get();
 			int taskid = msg.what;
 			Bundle bundle = msg.getData();
 			switch(taskid){

@@ -1,5 +1,6 @@
 package com.athudong.psr.adapter;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,13 +10,14 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.athudong.psr.R;
-import com.athudong.psr.ui.ActQuickReserve;
+import com.athudong.psr.ui.ParkingSerachAct;
+import com.athudong.psr.ui.QuickReserveAct;
 import com.athudong.psr.util.Logger;
 
 /**
  * 控制每个Fragment的显示和控制每个view的点击事件
  */
-public class AdapFragment extends SherlockFragment implements OnClickListener{
+public class FragmentAdap extends SherlockFragment implements OnClickListener{
 	public static final String ARG_OBJECT = "object";
 	private LinearLayout llParkingSpace;
 	private LinearLayout llParkingSearch;
@@ -49,12 +51,10 @@ public class AdapFragment extends SherlockFragment implements OnClickListener{
 		switch(v.getId()){
 		case R.id.ai_ps_ll_nearby_sp:
 			Logger.d("AdaFragment","onClick:nearby");
-			Intent intent = new Intent(getActivity(),ActQuickReserve.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-			getActivity().startActivity(intent);
+			overLayout(getActivity(), QuickReserveAct.class);
 			break;
 		case R.id.ai_ps_ll_reserve:
-			Logger.d("AdaFragment","onClick:reserve");
+			overLayout(getActivity(),ParkingSerachAct.class);
 			break;
 		case R.id.ai_ps_ll_history_look:
 			Toast.makeText(getActivity(),"在完善",Toast.LENGTH_SHORT).show();
@@ -64,4 +64,10 @@ public class AdapFragment extends SherlockFragment implements OnClickListener{
 			break;
 		}
 	};
+	
+	private void overLayout(Context context, Class<?> class1){
+		Intent intent = new Intent(context,class1);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+		getActivity().startActivity(intent);
+	}
 }

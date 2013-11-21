@@ -8,7 +8,7 @@ import com.athudong.psr.base.BaseAct;
 /**
  * ·Å×â³µÎ»
  */
-public class ActRentPackingSpace extends BaseAct {
+public class RentPackingSpaceAct extends BaseAct {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

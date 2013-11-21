@@ -58,7 +58,5 @@
         android:onClick="onClick"
         android:text="@string/forget_password"
         android:textSize="18sp" />
-    
-    <include layout="@layout/data_picker"/>
 
 </LinearLayout>
