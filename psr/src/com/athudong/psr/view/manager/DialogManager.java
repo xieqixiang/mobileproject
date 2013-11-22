@@ -4,8 +4,6 @@ import com.athudong.psr.R;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -19,7 +17,7 @@ import android.widget.Toast;
  * Dialog管理类
  */
 public class DialogManager {
-	
+
 	private static Dialog errorDialog;
 	private static Dialog progressDialog;
 	private static Dialog optionDialog;
@@ -29,7 +27,8 @@ public class DialogManager {
 	private static Animation animation;
 	private static PopupWindow promptPopupWindow;
 	private static ProgressBar pb;
-
+    private static TextView tvAler;
+	
 	/**
 	 * @param context上下文
 	 * @param toasttext需要显示的文本信息
@@ -49,7 +48,7 @@ public class DialogManager {
 	/**
 	 * 错误提示
 	 */
-	public static void showErrorDialog(Context context,String message, OnClickListener listener) {
+	public static void showErrorDialog(Context context, String message,OnClickListener listener) {
 		errorDialog = new Dialog(context, R.style.mDialog);
 		errorDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 		View view = View.inflate(context, R.layout.al_error_dialog, null);
@@ -65,6 +64,7 @@ public class DialogManager {
 
 	/**
 	 * 提示dialog
+	 * 
 	 * @param context
 	 * @param title
 	 * @param message
@@ -105,25 +105,30 @@ public class DialogManager {
 	 * @return dialog
 	 */
 	public static Dialog showProgressDialog(Context context, String text) {
-		progressDialog = new Dialog(context, R.style.mDialog);
-		progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-		Window window = progressDialog.getWindow();
-		WindowManager.LayoutParams lp = window.getAttributes();
-		lp.alpha = 0.5f;
-		window.setAttributes(lp);
-		View view = View.inflate(context, R.layout.al_progress_dialog, null);
-	    pb = (ProgressBar) view.findViewById(R.id.ai_pd_pb);
-		TextView textView = (TextView) view.findViewById(R.id.ai_pd_text);
-		textView.setText(text);
-		pb.setVisibility(View.VISIBLE);
-		progressDialog.setContentView(view);
-		progressDialog.setCanceledOnTouchOutside(false);
-		progressDialog.show();
+		
+		if(progressDialog !=null &&progressDialog.isShowing()){
+			tvAler.setText(text);
+		}else {
+			View view = View.inflate(context, R.layout.al_progress_dialog, null);
+			tvAler =(TextView) view.findViewById(R.id.ai_pd_text);
+			progressDialog = new Dialog(context, R.style.mDialog);
+			progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+			/*Window window = progressDialog.getWindow();
+			WindowManager.LayoutParams lp = window.getAttributes();
+			lp.alpha = 0.2f;
+			window.setAttributes(lp);*/
+			pb = (ProgressBar) view.findViewById(R.id.ai_pd_pb);
+			tvAler.setText(text);
+			pb.setVisibility(View.VISIBLE);
+			progressDialog.setContentView(view);
+			progressDialog.setCanceledOnTouchOutside(false);
+			progressDialog.show();
+		}
 		return progressDialog;
 	}
-	
-	public static boolean progressIsShow(){
-		if(progressDialog !=null && progressDialog.isShowing()){
+
+	public static boolean progressIsShow() {
+		if (progressDialog != null && progressDialog.isShowing()) {
 			return true;
 		}
 		return false;
@@ -144,8 +149,8 @@ public class DialogManager {
 	 */
 	public static void progressDialogdimiss() {
 		if (progressDialog != null && progressDialog.isShowing()) {
-			pb.setVisibility(View.GONE);
 			progressDialog.dismiss();
+			pb.setVisibility(View.GONE);
 			progressDialog = null;
 		}
 	}

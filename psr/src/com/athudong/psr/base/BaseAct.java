@@ -45,6 +45,15 @@ public class BaseAct extends Activity {
 		this.startActivity(intent);
 	}
 	
+	/**跳转到另一个activity*/
+	protected void overLayer(Class<?> classObje,Bundle bundle){
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setClass(this,classObje);
+		intent.putExtra("bundle",bundle);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+		this.startActivity(intent);
+	}
+	
 	public void showToast(String result) {
 		Toast.makeText(this,result,Toast.LENGTH_SHORT).show();
 	}

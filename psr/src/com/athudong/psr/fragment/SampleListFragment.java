@@ -19,7 +19,7 @@ public class SampleListFragment extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 	
-		return inflater.inflate(R.layout.al_list,null);
+		return inflater.inflate(R.layout.al_sligine_meu,null);
 	}
 	
 	@Override
