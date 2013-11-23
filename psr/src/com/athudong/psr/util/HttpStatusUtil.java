@@ -11,7 +11,7 @@ import android.net.Uri;
 /**
  * 判断当前手机联网的渠道，获取，检查网络状态
  */
-public class UtilHttpStatus {
+public class HttpStatusUtil {
 	
 	public static int WAP_INT = 1;
 	public static int NET_INT = 2;

@@ -12,7 +12,7 @@ import com.athudong.psr.base.BaseApp;
 import com.athudong.psr.base.BaseHandle;
 import com.athudong.psr.base.BaseTask;
 import com.athudong.psr.base.C;
-import com.athudong.psr.util.UtilApp;
+import com.athudong.psr.util.AppUtil;
 import com.athudong.psr.view.manager.DialogManager;
 
 /**
@@ -45,7 +45,7 @@ public class LoginAct extends BaseAct {
 			String userName = etUser.getText().toString().trim();
 			String userPass = etUserPass.getText().toString().trim();
 			String [] str = {userName,userPass};
-			if(UtilApp.isEmpty(str)){
+			if(AppUtil.isEmpty(str)){
 				showToast(getString(R.string.as_empty_error));
 				break;
 			}
@@ -53,7 +53,7 @@ public class LoginAct extends BaseAct {
 			DialogManager.showProgressDialog(this,getString(R.string.as_logining));
 			HashMap<String,String> requestParams = new HashMap<String, String>();
 			requestParams.put("nickname",userName);
-			String md5Pass = UtilApp.md5(userPass);
+			String md5Pass = AppUtil.md5(userPass);
 			requestParams.put("password",md5Pass);
 			requestParams.put("class",C.action.one);
 			requestParams.put("action",C.action.login);

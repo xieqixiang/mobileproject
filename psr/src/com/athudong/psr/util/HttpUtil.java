@@ -14,7 +14,7 @@ import android.content.Context;
  * 
  * @author Ð»ÆôÏé
  */
-public class UtilHttp {
+public class HttpUtil {
 
 	public static InputStream connWebService(Context context,String requestXml){
 		URL url = null;
@@ -22,7 +22,7 @@ public class UtilHttp {
 		HttpURLConnection conn = null;
 	    try {
 			url = new URL (VisitedURL.url);
-			if(UtilHttpStatus.WAP_INT==UtilHttpStatus.getNetType(context)){
+			if(HttpStatusUtil.WAP_INT==HttpStatusUtil.getNetType(context)){
 				Proxy proxy = new Proxy(java.net.Proxy.Type.HTTP,new InetSocketAddress("10.0.0.172", 80));
 				conn = (HttpURLConnection) url.openConnection(proxy);
 			}else {

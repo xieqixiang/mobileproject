@@ -11,7 +11,6 @@ import com.athudong.psr.util.Logger;
  * 需要访问网络的异步逻辑处理
  */
 public class TaskNetworkThread implements Runnable {
-
 	private HashMap<String, String> taskArgs;
 	private BaseTask baseTask;
 	private int delayTime = 0;
@@ -37,7 +36,7 @@ public class TaskNetworkThread implements Runnable {
 			case C.task.complete:
 				UserService userService = new UserService(taskArgs);
 				requesXml = userService.requestXml();
-				Logger.d("TaskNetwork", requesXml);
+				Logger.d("TaskNetwork",requesXml);
 				baseTask.onComplete(httpResult);
 				break;
 			}

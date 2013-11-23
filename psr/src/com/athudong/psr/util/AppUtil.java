@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  * 
  * @author 谢启祥
  */
-public class UtilApp {
+public class AppUtil {
 	/**
 	 * 判断字符串数组是否所有为空
 	 */

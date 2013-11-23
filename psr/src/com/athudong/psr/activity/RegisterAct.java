@@ -16,7 +16,7 @@ import com.athudong.psr.base.BaseAct;
 import com.athudong.psr.base.BaseHandle;
 import com.athudong.psr.base.BaseTask;
 import com.athudong.psr.base.C;
-import com.athudong.psr.util.UtilApp;
+import com.athudong.psr.util.AppUtil;
 import com.athudong.psr.view.manager.DialogManager;
 
 /**
@@ -63,17 +63,17 @@ public class RegisterAct extends BaseAct implements OnClickListener {
 			String strConfim = etConfim.getText().toString().trim();
 			String strEmail = etEmail.getText().toString().trim();
 			String strCarNum = etCarNum.getText().toString().trim();
-			if(UtilApp.isEmpty(new String []{strPhone,strPass,strConfim,strEmail,strCarNum})){
+			if(AppUtil.isEmpty(new String []{strPhone,strPass,strConfim,strEmail,strCarNum})){
 				showToast(getString(R.string.as_empty_error));
 				break;
 			}
-			if(!UtilApp.isMatchEmail(strEmail)){
+			if(!AppUtil.isMatchEmail(strEmail)){
 				showToast(getString(R.string.as_no_match_email));
 				break;
 			}
 			DialogManager.showProgressDialog(this,getString(R.string.as_registering));
 			HashMap<String,String> reqParams = new HashMap<String, String>();
-			String md5Pass = UtilApp.md5(strPass);
+			String md5Pass = AppUtil.md5(strPass);
 			reqParams.put("action",C.action.register);
 			reqParams.put("class",C.action.one);
 			reqParams.put("email",strEmail);

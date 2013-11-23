@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.athudong.psr.R;
 import com.athudong.psr.base.BaseAct;
 import com.athudong.psr.util.Logger;
-import com.athudong.psr.util.UtilBMap;
+import com.athudong.psr.util.BMapUtil;
 import com.athudong.psr.view.MyLocationMapView;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -131,6 +131,8 @@ public class LocationMan {
 				bundle.putDouble("latitude", location.getLatitude());
 				message.setData(bundle);
 				handler.sendMessage(message);
+				mLocationClient.unRegisterLocationListener(myLocationListener);
+				mLocationClient.stop();
 			}
 		}
 
@@ -190,7 +192,7 @@ public class LocationMan {
 			// 处理点击事件，弹出泡泡
 			popupText.setBackgroundResource(R.drawable.popup);
 			popupText.setText("我的位置");
-			pop.showPopup(UtilBMap.getBitmapFromView(popupText), new GeoPoint(
+			pop.showPopup(BMapUtil.getBitmapFromView(popupText), new GeoPoint(
 					(int) (locationData.latitude * 1e6),
 					(int) (locationData.longitude * 1e6)), 8);
 			return true;

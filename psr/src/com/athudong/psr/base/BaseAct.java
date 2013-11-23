@@ -2,6 +2,8 @@ package com.athudong.psr.base;
 
 import java.util.HashMap;
 
+import com.athudong.psr.util.RequestMedthodUtil;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,9 +18,12 @@ import android.widget.Toast;
  */
 public class BaseAct extends Activity {
 	private BaseTaskPool taskPool;
+	public RequestMedthodUtil rmu ;
 	
-	public BaseAct(){
-		
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		rmu = new RequestMedthodUtil(this);
 		taskPool = new BaseTaskPool(this);
 	}
 	

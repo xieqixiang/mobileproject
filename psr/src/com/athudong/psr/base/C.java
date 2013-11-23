@@ -16,15 +16,21 @@ public class C {
 		public static final int queryUserInfo = 1001;
 		public static final int saveUserInfo = 1002;
 		public static final int splash = 1003;
+		
 	}
 
 	public class key {
 		public static final String result = "10";
+		/**×¢²áºÅ*/
+		public static final String regNum ="regNum";
+		/**ÏµÍ³µÇÂ¼ºÅ*/
+		public static final String logNo = "logNo";
 	}
 	
 	public class action{
 		public static final String login = "Login";
 		public static final String register = "New";
 		public static final String one = "reg";
+		public static final String Search = "Search";
 	}
 }

@@ -35,13 +35,43 @@
             android:textColor="@color/black"
             android:textSize="16sp" />
 
-        <Button
+        <EditText
             android:id="@+id/ai_ps_btn_start_time"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:background="@drawable/btn"
+            android:background="@color/light_grey"
             android:gravity="left|center_vertical"
+            android:inputType="datetime"
+            android:paddingLeft="5dp"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/stop_length"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/ai_ps_btn_stop_length"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            
+            android:background="@color/light_grey"
+            android:gravity="left|center_vertical"
+            android:inputType="number"
+            android:digits="123456789"
             android:paddingLeft="5dp"
             android:textColor="@color/black"
             android:textSize="16sp" />
@@ -61,20 +91,21 @@
             android:textColor="@color/black"
             android:textSize="16sp" />
 
-        <Button
+        <EditText
             android:id="@+id/ai_ps_btn_stop_time"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:background="@drawable/btn"
+            android:background="@color/light_grey"
             android:gravity="left|center_vertical"
+            android:inputType="datetime"
             android:paddingLeft="5dp"
             android:textColor="@color/black"
             android:textSize="16sp" />
     </LinearLayout>
 
     <include
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         layout="@layout/data_picker" />
 
     <View style="@style/space_line" />

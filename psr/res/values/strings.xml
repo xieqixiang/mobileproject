@@ -48,6 +48,7 @@
     <string name="as_destination">请输入您的目的地</string>
     <string name="search1">马上搜索</string>
     <string name="search">搜索</string>
+    <string name="stop_length">停车时长:</string>
    
 
     <!-- 通用的字符串 -->
