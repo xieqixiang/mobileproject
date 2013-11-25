@@ -49,6 +49,7 @@
     <string name="search1">马上搜索</string>
     <string name="search">搜索</string>
     <string name="stop_length">停车时长:</string>
+    <string name="as_stop_length_alert">1-9(不足1小时按1小时计算)</string>
    
 
     <!-- 通用的字符串 -->
