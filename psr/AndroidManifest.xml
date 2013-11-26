@@ -122,7 +122,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.athudong.psr.activity.QuickReserveAct"
+            android:name="com.athudong.psr.activity.ParkingSpaceListAct"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
@@ -146,6 +146,18 @@
         
         <activity
             android:name="com.athudong.psr.activity.ParkingListAct"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="com.athudong.psr.activity.MapAct"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar" >

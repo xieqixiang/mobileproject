@@ -13,6 +13,7 @@
     <string name="as_no_match_email">请输入正确的邮箱地址</string>
     <string name="as_error_stop_time">请选择停止时间</string>
     <string name="as_error_start_time">请选择开始时间</string>
+    <string name="as_enter_address">请输入目的地</string>
 
     <!-- 其他字符串 -->
     <string name="as_login">登录</string>
@@ -38,19 +39,20 @@
     <string name="as_rent_parking_spaces">放租车位</string>
     <string name="as_history">历史信息查看</string>
     <string name="as_sparing_space_map">车位地图查看</string>
-    <string name="as_sp_reserve">车位搜索预订</string>
-    <string name="as_nearby_sp">(附近)快速预定</string>
+    <string name="as_sp_reserve">目的地搜索</string>
+    <string name="as_nearby_sp">定位搜索</string>
     <string name="as_rent_out">放租管理 </string>
     <string name="as_earning_report">收益报表</string>
-    <string name="as_quick_reserve">一键预订</string>
     <string name="as_loading_location">正在定位</string>
     <string name="as_loading_map">正在加载图片</string>
-    <string name="as_destination">请输入您的目的地</string>
+    <string name="as_destination">请输入您的目的地(空时自动搜索附近车位)</string>
     <string name="search1">马上搜索</string>
     <string name="search">搜索</string>
     <string name="stop_length">停车时长:</string>
     <string name="as_stop_length_alert">1-9(不足1小时按1小时计算)</string>
-   
+    <string name="as_reservate">预订</string>
+    <string name="as_location">定位</string>
+    <string name="as_spacking_space">车位</string>
 
     <!-- 通用的字符串 -->
     <string name="start_time">起始时间:</string>
@@ -63,5 +65,11 @@
     <string name="register">注册</string>
     <string name="forget_password">忘记密码</string>
     <string name="parking_log">停车场</string>
+    <string name="pull_refresh">下拉刷新</string>
+    <string name="loading">正在加载数据</string>
+    <string name="loosen_refresh">正在刷新数据...</string>
+    <string name="drive_route">驾车方案</string>
+    <string name="modify_user_info">修改注册信息</string>
+    <string name="exist_login">退出登录</string>
 
 </resources>

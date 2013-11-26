@@ -8,8 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 /**
  * listviewFragment
@@ -26,20 +24,15 @@ public class SampleListFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		SampleAdapter adapter = new SampleAdapter(getActivity());
-		for(int i = 0 ; i < 10;i++){
-			adapter.add(new SampleItem("°¬ÌØ»¥¶¯",android.R.drawable.btn_star));
+		for(int i = 0 ; i < 1;i++){
+			adapter.add(new SampleItem());
 		}
 		setListAdapter(adapter);
 	}
 	
 	private class SampleItem {
-		public String tag;
-		public int iconRes;
-		
-		public SampleItem(String tag, int iconRes) {
-			this.tag = tag;
-			this.iconRes = iconRes;
-		}
+		//public Button modifyInfo;
+		//public Button existLogin;
 	}
 	
 	
@@ -53,13 +46,8 @@ public class SampleListFragment extends ListFragment {
 			if (convertView == null) {
 				convertView = LayoutInflater.from(getContext()).inflate(R.layout.al_row, null);
 			}
-			ImageView icon = (ImageView) convertView.findViewById(R.id.row_icon);
-			icon.setImageResource(getItem(position).iconRes);
-			TextView title = (TextView) convertView.findViewById(R.id.row_title);
-			title.setText(getItem(position).tag);
 
 			return convertView;
 		}
-
 	}
 }

@@ -60,7 +60,7 @@ public class LoginAct extends BaseAct {
 			this.doNetworkTaskAsync(C.task.complete,new IndexHandler(this),3000,requestParams);
 			break;
 		case R.id.ai_register:
-			overLayer(RegisterAct.class);
+			overLayer(RegisterAct.class,this);
 			break;
 		case R.id.ai_forget_pass:
 			

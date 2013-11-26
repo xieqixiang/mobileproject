@@ -33,4 +33,11 @@ public class C {
 		public static final String one = "reg";
 		public static final String Search = "Search";
 	}
+	
+	public class flag{
+
+		public static final int pullUp = 100;
+		public static final int  pullDown =101;
+		
+	}
 }

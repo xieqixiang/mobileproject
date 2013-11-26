@@ -1,6 +1,8 @@
 package com.athudong.psr.base;
 
 import java.util.ArrayList;
+
+import com.athudong.psr.model.Parking;
 import com.baidu.mapapi.BMapManager;
 import com.baidu.mapapi.MKGeneralListener;
 import com.baidu.mapapi.map.MKEvent;
@@ -20,6 +22,7 @@ public class BaseApp extends Application {
 	public BMapManager mBMapManager = null;
 	private static BaseApp mInstance = null;
 	public boolean m_bKeyRight = true;
+	public ArrayList<Parking> parkings;
 
 	public static final String strKey = "A2bdc11b54ed000060af179a5f2850b2";
 
@@ -29,6 +32,17 @@ public class BaseApp extends Application {
 		activities = new ArrayList<Activity>();
 		mInstance = this;
 		initEngineManager(this);
+		parkings = new ArrayList<Parking>();
+		for(int i = 0 ; i < 20;i++){
+			Parking parking = new Parking();
+			parking.setStrParkName("正佳广场");
+			parking.setStrParkDistance("125m");
+			parking.setStrParkCount("5" );
+			parking.setStrRentPrice("20");
+			parking.setStrParkAddress("正佳广场负一层");
+			parking.setStrParkNo("C1");
+			parkings.add(parking);
+		}
 	}
 	
 	

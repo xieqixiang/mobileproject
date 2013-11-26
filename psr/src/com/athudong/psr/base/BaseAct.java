@@ -43,11 +43,11 @@ public class BaseAct extends Activity {
 	}
 	
 	/**跳转到另一个activity*/
-	protected void overLayer(Class<?> classObje){
+	protected void overLayer(Class<?> classObje,BaseAct act){
 		Intent intent = new Intent(Intent.ACTION_VIEW);
 		intent.setClass(this,classObje);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-		this.startActivity(intent);
+		act.startActivity(intent);
 	}
 	
 	/**跳转到另一个activity*/

@@ -13,7 +13,7 @@ import com.athudong.psr.R;
 import com.athudong.psr.base.BaseAct;
 import com.athudong.psr.util.Logger;
 import com.athudong.psr.util.BMapUtil;
-import com.athudong.psr.view.MyLocationMapView;
+import com.athudong.psr.view.LocationMapView;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
@@ -40,7 +40,7 @@ public class LocationMan {
 	private ProgressBar pBar;
 	private TextView tvAler;
 	private LocationOverlay myLocationOverlay;
-	private MyLocationMapView myLocationMapView;
+	private LocationMapView myLocationMapView;
 	private boolean isRequest = false;// 是否手动触发请求定位
 	private boolean isFristLoc = true;// 是否首次定位
 	private MapController mapController;
@@ -70,7 +70,7 @@ public class LocationMan {
 		return myLocationListener;
 	}
 
-	public LocationMan(BaseAct context, MyLocationMapView myLocationMapView) {
+	public LocationMan(BaseAct context, LocationMapView myLocationMapView) {
 		this.context = context;
 		mLocationClient = new LocationClient(context);
 		this.mLocationClient.registerLocationListener(myLocationListener);
@@ -103,8 +103,8 @@ public class LocationMan {
 				return;
 			}
 			if (myLocationMapView != null) {
-				pBar.setVisibility(View.GONE);
-				tvAler.setVisibility(View.GONE);
+				//pBar.setVisibility(View.GONE);
+				//tvAler.setVisibility(View.GONE);
 				locationData.latitude = location.getLatitude();
 				locationData.longitude = location.getLongitude();
 				// 如果不显示定位精度圈，将accuracy赋值为0即可
@@ -124,6 +124,7 @@ public class LocationMan {
 					myLocationOverlay.setLocationMode(LocationMode.FOLLOWING);
 				}
 			}else {
+				
 				Message message = handler.obtainMessage();
 				message.what = 5;
 				Bundle bundle = new Bundle();
@@ -131,7 +132,7 @@ public class LocationMan {
 				bundle.putDouble("latitude", location.getLatitude());
 				message.setData(bundle);
 				handler.sendMessage(message);
-				mLocationClient.unRegisterLocationListener(myLocationListener);
+				//mLocationClient.unRegisterLocationListener(myLocationListener);
 				mLocationClient.stop();
 			}
 		}
@@ -192,9 +193,7 @@ public class LocationMan {
 			// 处理点击事件，弹出泡泡
 			popupText.setBackgroundResource(R.drawable.popup);
 			popupText.setText("我的位置");
-			pop.showPopup(BMapUtil.getBitmapFromView(popupText), new GeoPoint(
-					(int) (locationData.latitude * 1e6),
-					(int) (locationData.longitude * 1e6)), 8);
+			pop.showPopup(BMapUtil.getBitmapFromView(popupText), new GeoPoint((int) (locationData.latitude * 1e6),(int) (locationData.longitude * 1e6)), 8);
 			return true;
 		}
 	}

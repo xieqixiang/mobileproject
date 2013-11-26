@@ -1,17 +1,15 @@
 package com.athudong.psr.adapter;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.actionbarsherlock.app.SherlockFragment;
 import com.athudong.psr.R;
 import com.athudong.psr.activity.ParkingSerachAct;
-import com.athudong.psr.activity.QuickReserveAct;
 import com.athudong.psr.util.Logger;
 
 /**
@@ -51,10 +49,10 @@ public class FragmentAdap extends SherlockFragment implements OnClickListener{
 		switch(v.getId()){
 		case R.id.ai_ps_ll_nearby_sp:
 			Logger.d("AdaFragment","onClick:nearby");
-			overLayout(getActivity(), QuickReserveAct.class);
+			overLayout(ParkingSerachAct.class,"locationSearch");
 			break;
 		case R.id.ai_ps_ll_reserve:
-			overLayout(getActivity(),ParkingSerachAct.class);
+			overLayout(ParkingSerachAct.class,"destinationSerarch");
 			break;
 		case R.id.ai_ps_ll_history_look:
 			Toast.makeText(getActivity(),"‘⁄ÕÍ…∆",Toast.LENGTH_SHORT).show();
@@ -65,9 +63,13 @@ public class FragmentAdap extends SherlockFragment implements OnClickListener{
 		}
 	};
 	
-	private void overLayout(Context context, Class<?> class1){
-		Intent intent = new Intent(context,class1);
+	private void overLayout(Class<?> class1,String flag){
+		Activity activity = getActivity();
+		Intent intent = new Intent(activity,class1);
+		Bundle bundle = new Bundle();
+		bundle.putString("flag",flag);
+		intent.putExtra("bundle",bundle);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-		getActivity().startActivity(intent);
+		activity.startActivity(intent);
 	}
 }
