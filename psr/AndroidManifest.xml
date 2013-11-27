@@ -100,7 +100,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.athudong.psr.activity.PackingSpaceAct"
+            android:name="com.athudong.psr.activity.SpakcingSpaceAct"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
@@ -145,7 +145,7 @@
         </activity>
         
         <activity
-            android:name="com.athudong.psr.activity.ParkingListAct"
+            android:name="com.athudong.psr.activity.MapAct"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
@@ -157,7 +157,31 @@
         </activity>
         
         <activity
-            android:name="com.athudong.psr.activity.MapAct"
+            android:name="com.athudong.psr.activity.IncomeAct"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="com.athudong.psr.activity.ModifyRentManagerAct"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="com.athudong.psr.activity.RentManagerAct"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar" >

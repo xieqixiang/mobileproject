@@ -38,6 +38,16 @@ public class C {
 
 		public static final int pullUp = 100;
 		public static final int  pullDown =101;
+		/**历史信息*/
+		public static final int historyInfo=102;
+		/**当前预订*/
+		public static final int nowInfo=103;
+		/**定位搜索*/
+		public static final int locationSearch=104;
+		/**目的地搜索*/
+		public static final int destinationSearcy = 105;
+		/**收益*/
+		public static final int income=106;
 		
 	}
 }

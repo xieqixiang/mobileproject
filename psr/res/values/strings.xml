@@ -38,14 +38,14 @@
     <string name="as_parking_spaces">租车位</string>
     <string name="as_rent_parking_spaces">放租车位</string>
     <string name="as_history">历史信息查看</string>
-    <string name="as_sparing_space_map">车位地图查看</string>
+    <string name="as_sparing_space_map">当前预订查看</string>
     <string name="as_sp_reserve">目的地搜索</string>
     <string name="as_nearby_sp">定位搜索</string>
     <string name="as_rent_out">放租管理 </string>
     <string name="as_earning_report">收益报表</string>
     <string name="as_loading_location">正在定位</string>
     <string name="as_loading_map">正在加载图片</string>
-    <string name="as_destination">请输入您的目的地(空时自动搜索附近车位)</string>
+    <string name="as_destination">请输入目的地</string>
     <string name="search1">马上搜索</string>
     <string name="search">搜索</string>
     <string name="stop_length">停车时长:</string>
@@ -53,6 +53,15 @@
     <string name="as_reservate">预订</string>
     <string name="as_location">定位</string>
     <string name="as_spacking_space">车位</string>
+    <string name="as_history2">历史预订信息</string>
+    <string name="as_now_reserve">当前预订信息</string>
+    <string name="as_spacking_spece_route">车位路线</string>
+    <string name="as_start_rent">放租开始时间</string>
+    <string name="as_stop_rent">放租结束时间</string>
+    <string name="as_price">单价/小时</string>
+    <string name="as_indefinite_duration_rent">无限期放租</string>
+    <string name="as_indefinite_duration_stop_rent">无限期停租</string>
+    <string name="as_mobile_rent_plan">修改出租方案</string>
 
     <!-- 通用的字符串 -->
     <string name="start_time">起始时间:</string>
@@ -71,5 +80,6 @@
     <string name="drive_route">驾车方案</string>
     <string name="modify_user_info">修改注册信息</string>
     <string name="exist_login">退出登录</string>
+    
 
 </resources>
