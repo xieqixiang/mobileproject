@@ -2,6 +2,7 @@ package com.athudong.psr.base;
 
 import java.util.ArrayList;
 import com.athudong.psr.model.ParkingSpace;
+import com.athudong.psr.model.RentPlan;
 import com.baidu.mapapi.BMapManager;
 import com.baidu.mapapi.MKGeneralListener;
 import com.baidu.mapapi.map.MKEvent;
@@ -22,6 +23,7 @@ public class BaseApp extends Application {
 	private static BaseApp mInstance = null;
 	public boolean m_bKeyRight = true;
 	public ArrayList<ParkingSpace> parkings;
+	public ArrayList<RentPlan> rPlans;
 
 	public static final String strKey = "A2bdc11b54ed000060af179a5f2850b2";
 
@@ -29,6 +31,7 @@ public class BaseApp extends Application {
 	public void onCreate() {
 		super.onCreate();
 		activities = new ArrayList<Activity>();
+		rPlans = new ArrayList<RentPlan>();
 		mInstance = this;
 		initEngineManager(this);
 		parkings = new ArrayList<ParkingSpace>();
@@ -44,6 +47,14 @@ public class BaseApp extends Application {
 			parking.setStrPayMent("40");
 			parking.setStrParkNo("C1");
 			parkings.add(parking);
+		}
+		
+		for(int i = 0 ;i < 5;i++){
+			RentPlan rPlan = new RentPlan();
+			rPlan.setStrStartTime("2013年11月29日");
+			rPlan.setStrStopTime("2013年12月29日");
+			rPlan.setStrpPrice("20");
+			rPlans.add(rPlan);
 		}
 	}
 	

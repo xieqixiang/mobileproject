@@ -49,5 +49,11 @@ public class C {
 		/**ÊÕÒæ*/
 		public static final int income=106;
 		
+		/**·Å×â*/
+		public static final int startRent = 107;
+		
+		/**Í£×â*/
+		public static final int stopRent = 108;
+		
 	}
 }
