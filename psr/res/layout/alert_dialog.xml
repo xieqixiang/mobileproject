@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="220dip"
-    android:layout_height="120dp"
+    android:layout_width="240dip"
+    android:layout_height="180dp"
     android:background="@drawable/dialog_shape"
     android:orientation="vertical" >
 
     <TextView
         android:id="@+id/ai_alert_title"
-        android:layout_width="220dp"
+        android:layout_width="240dp"
         android:layout_height="35dip"
         android:gravity="center"
         android:textColor="@android:color/black"
@@ -15,40 +15,49 @@
 
     <TextView
         android:id="@+id/ai_alert_message"
-        android:layout_width="220dp"
-        android:layout_height="wrap_content"
+        android:layout_width="240dp"
+        android:layout_height="80dp"
         android:gravity="center"
-        android:padding="10dp"
+        android:padding="5dp"
         android:textColor="@android:color/black"
         android:textSize="18sp" >
     </TextView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/blue" />
 
     <LinearLayout
         android:layout_width="220dip"
         android:layout_height="35dp"
         android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/ai_alert_negative"
-            android:layout_width="80dp"
+            android:id="@+id/alert_negative"
+            android:layout_width="100dp"
             android:layout_height="35dip"
             android:layout_gravity="center"
             android:layout_marginRight="10dp"
-            android:background="@drawable/ad_btn_cancel_selected"
+            android:background="@drawable/btn_cancel_selected"
             android:onClick="controlClick"
             android:text="@string/cancel"
             android:textColor="@color/dark_grey"
             android:textSize="18sp" />
 
         <Button
-            android:id="@+id/ai_alert_positive"
-            android:layout_width="80dip"
+            android:id="@+id/alert_positive"
+            android:layout_width="100dip"
             android:layout_height="35dip"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/ad_selector_bg"
+            android:background="@drawable/blue_btn_selector"
             android:onClick="controlClick"
             android:text="@string/sure"
             android:textColor="@android:color/white"

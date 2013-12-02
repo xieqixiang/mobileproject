@@ -5,6 +5,11 @@ import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+
 /**
  * 各种各样的工具类
  * 
@@ -111,5 +116,11 @@ public class AppUtil {
 			}
 		}
 		return builder.toString();
+	}
+	
+	/**bitmap转成drawable*/
+	public static  Drawable bitmap2Drawable(Resources res,Bitmap bitmap){
+		BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+		return bd;
 	}
 }

@@ -124,7 +124,6 @@ public class LocationMan {
 					myLocationOverlay.setLocationMode(LocationMode.FOLLOWING);
 				}
 			}else {
-				
 				Message message = handler.obtainMessage();
 				message.what = 5;
 				Bundle bundle = new Bundle();

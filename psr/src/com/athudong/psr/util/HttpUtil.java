@@ -8,7 +8,10 @@ import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
 
+import com.athudong.psr.base.BaseAct;
+
 import android.content.Context;
+import android.graphics.Bitmap;
 
 /**
  * 
@@ -16,6 +19,7 @@ import android.content.Context;
  */
 public class HttpUtil {
 
+	/**访问指定的URL*/
 	public static InputStream connWebService(Context context,String requestXml){
 		URL url = null;
 		InputStream is = null;
@@ -44,8 +48,23 @@ public class HttpUtil {
 	    return null;
 	}
 	
+	/**下载图片*/
+	public static Bitmap downloadImage(BaseAct activity,String url){
+		
+		Bitmap bitmap = null;
+		try {
+			
+		} catch (Exception e) {
+			Logger.e("HttpUtil",e.getMessage());
+		}
+		return bitmap;
+		
+	}
 	
-	private Object xmlParse(InputStream stream,int taskId){
+	/**
+	 * 解析XML后的结果
+	 */
+	public static Object xmlParse(InputStream stream,int taskId){
 		XmlParse parse = new XmlParse();
 		return parse.readXml(stream);
 	}

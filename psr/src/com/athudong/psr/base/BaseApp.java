@@ -1,14 +1,20 @@
 package com.athudong.psr.base;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Map;
+import java.util.WeakHashMap;
+
 import com.athudong.psr.model.ParkingSpace;
 import com.athudong.psr.model.RentPlan;
+import com.athudong.psr.util.MemoryCache;
 import com.baidu.mapapi.BMapManager;
 import com.baidu.mapapi.MKGeneralListener;
 import com.baidu.mapapi.map.MKEvent;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 /**
@@ -22,6 +28,8 @@ public class BaseApp extends Application {
 	public BMapManager mBMapManager = null;
 	private static BaseApp mInstance = null;
 	public boolean m_bKeyRight = true;
+	public MemoryCache memoryCache;
+	public Map<ImageView,String> removeViews = Collections.synchronizedMap(new WeakHashMap<ImageView,String>());
 	public ArrayList<ParkingSpace> parkings;
 	public ArrayList<RentPlan> rPlans;
 
@@ -56,6 +64,8 @@ public class BaseApp extends Application {
 			rPlan.setStrpPrice("20");
 			rPlans.add(rPlan);
 		}
+		
+		memoryCache = new MemoryCache();
 	}
 	
 	

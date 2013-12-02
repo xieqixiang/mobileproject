@@ -7,10 +7,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
+
 import com.athudong.psr.R;
 import com.athudong.psr.base.BaseAct;
 import com.athudong.psr.base.BaseHandle;
@@ -40,6 +43,16 @@ public class RegisterAct extends BaseAct implements OnClickListener {
 		etEmail = getView(R.id.ai_reg_email);
 		etCarNum = getView(R.id.ai_reg_car_num);
 		cbConsent = getView(R.id.ai_reg_consent);
+		
+		Intent intent = getIntent();
+		Bundle bundle = intent.getBundleExtra("bundle");
+		if(bundle !=null){
+			String flag = bundle.getString("modifyInfo");
+			if(flag !=null && TextUtils.isEmpty(flag)){
+				TextView tvTitle = getView(R.id.ai_head_tv);
+				tvTitle.setText("");
+			}
+		}
 	}
 	
 	@Override

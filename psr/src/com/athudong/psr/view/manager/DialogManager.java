@@ -3,6 +3,7 @@ package com.athudong.psr.view.manager;
 import com.athudong.psr.R;
 import android.app.Dialog;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
@@ -73,16 +74,21 @@ public class DialogManager {
 	public static void showAlertDialog(Context context, String title,String message, OnClickListener listener) {
 		alertDialog = new Dialog(context, R.style.mDialog);
 		alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-		View view = View.inflate(context, R.layout.al_alert_dialog, null);
+		View view = View.inflate(context, R.layout.alert_dialog, null);
 		TextView tvTitle = (TextView) view.findViewById(R.id.ai_alert_title);
-
-		tvTitle.setText(title);
+		if(!TextUtils.isEmpty(title)){
+			tvTitle.setVisibility(View.VISIBLE);
+			tvTitle.setText(title);
+		}else {
+			tvTitle.setVisibility(View.GONE);
+		}
+		
 		TextView tvMessage = (TextView) view.findViewById(R.id.ai_alert_message);
 		tvMessage.setText(message);
 		alertDialog.setContentView(view);
-		Button cancel = (Button) view.findViewById(R.id.ai_alert_negative);
+		Button cancel = (Button) view.findViewById(R.id.alert_negative);
 		cancel.setOnClickListener(listener);
-		Button sure = (Button) view.findViewById(R.id.ai_alert_positive);
+		Button sure = (Button) view.findViewById(R.id.alert_positive);
 		sure.setOnClickListener(listener);
 		alertDialog.show();
 	}
@@ -109,7 +115,7 @@ public class DialogManager {
 		if(progressDialog !=null &&progressDialog.isShowing()){
 			tvAler.setText(text);
 		}else {
-			View view = View.inflate(context, R.layout.al_progress_dialog, null);
+			View view = View.inflate(context, R.layout.progress_dialog, null);
 			tvAler =(TextView) view.findViewById(R.id.ai_pd_text);
 			progressDialog = new Dialog(context, R.style.mDialog);
 			progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);

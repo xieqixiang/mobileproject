@@ -1,5 +1,6 @@
 package com.athudong.psr.activity;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -7,18 +8,20 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import com.athudong.psr.R;
 import com.athudong.psr.adapter.FragmentPagerAdap;
 import com.athudong.psr.base.BaseApp;
 import com.athudong.psr.fragment.SampleListFragment;
+import com.athudong.psr.view.manager.DialogManager;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.app.SlidingFragmentActivity;
 
 /**
  * ึ๗าณ
  */
-public class MainAct extends SlidingFragmentActivity {
+public class MainAct extends SlidingFragmentActivity implements OnClickListener {
 	private ViewPager vp;
 	FragmentPagerAdap mPagerAdapter;
 	protected ListFragment mFragment;
@@ -43,14 +46,18 @@ public class MainAct extends SlidingFragmentActivity {
 		
 		setBehindContentView(R.layout.al_menu_frame);
 		
+		
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		mFragment  = new SampleListFragment();
 		ft.replace(R.id.menu_frame,mFragment);
 		ft.commit();
 		
 		sm = getSlidingMenu();
+		Button btnExistLogin = (Button) sm.findViewById(R.id.mf_exist_login);
+		btnExistLogin.setOnClickListener(this);
 		sm.setShadowWidthRes(R.dimen.shadow_width);
 		sm.setShadowDrawable(R.drawable.ad_shadow);
+	    
 		sm.setMode(SlidingMenu.RIGHT);
 		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
 		sm.setBehindOffsetRes(R.dimen.actionbar_home_width);
@@ -117,6 +124,25 @@ public class MainAct extends SlidingFragmentActivity {
 			break;
 		case R.id.ai_main_menu:
 			sm.toggle();
+			break;
+		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch(v.getId()){
+		case R.id.mf_exist_login:
+			DialogManager.showAlertDialog(this,"",getString(R.string.logout),this);
+			break;
+		case R.id.alert_negative:
+			DialogManager.closeAlertDialog();
+			break;
+		case R.id.alert_positive:
+			DialogManager.closeAlertDialog();
+			Intent intent = new Intent(this,LoginAct.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			this.finish();
 			break;
 		}
 	}
