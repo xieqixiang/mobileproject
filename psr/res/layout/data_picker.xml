@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.athudong.psr.view.DatePickWheel xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/timePicker1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="10dp"
+    android:orientation="horizontal"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp" >
+
+    <com.athudong.psr.view.WheelView
+        android:id="@+id/year"
+        android:layout_width="75dip"
+        android:layout_height="25dp"
+        android:visibility="gone" />
+
+    <com.athudong.psr.view.WheelView
+        android:id="@+id/month"
+        android:layout_width="50dip"
+        android:layout_height="25dp"
+        android:visibility="gone" />
+
+    <com.athudong.psr.view.DayWheelView
+        android:id="@+id/day"
+        android:layout_width="140dip"
+        android:layout_height="wrap_content"
+         />
+
+    <com.athudong.psr.view.WheelView
+        android:id="@+id/hour"
+        android:layout_width="50dip"
+        android:layout_height="wrap_content"
+         />
+
+    <com.athudong.psr.view.WheelView
+        android:id="@+id/mins"
+        android:layout_width="50dip"
+        android:layout_height="wrap_content"
+        />
+
+</com.athudong.psr.view.DatePickWheel>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_grey"
+    android:orientation="vertical" >
+
+    <include layout="@layout/al_head" />
+
+    <com.athudong.psr.view.LocationMapView
+        android:id="@+id/ai_map_view"
+        android:layout_width="match_parent"
+        android:layout_height="340dp"
+        android:layout_margin="5dp" />
+
+</LinearLayout>

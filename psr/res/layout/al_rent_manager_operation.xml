@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_grey"
+    android:orientation="vertical" >
+
+    <include layout="@layout/al_head" />
+
+    <TextView
+        android:id="@+id/ai_rmo_alert1"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:gravity="left|center_vertical"
+        android:text="@string/as_start_rent"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/ai_rmo_start_time"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:gravity="left|center_vertical"
+        android:inputType="datetime"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/ai_rmo_alert2"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:text="@string/as_stop_rent"
+        android:gravity="left|center_vertical"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/ai_rmo_stop_time"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:gravity="left|center_vertical"
+        android:inputType="datetime"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:id="@+id/ai_rmo_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/as_price"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/ai_rmo_price"
+            android:layout_width="220dp"
+            android:layout_height="40dp"
+            android:gravity="left"
+            android:inputType="number"
+            android:paddingLeft="5dp"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <include
+        android:layout_marginLeft="10dp"
+        layout="@layout/data_picker" />
+
+    <Button
+        android:id="@+id/ai_rmo_submit"
+        android:layout_width="220dp"
+        android:layout_height="35dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/red_btn_selector"
+        android:gravity="center"
+        android:text="@string/sure"
+        android:textSize="18sp"
+        android:textColor="@android:color/white" />
+
+</LinearLayout>

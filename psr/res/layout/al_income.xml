@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_grey"
+    android:orientation="vertical" >
+
+    <include
+        layout="@layout/al_head" />
+
+    <com.athudong.psr.view.CustomerListView
+        android:id="@+id/ai_income_listview"
+        android:layout_weight="1"
+        style="@style/listview" />
+
+    <TextView
+        android:id="@+id/ai_income_total"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:gravity="center"
+        android:layout_marginRight="10dp"
+        android:textColor="@color/red"
+        android:textSize="24sp"
+         />
+
+</LinearLayout>
