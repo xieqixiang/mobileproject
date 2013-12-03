@@ -65,9 +65,17 @@
     <string name="as_modify_temporary_rent">临时放租</string>
     <string name="as_modify_parking_space_info">车位资料</string>
     <string name="as_modify_rent_plan">修改放租方案</string>
-    <string name="as_stop_rent2">停租方案</string>
-    <string name="as_start_rent2">放租方案</string>
-
+    <string name="as_stop_rent2">停租</string>
+    <string name="as_start_rent2">放租</string>
+    <string name="as_have_parking_space_rent">有车位出租</string>
+    <string name="as_payment_back">后台支付</string>
+    <string name="as_payment_now">实时支付</string>
+    <string name="as_blank">后台支付银行</string>
+    <string name="as_blank_account">银行卡号</string>
+    <string name="as_payment_method">支付方式</string>
+    <string name="as_dentification">证件名称</string>
+    <string name="as_dentification_num">证件号</string>
+     
     <!-- 通用的字符串 -->
     <string name="start_time">起始时间:</string>
     <string name="stop_time">终止时间:</string>

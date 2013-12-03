@@ -1,110 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_grey" >
+    android:background="@color/light_grey"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
 
-    <LinearLayout
+    <include layout="@layout/al_head" />
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/light_grey"
-        android:gravity="center_horizontal"
-        android:orientation="vertical" >
+        android:background="@color/light_grey" >
 
-        <include layout="@layout/al_head" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
 
-        <EditText
-            android:id="@+id/ai_reg_phone"
-            style="@style/complete"
-            android:background="@drawable/et_shape"
-            android:digits="0123456789"
-            android:hint="@string/as_user_phone"
-            android:inputType="phone" />
+            <EditText
+                android:id="@+id/ai_reg_phone"
+                style="@style/complete"
+                android:background="@drawable/et_selector"
+                android:digits="0123456789"
+                android:hint="@string/as_user_phone"
+                android:inputType="number" />
 
-        <EditText
-            android:id="@+id/ai_reg_car_num"
-            style="@style/complete"
-            android:background="@drawable/et_shape"
-            android:ems="10"
-            android:hint="@string/as_user_car_num"
-            android:inputType="text"
-            android:singleLine="true" >
+            <EditText
+                android:id="@+id/ai_reg_car_num"
+                style="@style/complete"
+                android:background="@drawable/et_selector"
+                android:ems="10"
+                android:hint="@string/as_user_car_num"
+                android:inputType="text"
+                android:singleLine="true" >
+            </EditText>
 
-            <requestFocus />
-        </EditText>
+            <EditText
+                android:id="@+id/ai_reg_pass"
+                style="@style/complete"
+                android:background="@drawable/et_normal"
+                android:hint="@string/as_user_password"
+                android:inputType="textPassword"
+                android:singleLine="true" />
 
-        <EditText
-            android:id="@+id/ai_reg_pass"
-            style="@style/complete"
-            android:background="@drawable/et_shape"
-            android:hint="@string/as_user_password"
-            android:inputType="textPassword"
-            android:singleLine="true" />
+            <EditText
+                android:id="@+id/ai_reg_confirm_pass"
+                style="@style/complete"
+                android:background="@drawable/et_selector"
+                android:hint="@string/as_confim_pass"
+                android:inputType="textPassword"
+                android:paddingLeft="5dp" />
 
-        <EditText
-            android:id="@+id/ai_reg_confirm_pass"
-            style="@style/complete"
-            android:background="@drawable/et_shape"
-            android:hint="@string/as_confim_pass"
-            android:inputType="textPassword"
-            android:paddingLeft="5dp" />
+            <EditText
+                android:id="@+id/ai_reg_email"
+                style="@style/complete"
+                android:background="@drawable/et_selector"
+                android:hint="@string/as_user_email"
+                android:inputType="textEmailAddress"
+                android:singleLine="true" />
 
-        <EditText
-            android:id="@+id/ai_reg_email"
-            style="@style/complete"
-            android:background="@drawable/et_shape"
-            android:hint="@string/as_user_email"
-            android:inputType="textEmailAddress"
-            android:singleLine="true" />
+            <EditText
+                android:id="@+id/ai_reg_identification"
+                style="@style/complete"
+                android:background="@drawable/et_selector"
+                android:hint="@string/as_dentification"
+                android:inputType="textEmailAddress"
+                android:singleLine="true" />
 
-        <RelativeLayout
-            android:layout_width="wrap_content" 
-            android:layout_height="30dp"
-            android:layout_marginTop="10dp" >
+            <EditText
+                android:id="@+id/ai_reg_identification_num"
+                style="@style/complete"
+                android:background="@drawable/et_selector"
+                android:hint="@string/as_dentification_num"
+                android:inputType="textEmailAddress"
+                android:singleLine="true" />
 
-            <CheckBox
-                android:id="@+id/ai_reg_consent"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_centerVertical="true"
-                android:checked="true" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/setting_shape" >
 
-            <TextView
-                android:id="@+id/ai_reg_tv_consent"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_alignParentLeft="true"
+                    android:gravity="left|center_vertical"
+                    android:paddingLeft="10dp"
+                    android:text="@string/as_have_parking_space_rent"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <CheckBox
+                    android:id="@+id/ai_register_cb"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:checked="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/ai_register_rl"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/white_btn_selector"
+                android:onClick="controlClick" >
+
+                <TextView
+                    android:id="@+id/ai_register_payment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_alignParentLeft="true"
+                    android:gravity="left|center_vertical"
+                    android:paddingLeft="10dp"
+                    android:text="@string/as_payment_now"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/arrow_right"
+                    android:contentDescription="@null" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="5dp"
-                android:layout_toRightOf="@id/ai_reg_consent"
-                android:text="@string/as_consent"
-                android:textColor="@android:color/black"
-                android:textSize="14sp" />
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp" >
+
+                <CheckBox
+                    android:id="@+id/ai_reg_consent"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:checked="true" />
+
+                <TextView
+                    android:id="@+id/ai_reg_tv_consent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@id/ai_reg_consent"
+                    android:text="@string/as_consent"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/ai_reg_app_clause"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/ai_reg_tv_consent"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:onClick="controlClick"
+                    android:text="@string/as_clause"
+                    android:textColor="@color/blue"
+                    android:textSize="14sp" />
+            </RelativeLayout>
 
             <Button
-                android:id="@+id/ai_reg_app_clause"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/ai_reg_tv_consent"
-                android:background="@android:color/transparent"
+                android:id="@+id/ai_reg_submit"
+                android:layout_width="180dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/blue_btn_selector"
                 android:gravity="center"
                 android:onClick="controlClick"
-                android:text="@string/as_clause"
-                android:textColor="@color/blue"
-                android:textSize="14sp" />
-        </RelativeLayout>
+                android:text="@string/as_submit"
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </ScrollView>
 
-        <Button
-            android:id="@+id/ai_reg_submit"
-            android:layout_width="180dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/blue_btn_selector"
-            android:gravity="center"
-            android:onClick="controlClick"
-            android:text="@string/as_submit"
-            android:textColor="@android:color/white"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-</ScrollView>
+</LinearLayout>

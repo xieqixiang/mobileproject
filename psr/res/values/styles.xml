@@ -33,9 +33,11 @@
     </style>
 
     <style name="complete">
-        <item name="android:layout_width">240dp</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">40dp</item>
-        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginLeft">30dp</item>
+        <item name="android:layout_marginRight">30dp</item>
         <item name="android:gravity">left|center_vertical</item>
         <item name="android:paddingLeft">5dp</item>
         <item name="android:textColor">@android:color/black</item>
@@ -63,6 +65,7 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_marginLeft">7dp</item>
         <item name="android:layout_marginRight">7dp</item>
+        <item name="android:layout_marginBottom">7dp</item>
         <item name="android:background">@android:color/transparent</item>
         <item name="android:cacheColorHint">#00000000</item>
         <item name="android:divider">@color/light_grey</item>

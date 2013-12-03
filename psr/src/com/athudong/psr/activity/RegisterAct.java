@@ -2,18 +2,15 @@ package com.athudong.psr.activity;
 
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.athudong.psr.R;
 import com.athudong.psr.base.BaseAct;
 import com.athudong.psr.base.BaseHandle;
@@ -27,7 +24,9 @@ import com.athudong.psr.view.manager.DialogManager;
  */
 public class RegisterAct extends BaseAct implements OnClickListener {
 	private EditText etPhone,etPass,etConfim,etCarNum,etEmail;
-	private CheckBox cbConsent;
+	private CheckBox cbConsent,cbRent;
+	private TextView tvPayment;
+	private String strBlank ="",strBlankAccount="";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,16 +42,8 @@ public class RegisterAct extends BaseAct implements OnClickListener {
 		etEmail = getView(R.id.ai_reg_email);
 		etCarNum = getView(R.id.ai_reg_car_num);
 		cbConsent = getView(R.id.ai_reg_consent);
-		
-		Intent intent = getIntent();
-		Bundle bundle = intent.getBundleExtra("bundle");
-		if(bundle !=null){
-			String flag = bundle.getString("modifyInfo");
-			if(flag !=null && TextUtils.isEmpty(flag)){
-				TextView tvTitle = getView(R.id.ai_head_tv);
-				tvTitle.setText("");
-			}
-		}
+		cbRent = getView(R.id.ai_register_cb);
+		tvPayment = getView(R.id.ai_register_payment);
 	}
 	
 	@Override
@@ -76,6 +67,13 @@ public class RegisterAct extends BaseAct implements OnClickListener {
 			String strConfim = etConfim.getText().toString().trim();
 			String strEmail = etEmail.getText().toString().trim();
 			String strCarNum = etCarNum.getText().toString().trim();
+			String rent = null;
+			boolean haveParkingSpace = cbRent.isChecked();
+			if(haveParkingSpace){
+				rent = "Y";
+			}else {
+				rent = "N";
+			}
 			if(AppUtil.isEmpty(new String []{strPhone,strPass,strConfim,strEmail,strCarNum})){
 				showToast(getString(R.string.as_empty_error));
 				break;
@@ -93,6 +91,9 @@ public class RegisterAct extends BaseAct implements OnClickListener {
 			reqParams.put("mobileno",strPhone);
 			reqParams.put("carno",strCarNum);
 			reqParams.put("password",md5Pass);
+			reqParams.put("rent",rent);
+			reqParams.put("paycmpn",strBlank);
+			reqParams.put("payno",strBlankAccount);
 			this.doNetworkTaskAsync(C.task.complete,new IndexHandler(this),0,reqParams);
 			break;
 		case R.id.ai_reg_app_clause:
@@ -103,6 +104,38 @@ public class RegisterAct extends BaseAct implements OnClickListener {
 		case R.id.ai_head_left:
 			this.finish();
 			break;
+		case R.id.ai_register_rl:
+			String payment = tvPayment.getText().toString().trim();
+			Bundle bundle = new Bundle();
+			if("实时支付".equals(payment)){
+				bundle.putInt("payment",1);
+			}else {
+				bundle.putInt("payment",2);
+				bundle.putString("blank",strBlank);
+				bundle.putString("blankAccount",strBlankAccount);
+			}
+			ForResult(PaymentAct.class, bundle, this,1001);
+			break;
+		
+		}
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if(requestCode==1001){
+			if(resultCode==RESULT_OK){
+				Bundle bundle= data.getBundleExtra("blund");
+				if(bundle !=null){
+					int payment = bundle.getInt("payment",1);
+					if(payment==1){
+						tvPayment.setText("实时支付");
+					}else {
+						tvPayment.setText("后台支付");
+						strBlank = bundle.getString("blank");
+						strBlankAccount = bundle.getString("blankAccount");
+					}
+				}
+			}
 		}
 	}
 	

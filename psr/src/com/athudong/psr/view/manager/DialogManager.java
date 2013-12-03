@@ -6,6 +6,8 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -119,10 +121,10 @@ public class DialogManager {
 			tvAler =(TextView) view.findViewById(R.id.ai_pd_text);
 			progressDialog = new Dialog(context, R.style.mDialog);
 			progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-			/*Window window = progressDialog.getWindow();
+			Window window = progressDialog.getWindow();
 			WindowManager.LayoutParams lp = window.getAttributes();
-			lp.alpha = 0.2f;
-			window.setAttributes(lp);*/
+			lp.alpha = 0.7f;
+			window.setAttributes(lp);
 			pb = (ProgressBar) view.findViewById(R.id.ai_pd_pb);
 			tvAler.setText(text);
 			pb.setVisibility(View.VISIBLE);

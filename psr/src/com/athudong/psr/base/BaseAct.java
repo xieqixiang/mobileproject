@@ -59,6 +59,14 @@ public class BaseAct extends Activity {
 		this.startActivity(intent);
 	}
 	
+	/**传递参数给打开的Activity*/
+	protected void ForResult(Class<?> classObj,Bundle bundle,BaseAct activity,int requestCode){
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setClass(activity,classObj);
+		intent.putExtra("bundle",bundle);
+		activity.startActivityForResult(intent, requestCode);
+	}
+	
 	public void showToast(String result) {
 		Toast.makeText(this,result,Toast.LENGTH_SHORT).show();
 	}
