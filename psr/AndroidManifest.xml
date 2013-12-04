@@ -4,6 +4,13 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true" />
+
     <uses-sdk
         android:minSdkVersion="9"
         android:targetSdkVersion="18" />
@@ -143,7 +150,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        
         <activity
             android:name="com.athudong.psr.activity.MapAct"
             android:launchMode="singleTop"
@@ -155,7 +161,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        
         <activity
             android:name="com.athudong.psr.activity.IncomeAct"
             android:launchMode="singleTop"
@@ -167,7 +172,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        
         <activity
             android:name="com.athudong.psr.activity.ModifyRentManagerAct"
             android:launchMode="singleTop"
@@ -179,7 +183,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        
         <activity
             android:name="com.athudong.psr.activity.RentManagerAct"
             android:launchMode="singleTop"
@@ -191,7 +194,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        
         <activity
             android:name="com.athudong.psr.activity.ModifyRentPlanAct"
             android:launchMode="singleTop"
@@ -203,7 +205,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        
         <activity
             android:name="com.athudong.psr.activity.PaymentAct"
             android:launchMode="singleTop"

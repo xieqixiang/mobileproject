@@ -1,12 +1,15 @@
 package com.athudong.psr.fragment;
 
 import com.athudong.psr.R;
+import com.athudong.psr.activity.IncomeAct;
 import com.athudong.psr.activity.RegisterAct;
+import com.athudong.psr.activity.RentManagerAct;
+
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,9 +33,9 @@ public class SampleListFragment extends ListFragment implements OnClickListener 
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		SampleAdapter adapter = new SampleAdapter(getActivity());
-		for(int i = 0 ; i < 1;i++){
-			adapter.add(new SampleItem("修改注册资料"));
-		}
+		adapter.add(new SampleItem("车位管理"));
+		adapter.add(new SampleItem("收益报表"));
+		adapter.add(new SampleItem("修改注册资料"));
 		setListAdapter(adapter);
 	}
 	
@@ -67,20 +70,32 @@ public class SampleListFragment extends ListFragment implements OnClickListener 
 	@Override
 	public void onClick(View v) {
 		if(v instanceof Button){
-			String index = (String) v.getContentDescription();
-			if(!TextUtils.isEmpty(index)){
-				switch(v.getId()){
-				case R.id.row_modify_info:
-					if(Integer.valueOf(index)==0){
-						Intent intent = new Intent(getActivity(),RegisterAct.class);
-						Bundle bundle = new Bundle();
-						bundle.putString("flag","modifyInfo");
-						intent.putExtra("bundle",bundle);
-						startActivity(intent);
-					}
+			int index = Integer.valueOf(v.getContentDescription().toString());
+				switch(index){
+				case 0:
+					overLayout(RentManagerAct.class,0);
 					break;
-				}
+				case 1:
+					overLayout(IncomeAct.class,0);
+					break;
+				case 2:
+					Intent intent = new Intent(getActivity(),RegisterAct.class);
+					Bundle bundle = new Bundle();
+					bundle.putString("flag","modifyInfo");
+					intent.putExtra("bundle",bundle);
+					startActivity(intent);
+					break;
 			}
 		}
+	}
+	
+	private void overLayout(Class<?> class1,int flag){
+		Activity activity = getActivity();
+		Intent intent = new Intent(activity,class1);
+		Bundle bundle = new Bundle();
+		bundle.putInt("flag", flag);
+		intent.putExtra("bundle",bundle);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+		activity.startActivity(intent);
 	}
 }

@@ -1,16 +1,26 @@
 package com.athudong.psr.view.manager;
 
 import com.athudong.psr.R;
+import com.athudong.psr.adapter.DialogItemAdap;
+import com.athudong.psr.view.listener.OnAlertSelectId;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.LayoutInflater;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -30,14 +40,15 @@ public class DialogManager {
 	private static Animation animation;
 	private static PopupWindow promptPopupWindow;
 	private static ProgressBar pb;
-    private static TextView tvAler;
-	
+	private static TextView tvAler;
+
 	/**
 	 * @param context上下文
 	 * @param toasttext需要显示的文本信息
 	 * @return 自定义toast
 	 */
-	public static Toast toastMakeText(Context context, String toasttext,int duration) {
+	public static Toast toastMakeText(Context context, String toasttext,
+			int duration) {
 		toast = new Toast(context);
 		toast.setDuration(duration);
 		view = View.inflate(context, R.layout.al_my_toast, null);
@@ -51,13 +62,16 @@ public class DialogManager {
 	/**
 	 * 错误提示
 	 */
-	public static void showErrorDialog(Context context, String message,OnClickListener listener) {
+	public static void showErrorDialog(Context context, String message,
+			OnClickListener listener) {
 		errorDialog = new Dialog(context, R.style.mDialog);
-		errorDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+		errorDialog.getWindow().setBackgroundDrawableResource(
+				android.R.color.transparent);
 		View view = View.inflate(context, R.layout.al_error_dialog, null);
 		TextView errorTitle = (TextView) view.findViewById(R.id.ai_error_title);
 		errorTitle.setText("");
-		TextView errorMessage = (TextView) view.findViewById(R.id.ai_fail_message);
+		TextView errorMessage = (TextView) view
+				.findViewById(R.id.ai_fail_message);
 		errorMessage.setText(message);
 		errorDialog.setContentView(view);
 		Button sureBtn = (Button) view.findViewById(R.id.ai_suer);
@@ -73,19 +87,22 @@ public class DialogManager {
 	 * @param message
 	 * @param listener
 	 */
-	public static void showAlertDialog(Context context, String title,String message, OnClickListener listener) {
+	public static void showAlertDialog(Context context, String title,
+			String message, OnClickListener listener) {
 		alertDialog = new Dialog(context, R.style.mDialog);
-		alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+		alertDialog.getWindow().setBackgroundDrawableResource(
+				android.R.color.transparent);
 		View view = View.inflate(context, R.layout.alert_dialog, null);
 		TextView tvTitle = (TextView) view.findViewById(R.id.ai_alert_title);
-		if(!TextUtils.isEmpty(title)){
+		if (!TextUtils.isEmpty(title)) {
 			tvTitle.setVisibility(View.VISIBLE);
 			tvTitle.setText(title);
-		}else {
+		} else {
 			tvTitle.setVisibility(View.GONE);
 		}
-		
-		TextView tvMessage = (TextView) view.findViewById(R.id.ai_alert_message);
+
+		TextView tvMessage = (TextView) view
+				.findViewById(R.id.ai_alert_message);
 		tvMessage.setText(message);
 		alertDialog.setContentView(view);
 		Button cancel = (Button) view.findViewById(R.id.alert_negative);
@@ -95,9 +112,11 @@ public class DialogManager {
 		alertDialog.show();
 	}
 
-	public static void showOptionDialog(Context context,OnClickListener listener) {
+	public static void showOptionDialog(Context context,
+			OnClickListener listener) {
 		optionDialog = new Dialog(context, R.style.mDialog);
-		optionDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+		optionDialog.getWindow().setBackgroundDrawableResource(
+				android.R.color.transparent);
 		View view = View.inflate(context, R.layout.al_option_dialog, null);
 		TextView one = (TextView) view.findViewById(R.id.ai_od_one);
 		one.setOnClickListener(listener);
@@ -108,20 +127,23 @@ public class DialogManager {
 	}
 
 	/**
-	 * @param context 上下文
-	 * @param text dialog显示的提示信息
+	 * @param context
+	 *            上下文
+	 * @param text
+	 *            dialog显示的提示信息
 	 * @return dialog
 	 */
 	public static Dialog showProgressDialog(Context context, String text) {
-		
-		if(progressDialog !=null &&progressDialog.isShowing()){
+
+		if (progressDialog != null && progressDialog.isShowing()) {
 			tvAler.setText(text);
-		}else {
+		} else {
 			View view = View.inflate(context, R.layout.progress_dialog, null);
-			tvAler =(TextView) view.findViewById(R.id.ai_pd_text);
+			tvAler = (TextView) view.findViewById(R.id.ai_pd_text);
 			progressDialog = new Dialog(context, R.style.mDialog);
-			progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 			Window window = progressDialog.getWindow();
+			window.setBackgroundDrawableResource(android.R.color.transparent);
+
 			WindowManager.LayoutParams lp = window.getAttributes();
 			lp.alpha = 0.7f;
 			window.setAttributes(lp);
@@ -133,6 +155,53 @@ public class DialogManager {
 			progressDialog.show();
 		}
 		return progressDialog;
+	}
+
+	/** 底部弹出的Dialog */
+	public static void showButtomDialog(final Activity activity,final String[] items, final OnAlertSelectId alertSelectId) {
+
+		DisplayMetrics dm = activity.getResources().getDisplayMetrics();
+		float density = dm.density;
+		int width= dm.widthPixels;
+		
+		final Dialog buttomDialog = new Dialog(activity, R.style.mDialog);
+		LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.buttom_dialog, null);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int) (width-(30*density)),(int) (230*density));
+		layout.setLayoutParams(params);
+	
+		Button btnButtom = (Button) layout.findViewById(R.id.ai_bd_buttom);
+		btnButtom.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				buttomDialog.dismiss();
+			}
+		});
+		final ListView lv = (ListView) layout.findViewById(R.id.ai_bd_listview);
+		LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams((int) (width-(10*density)),(int) (210*density));
+		lv.setPadding((int)(30*density),0,(int)(30*density),0);
+		params2.topMargin = 20;
+		lv.setLayoutParams(params2);
+		DialogItemAdap adapter = new DialogItemAdap(activity);
+		adapter.setItems(items);
+		lv.setAdapter(adapter);
+		lv.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				alertSelectId.onClick(position);
+				buttomDialog.dismiss();
+				lv.requestFocus();
+			}
+		});
+		Window window = buttomDialog.getWindow();
+		window.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+		window.setBackgroundDrawableResource(android.R.color.transparent);
+		window.setWindowAnimations(R.style.dialog_style);
+		buttomDialog.setContentView(layout);
+		buttomDialog.show();
 	}
 
 	public static boolean progressIsShow() {
@@ -178,7 +247,7 @@ public class DialogManager {
 	 */
 	public static Animation getAnimation(Context context) {
 
-		animation = AnimationUtils.loadAnimation(context, R.anim.ya_rotate);
+		animation = AnimationUtils.loadAnimation(context, R.anim.rotate);
 		return animation;
 	}
 

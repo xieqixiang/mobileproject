@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.athudong.psr.R;
 import com.athudong.psr.base.BaseAct;
@@ -23,10 +24,11 @@ import com.athudong.psr.view.manager.DialogManager;
  * зЂВс
  */
 public class RegisterAct extends BaseAct implements OnClickListener {
-	private EditText etPhone,etPass,etConfim,etCarNum,etEmail;
+	private EditText etPhone,etPass,etConfim,etCarNum,etEmail,etCertificate,etCertificateNum;
 	private CheckBox cbConsent,cbRent;
 	private TextView tvPayment;
 	private String strBlank ="",strBlankAccount="";
+	private RelativeLayout rlAgreement;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +38,30 @@ public class RegisterAct extends BaseAct implements OnClickListener {
 	}
 	
 	private void initView(){
+		Intent intent = getIntent();
+		
 		etPass = getView(R.id.ai_reg_pass);
 		etPhone = getView(R.id.ai_reg_phone);
 		etConfim = getView(R.id.ai_reg_confirm_pass);
 		etEmail = getView(R.id.ai_reg_email);
 		etCarNum = getView(R.id.ai_reg_car_num);
+		etCertificate = getView(R.id.ai_reg_identification);
+		etCertificateNum = getView(R.id.ai_reg_identification_num);
+		
 		cbConsent = getView(R.id.ai_reg_consent);
 		cbRent = getView(R.id.ai_register_cb);
 		tvPayment = getView(R.id.ai_register_payment);
+		
+		rlAgreement = getView(R.id.ai_register_agreement);
+		
+		Bundle bundle = intent.getBundleExtra("bundle");
+		if(bundle !=null && "modifyInfo".equals(bundle.getString("flag"))){
+			TextView tvTitle = getView(R.id.ai_head_tv);
+			tvTitle.setText(getString(R.string.as_modify_register_info));
+			etPass.setVisibility(View.GONE);
+			etConfim.setVisibility(View.GONE);
+			rlAgreement.setVisibility(View.GONE);
+		}
 	}
 	
 	@Override
@@ -67,6 +85,10 @@ public class RegisterAct extends BaseAct implements OnClickListener {
 			String strConfim = etConfim.getText().toString().trim();
 			String strEmail = etEmail.getText().toString().trim();
 			String strCarNum = etCarNum.getText().toString().trim();
+			String strCertificate = etCertificate.getText().toString().trim();
+			String strCertificateNum = etCertificateNum.getText().toString().trim();
+			
+			
 			String rent = null;
 			boolean haveParkingSpace = cbRent.isChecked();
 			if(haveParkingSpace){
@@ -92,6 +114,8 @@ public class RegisterAct extends BaseAct implements OnClickListener {
 			reqParams.put("carno",strCarNum);
 			reqParams.put("password",md5Pass);
 			reqParams.put("rent",rent);
+			reqParams.put("idname",strCertificate);
+			reqParams.put("inno",strCertificateNum);
 			reqParams.put("paycmpn",strBlank);
 			reqParams.put("payno",strBlankAccount);
 			this.doNetworkTaskAsync(C.task.complete,new IndexHandler(this),0,reqParams);

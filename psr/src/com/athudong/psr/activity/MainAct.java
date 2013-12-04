@@ -1,7 +1,6 @@
 package com.athudong.psr.activity;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
@@ -23,11 +22,11 @@ import com.slidingmenu.lib.app.SlidingFragmentActivity;
  */
 public class MainAct extends SlidingFragmentActivity implements OnClickListener {
 	private ViewPager vp;
-	private FragmentPagerAdap mPagerAdapter;
+	FragmentPagerAdap mPagerAdapter;
 	protected ListFragment mFragment;
 	private SlidingMenu sm ;
-	private Button btn1, btn2;
-	private Resources resources;
+	//private Button btn1, btn2;
+	//private Resources resources;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -39,10 +38,10 @@ public class MainAct extends SlidingFragmentActivity implements OnClickListener 
 	}
 
 	private void initView() {
-		resources = getResources();
+		//resources = getResources();
 		vp = (ViewPager) findViewById(R.id.ai_main_viewpager);
-		btn1 = (Button)findViewById(R.id.ai_main_parking_space);
-		btn2 = (Button)findViewById(R.id.ai_main_rent_parking_space);
+		//btn1 = (Button)findViewById(R.id.ai_main_parking_space);
+		//btn2 = (Button)findViewById(R.id.ai_main_rent_parking_space);
 		
 		setBehindContentView(R.layout.al_menu_frame);
 		
@@ -59,7 +58,7 @@ public class MainAct extends SlidingFragmentActivity implements OnClickListener 
 		sm.setShadowDrawable(R.drawable.ad_shadow);
 	    
 		sm.setMode(SlidingMenu.RIGHT);
-		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
 		sm.setBehindOffsetRes(R.dimen.actionbar_home_width);
 		sm.setFadeDegree(0.35f);
 		setSlidingActionBarEnabled(false);
@@ -69,15 +68,15 @@ public class MainAct extends SlidingFragmentActivity implements OnClickListener 
 	}
 
 	private void initData() {
-		btn1.setTextColor(resources.getColor(R.color.blue));
-		btn2.setTextColor(resources.getColor(R.color.black));
+		//btn1.setTextColor(resources.getColor(R.color.blue));
+		//btn2.setTextColor(resources.getColor(R.color.black));
 	}
 
 	private void initListener() {
 		vp.setOnPageChangeListener(new OnPageChangeListener() {
 			@Override
 			public void onPageSelected(int arg0) {
-				setSelector(arg0);
+				//setSelector(arg0);
 			}
 
 			@Override
@@ -99,7 +98,7 @@ public class MainAct extends SlidingFragmentActivity implements OnClickListener 
 	}
 
 	/** 设置选中效果 */
-	public void setSelector(int id) {
+	/*public void setSelector(int id) {
 		switch(id){
 		case 0:
 			sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
@@ -112,7 +111,7 @@ public class MainAct extends SlidingFragmentActivity implements OnClickListener 
 			btn1.setTextColor(resources.getColor(R.color.black));
 			break;
 		}
-	}
+	}*/
 
 	public void controlClick(View view) {
 		switch (view.getId()) {

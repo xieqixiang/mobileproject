@@ -8,10 +8,8 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.athudong.psr.R;
-import com.athudong.psr.activity.IncomeAct;
 import com.athudong.psr.activity.ParkingSerachAct;
 import com.athudong.psr.activity.ParkingSpaceListAct;
-import com.athudong.psr.activity.RentManagerAct;
 import com.athudong.psr.base.C;
 
 /**
@@ -23,35 +21,19 @@ public class FragmentAdap extends SherlockFragment implements OnClickListener{
 	private LinearLayout llParkingSearch;
 	private LinearLayout llHistoryLook;
 	private LinearLayout llParkingMap;
-	private LinearLayout llRentManager;
-	private LinearLayout llIncome;
 	
 	
 	public android.view.View onCreateView(android.view.LayoutInflater inflater, android.view.ViewGroup container, android.os.Bundle savedInstanceState) {
-		Bundle args = getArguments();
-		int index = args.getInt(ARG_OBJECT);
 		View rootView = null;
-		if(index==0){
-			rootView = inflater.inflate(R.layout.al_parking_space, container,false);
-			llParkingSpace = (LinearLayout) rootView.findViewById(R.id.ai_ps_ll_nearby_sp);
-			llParkingSearch = (LinearLayout) rootView.findViewById(R.id.ai_ps_ll_reserve);
-			llHistoryLook = (LinearLayout) rootView.findViewById(R.id.ai_ps_ll_history_look);
-			llParkingMap = (LinearLayout) rootView.findViewById(R.id.ai_ps_ll_parking_map);
-			
-			llHistoryLook.setOnClickListener(this);
-			llParkingMap.setOnClickListener(this);
-			llParkingSearch.setOnClickListener(this);
-			llParkingSpace.setOnClickListener(this);
-		}
-		if(index==1){
-			rootView = inflater.inflate(R.layout.al_rent_parking_space, container,false);
-		
-			llRentManager = (LinearLayout) rootView.findViewById(R.id.ai_rps_rent_manager);
-			llIncome = (LinearLayout) rootView.findViewById(R.id.ai_rps_income);
-			
-			llRentManager.setOnClickListener(this);
-			llIncome.setOnClickListener(this);
-		}
+		rootView = inflater.inflate(R.layout.al_parking_space, container,false);
+		llParkingSpace = (LinearLayout) rootView.findViewById(R.id.ai_ps_ll_nearby_sp);
+		llParkingSearch = (LinearLayout) rootView.findViewById(R.id.ai_ps_ll_reserve);
+		llHistoryLook = (LinearLayout) rootView.findViewById(R.id.ai_ps_ll_history_look);
+		llParkingMap = (LinearLayout) rootView.findViewById(R.id.ai_ps_ll_parking_map);
+		llHistoryLook.setOnClickListener(this);
+		llParkingMap.setOnClickListener(this);
+		llParkingSearch.setOnClickListener(this);
+		llParkingSpace.setOnClickListener(this);
 		return rootView;
 	}
 
@@ -69,12 +51,6 @@ public class FragmentAdap extends SherlockFragment implements OnClickListener{
 			break;
 		case R.id.ai_ps_ll_parking_map:
 			overLayout(ParkingSpaceListAct.class,C.flag.nowInfo);
-			break;
-		case R.id.ai_rps_rent_manager:
-			overLayout(RentManagerAct.class,0);
-			break;
-		case R.id.ai_rps_income:
-			overLayout(IncomeAct.class,0);
 			break;
 		}
 	};

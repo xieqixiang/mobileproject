@@ -74,7 +74,7 @@ public class ParkingSpaceListAct extends BaseAct {
 			HashMap<String,String> params = rmu.parkingSpaceSearch("",address,"","",startTime,stopTime);
 			this.doNetworkTaskAsync(C.task.complete,handler,3000,params);
 		}else if(flag==C.flag.nowInfo){
-			tView.setText(getString(R.string.as_now_reserve));
+			tView.setText(getString(R.string.as_sparing_space_map));
 			ArrayList<ParkingSpace> arrayList = new ArrayList<ParkingSpace>();
 			ParkingSpace parking = new ParkingSpace();
 			parking.setStrParkName("Õý¼Ñ¹ã³¡");

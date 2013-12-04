@@ -74,5 +74,10 @@
         <item name="android:listSelector">@android:color/transparent</item>
         <item name="android:scrollbarStyle">outsideOverlay</item>
     </style>
+    
+    <style name="dialog_style" parent="android:Animation" >
+        <item name="@android:windowEnterAnimation" >@anim/dialog_enter</item> <!-- 进人时的动画 -->
+        <item name="@android:windowExitAnimation">@anim/dialog_exit</item><!-- 退出时的动画 -->
+    </style>
 
 </resources>

@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="40dp"
+    android:layout_marginLeft="30dp"
+    android:layout_marginRight="30dp"
     android:background="@drawable/list_item_selector"
+    android:gravity="center"
     android:orientation="vertical" >
-    
-    <TextView 
-        android:id="@+id/ai_pli_tv_describe"
+
+    <TextView
+        android:id="@+id/ai_it_tv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
+        android:gravity="center"
         android:textColor="@color/black"
-        android:textSize="18sp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:gravity="left"/>
+        android:textSize="18sp" />
+
 </LinearLayout>

@@ -6,25 +6,29 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import com.athudong.psr.R;
 import com.athudong.psr.base.BaseAct;
+import com.athudong.psr.view.listener.OnAlertSelectId;
+import com.athudong.psr.view.manager.DialogManager;
 
 /**
  * 支付方式界面
- * 
  * @author 谢启祥
  */
 public class PaymentAct extends BaseAct {
 	private RadioButton cbPayment1, cbPayment2;
 	private TextView tvSummary;
 	private LinearLayout llBank;
-	private EditText etBank, etBankAccount;
+	private EditText etBankAccount;
+	private Button btnBank;
 	private int payment = 1;
-
+	private String [] items = new String[]{"工商银行","建设银行","农业银行","中国银行","交通银行","招商银行","广发银行","民生银行"};
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,7 +43,7 @@ public class PaymentAct extends BaseAct {
 		cbPayment2 = getView(R.id.ai_mp_cb2);
 		tvSummary = getView(R.id.ai_mp_payment_about);
 		llBank = getView(R.id.ai_mp_ll);
-		etBank = getView(R.id.ai_mp_et_bank);
+		btnBank = getView(R.id.ai_mp_btn_bank);
 		etBankAccount = getView(R.id.ai_mp_et_bank_account);
 	}
 
@@ -47,8 +51,7 @@ public class PaymentAct extends BaseAct {
 		cbPayment1.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
+			public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
 				if (isChecked) {
 					payment = 1;
 					llBank.setVisibility(View.GONE);
@@ -61,13 +64,12 @@ public class PaymentAct extends BaseAct {
 		cbPayment2.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
+			public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
 				if (isChecked) {
 					payment = 2;
 					llBank.setVisibility(View.VISIBLE);
 					cbPayment1.setChecked(false);
-					tvSummary.setText("后台支付需与车位易公司办理授权，授权成功后自动在确定预订车位时自动会在银行账号扣除费用");
+					tvSummary.setText("后台支付需与车位易公司办理授权，授权成功后在确定预订车位时自动会在银行账号扣除费用");
 				}
 			}
 		});
@@ -89,7 +91,7 @@ public class PaymentAct extends BaseAct {
 				llBank.setVisibility(View.VISIBLE);
 				String blank = bundle.getString("blank");
 				String blankAccount = bundle.getString("blankAccount");
-				etBank.setText(blank);
+				btnBank.setText(blank);
 				etBankAccount.setText(blankAccount);
 				tvSummary.setText("后台支付在确定预订车位时自动会在银行账号扣除费用");
 			}
@@ -104,8 +106,8 @@ public class PaymentAct extends BaseAct {
 			Bundle bundle = new Bundle();
 			bundle.putInt("payment", payment);
 			if (payment == 2) {
-				String blank = etBank.getText().toString().trim();
-				String blankAccount = etBank.getText().toString().trim();
+				String blank = btnBank.getText().toString().trim();
+				String blankAccount = btnBank.getText().toString().trim();
 				if (TextUtils.isEmpty(blank)) {
 					showToast("请输入支付银行");
 					break;
@@ -124,6 +126,30 @@ public class PaymentAct extends BaseAct {
 		case R.id.ai_mp_cancel:
 			this.finish();
 			break;
+		case R.id.ai_mp_btn_bank:
+			
+			DialogManager.showButtomDialog(this, items,new OnClickIndex());
+			break;
+		case R.id.ai_bd_buttom:
+			
+			break;
+		case R.id.ai_mp_rl1:
+			cbPayment1.setChecked(true);
+			cbPayment2.setChecked(false);
+			break;
+		case R.id.ai_mp_rl2:
+			cbPayment1.setChecked(false);
+			cbPayment2.setChecked(true);
+			break;
 		}
+	}
+	
+	private class OnClickIndex implements OnAlertSelectId{
+
+		@Override
+		public void onClick(int position) {
+			btnBank.setText(items[position]);
+		}
+		
 	}
 }
