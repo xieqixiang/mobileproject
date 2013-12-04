@@ -25,6 +25,13 @@ public class RentPlanAdapter extends BaseAdap implements OnClickListener {
 	
 	/**标识方租类型(放租或停租)*/
 	private int flag;
+	
+	/**放租形式*/
+	private int rentOut;
+	
+	public void setRentOut(int rentOut) {
+		this.rentOut = rentOut;
+	}
 
 	public void setArrayList(ArrayList<RentPlan> arrayList) {
 		this.arrayList = arrayList;
@@ -53,7 +60,6 @@ public class RentPlanAdapter extends BaseAdap implements OnClickListener {
 	
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 	
@@ -66,6 +72,7 @@ public class RentPlanAdapter extends BaseAdap implements OnClickListener {
 			viewHolder.tvRentPlan = (TextView) convertView.findViewById(R.id.pi_plan_detail);
 			viewHolder.tvModify = (TextView) convertView.findViewById(R.id.ai_vi_modify);
 			viewHolder.tvDelete = (TextView) convertView.findViewById(R.id.ai_vi_delete);
+			viewHolder.viewLine = convertView.findViewById(R.id.ai_vi_line);
 			convertView.setTag(viewHolder);
 		}else {
 			viewHolder = (ViewHolder) convertView.getTag();
@@ -78,6 +85,15 @@ public class RentPlanAdapter extends BaseAdap implements OnClickListener {
 		if(flag==C.flag.stopRent){
 			viewHolder.tvRentPlan.setText("停租开始时间\n"+rp.getStrStartTime()+"\n停租结束时间\n"+rp.getStrStopTime());
 		}
+		
+		if(rentOut==1){
+			viewHolder.tvDelete.setVisibility(View.GONE);
+			viewHolder.viewLine.setVisibility(View.GONE);
+		}
+		if(rentOut==2){
+			viewHolder.tvDelete.setVisibility(View.VISIBLE);
+			viewHolder.viewLine.setVisibility(View.VISIBLE);
+		}
 		viewHolder.tvDelete.setOnClickListener(this);
 		viewHolder.tvDelete.setContentDescription(position+"");
 		viewHolder.tvModify.setOnClickListener(this);
@@ -89,6 +105,7 @@ public class RentPlanAdapter extends BaseAdap implements OnClickListener {
 		public TextView tvRentPlan;
 		public TextView tvModify;
 		public TextView tvDelete;
+		public View viewLine;
 	}
 
 	@Override

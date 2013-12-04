@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import com.athudong.psr.R;
 import com.athudong.psr.base.BaseAct;
-
+ 
 /**
  * 修改放租方案
  * @author 谢启祥
@@ -23,8 +23,6 @@ public class ModifyRentPlanAct extends BaseAct {
 	private void initView(){
 		TextView tvTitle = getView(R.id.ai_head_tv);
 		tvTitle.setText(getString(R.string.add));
-		
-		
 	}
 	
 	public void controlClick(View view){

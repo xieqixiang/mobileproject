@@ -23,7 +23,7 @@
         android:gravity="center"
         android:text="@string/as_register"
         android:textColor="@android:color/white"
-        android:textSize="26sp" />
+        android:textSize="24sp" />
 
     <ImageButton
         android:id="@+id/ai_head_right"

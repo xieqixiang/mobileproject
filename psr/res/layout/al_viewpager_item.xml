@@ -31,7 +31,9 @@
             android:textColor="@color/black"
             android:textSize="16sp" />
         
-        <View android:layout_width="1dp"
+        <View
+            android:id="@+id/ai_vi_line" 
+            android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="@color/blue"/>
 

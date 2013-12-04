@@ -23,7 +23,7 @@ import com.slidingmenu.lib.app.SlidingFragmentActivity;
  */
 public class MainAct extends SlidingFragmentActivity implements OnClickListener {
 	private ViewPager vp;
-	FragmentPagerAdap mPagerAdapter;
+	private FragmentPagerAdap mPagerAdapter;
 	protected ListFragment mFragment;
 	private SlidingMenu sm ;
 	private Button btn1, btn2;

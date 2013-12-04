@@ -2,12 +2,13 @@ package com.athudong.psr.adapter;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.athudong.psr.R;
 import com.athudong.psr.activity.ModifyRentManagerAct;
 import com.athudong.psr.base.BaseAct;
@@ -80,8 +81,7 @@ public class ModifyRentPlanAdap extends BaseAdap implements OnClickListener {
 		viewHold.tvModifyDailyRent.setContentDescription(position+"");
 		viewHold.tvModifyTemporaryRent.setContentDescription(position+"");
 		ParkingSpace ps = arrayList.get(position);
-		viewHold.tvParkingSpaceInfo.setText(AppUtil.appString(new String []{"车位地址"},new String []{ps.getStrParkName()+ps.getStrParkNo()}));
-		
+		viewHold.tvParkingSpaceInfo.setText(AppUtil.appString(new String []{"车位地址","出租状态"},new String []{ps.getStrParkName()+ps.getStrParkNo(),ps.getStrRentalStatus()}));
 		return convertView;
 	}
 	
@@ -98,10 +98,19 @@ public class ModifyRentPlanAdap extends BaseAdap implements OnClickListener {
 			
 			break;
 		case R.id.ai_rmi_mobile_daily_rent:
+			overLayout(activity,1);
+			break;
 		case R.id.ai_rmi_mobile_temporary_rent:
-			Intent intent = new Intent(activity,ModifyRentManagerAct.class);
-			activity.startActivity(intent);
+			overLayout(activity,2);
 			break;
 		}
+	}
+	
+	private void overLayout(Activity activity ,int flag){
+		Bundle bundle = new Bundle();
+		bundle.putInt("flag",flag);
+		Intent intent = new Intent(activity,ModifyRentManagerAct.class);
+		intent.putExtra("bundle",bundle);
+		activity.startActivity(intent);
 	}
 }

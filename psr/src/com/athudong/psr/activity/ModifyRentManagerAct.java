@@ -1,6 +1,8 @@
 package com.athudong.psr.activity;
 
 import java.util.ArrayList;
+
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -17,7 +19,6 @@ import com.athudong.psr.base.BaseApp;
 import com.athudong.psr.base.C;
 
 /**
- * 
  * 修改租车方案
  * @author 谢启祥
  */
@@ -28,7 +29,8 @@ public class ModifyRentManagerAct extends BaseAct {
 	private ArrayList<View> arrayList;
 	private Button btnStartTime, btnStopTime;
 	private Resources resources;
-
+	private int flag;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,24 +41,42 @@ public class ModifyRentManagerAct extends BaseAct {
 
 	private void initView() {
 		TextView tvTitle = getView(R.id.ai_head_tv);
-		tvTitle.setText(getString(R.string.as_modify_rent_plan));
-
+		
+		Intent intent = getIntent();
+		Bundle bundle = intent.getBundleExtra("bundle");
+		flag = bundle.getInt("flag");
+		if(flag==1){
+			tvTitle.setText(getString(R.string.as_modify_daily_rent));
+		}else {
+			tvTitle.setText(getString(R.string.as_modify_temporary_rent));
+		}
+		
 		vp = getView(R.id.ai_amr_viewpager);
 		vpAdapter = new ViewPagerAdap(this);
-
 		View viewpage1 = getLayoutInflater().inflate(R.layout.al_rent_manager_page1, null);
+		Button btnAdd1= (Button) viewpage1.findViewById(R.id.ai_rmp1_add);
+		if(flag==1){
+			btnAdd1.setVisibility(View.GONE);
+		}
+		
 		View viewpage2 = getLayoutInflater().inflate(R.layout.al_rent_manager_page2, null);
-
+		Button btnAdd2 = (Button) viewpage2.findViewById(R.id.ai_rmp2_add);
+		if(flag==1){
+			btnAdd2.setVisibility(View.GONE);
+		}
+		
 		listView1 = (ListView) viewpage1.findViewById(R.id.lv_viewpage1);
 		listView2 = (ListView) viewpage2.findViewById(R.id.lv_viewpage2);
-
+		
 		BaseApp application = (BaseApp) getApplication();
 		RentPlanAdapter rpAdapter1 = new RentPlanAdapter(this);
+		rpAdapter1.setRentOut(flag);
 		rpAdapter1.setArrayList(application.rPlans);
 		rpAdapter1.setFlag(C.flag.startRent);
 		listView1.setAdapter(rpAdapter1);
 
 		RentPlanAdapter rpAdapter2 = new RentPlanAdapter(this);
+		rpAdapter2.setRentOut(flag);
 		rpAdapter2.setArrayList(application.rPlans);
 		rpAdapter2.setFlag(C.flag.stopRent);
 		listView2.setAdapter(rpAdapter2);

@@ -34,8 +34,18 @@ public class ParkingSpace implements Parcelable{
 	private String strTraderPhone;
 	/**½áËã½ð¶î*/
 	private String strPayMent;
+	/**³ö×â×´Ì¬*/
+	private String strRentalStatus;
 	
-	
+	public String getStrRentalStatus() {
+		return strRentalStatus;
+	}
+	public void setStrRentalStatus(String strRentalStatus) {
+		this.strRentalStatus = strRentalStatus;
+	}
+	public static Parcelable.Creator<ParkingSpace> getCreator() {
+		return CREATOR;
+	}
 	public String getStrStartTime() {
 		return strStartTime;
 	}
@@ -123,8 +133,8 @@ public class ParkingSpace implements Parcelable{
 	public ParkingSpace(String strParkNo, String strSpaceNo,
 			String strParkName, String strParkAddress, String strParkType,
 			String strParkPhotoUrl, String strSpaceName, String strRentPrice,
-			 String strStartTime, String strStopTime,
-			String strCarNum, String strTraderPhone, String strPayMent) {
+			String strStartTime, String strStopTime, String strCarNum,
+			String strTraderPhone, String strPayMent, String strRentalStatus) {
 		this.strParkNo = strParkNo;
 		this.strSpaceNo = strSpaceNo;
 		this.strParkName = strParkName;
@@ -138,6 +148,7 @@ public class ParkingSpace implements Parcelable{
 		this.strCarNum = strCarNum;
 		this.strTraderPhone = strTraderPhone;
 		this.strPayMent = strPayMent;
+		this.strRentalStatus = strRentalStatus;
 	}
 
 
@@ -169,7 +180,7 @@ public class ParkingSpace implements Parcelable{
 		this.strCarNum = parcel.readString();;
 		this.strTraderPhone = parcel.readString();;
 		this.strPayMent = parcel.readString();
-		
+		this.strRentalStatus = parcel.readString();
 	}
 	@Override
 	public int describeContents() {
@@ -190,5 +201,6 @@ public class ParkingSpace implements Parcelable{
 		dest.writeString(this.strCarNum);
 		dest.writeString(this.strTraderPhone);
 		dest.writeString(this.strPayMent);
+		dest.writeString(this.strRentalStatus);
 	}
 }

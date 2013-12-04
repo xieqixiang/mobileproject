@@ -42,6 +42,7 @@
     <string name="as_sp_reserve">目的地搜索</string>
     <string name="as_nearby_sp">定位搜索</string>
     <string name="as_rent_out">放租管理 </string>
+    <string name="as_parking_space_manager">车位管理 </string>
     <string name="as_earning_report">收益报表</string>
     <string name="as_loading_location">正在定位</string>
     <string name="as_loading_map">正在加载图片</string>
