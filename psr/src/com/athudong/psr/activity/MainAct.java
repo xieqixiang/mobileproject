@@ -30,6 +30,7 @@ public class MainAct extends SlidingFragmentActivity implements OnClickListener 
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		setTheme(R.style.Theme_Sherlock_NoActionBar);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.al_main);
 		initView();
@@ -55,6 +56,7 @@ public class MainAct extends SlidingFragmentActivity implements OnClickListener 
 		Button btnExistLogin = (Button) sm.findViewById(R.id.mf_exist_login);
 		btnExistLogin.setOnClickListener(this);
 		sm.setShadowWidthRes(R.dimen.shadow_width);
+		
 		sm.setShadowDrawable(R.drawable.ad_shadow);
 	    
 		sm.setMode(SlidingMenu.RIGHT);

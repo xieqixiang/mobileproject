@@ -3,6 +3,7 @@ package com.athudong.psr.util;
 import com.athudong.psr.base.C;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 
 /**
  * 管理SharedPreferences
@@ -25,7 +26,20 @@ public class SharedPreUtil {
 		return sp.getString(C.key.logNo,"");
 	}
 	
+	/**获取注册邮箱*/
 	public String email(){
 		return sp.getString("email","");
+	}
+	
+	/**获取位置隐私提醒标记*/
+	public int getPrivacyFlag(int flagIndex){
+		return sp.getInt(C.key.locationPrivacy,0);
+	}
+	
+	/**存储位置隐私提醒标记*/
+	public void editPrivacy(String key,int flagIndex){
+		Editor editor = sp.edit();
+		editor.putInt(key, flagIndex);
+		editor.commit();
 	}
 }

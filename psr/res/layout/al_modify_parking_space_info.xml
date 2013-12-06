@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_grey"
+    android:orientation="vertical" >
+
+    <include layout="@layout/al_head" />
+
+    <Button
+        android:id="@+id/ai_mpsi_date"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/et_selector"
+        android:gravity="left|center_vertical"
+        android:hint="@string/as_stop_rent"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/ai_mpsi_bank"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/et_selector"
+        android:gravity="left|center_vertical"
+        android:inputType="text"
+        android:singleLine="true"
+        android:hint="@string/as_blank"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/ai_mpsi_bank_num"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:hint="@string/as_blank_account"
+        android:background="@drawable/et_selector"
+        android:gravity="left|center_vertical"
+        android:inputType="text"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <include
+        android:layout_gravity="center_horizontal"
+        layout="@layout/data_picker" />
+
+    <Button
+        android:id="@+id/ai_mpsi_submit"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/blue_btn_selector"
+        android:gravity="center"
+        android:text="@string/submit"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+
+</LinearLayout>

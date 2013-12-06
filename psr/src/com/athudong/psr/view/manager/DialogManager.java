@@ -2,6 +2,9 @@ package com.athudong.psr.view.manager;
 
 import com.athudong.psr.R;
 import com.athudong.psr.adapter.DialogItemAdap;
+import com.athudong.psr.base.BaseAct;
+import com.athudong.psr.base.C;
+import com.athudong.psr.util.SharedPreUtil;
 import com.athudong.psr.view.listener.OnAlertSelectId;
 import android.app.Activity;
 import android.app.Dialog;
@@ -19,6 +22,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -87,11 +93,9 @@ public class DialogManager {
 	 * @param message
 	 * @param listener
 	 */
-	public static void showAlertDialog(Context context, String title,
-			String message, OnClickListener listener) {
+	public static void showAlertDialog(Context context, String title,String message, OnClickListener listener) {
 		alertDialog = new Dialog(context, R.style.mDialog);
-		alertDialog.getWindow().setBackgroundDrawableResource(
-				android.R.color.transparent);
+		alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 		View view = View.inflate(context, R.layout.alert_dialog, null);
 		TextView tvTitle = (TextView) view.findViewById(R.id.ai_alert_title);
 		if (!TextUtils.isEmpty(title)) {
@@ -101,8 +105,7 @@ public class DialogManager {
 			tvTitle.setVisibility(View.GONE);
 		}
 
-		TextView tvMessage = (TextView) view
-				.findViewById(R.id.ai_alert_message);
+		TextView tvMessage = (TextView) view.findViewById(R.id.ai_alert_message);
 		tvMessage.setText(message);
 		alertDialog.setContentView(view);
 		Button cancel = (Button) view.findViewById(R.id.alert_negative);
@@ -112,11 +115,9 @@ public class DialogManager {
 		alertDialog.show();
 	}
 
-	public static void showOptionDialog(Context context,
-			OnClickListener listener) {
+	public static void showOptionDialog(Context context,OnClickListener listener) {
 		optionDialog = new Dialog(context, R.style.mDialog);
-		optionDialog.getWindow().setBackgroundDrawableResource(
-				android.R.color.transparent);
+		optionDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 		View view = View.inflate(context, R.layout.al_option_dialog, null);
 		TextView one = (TextView) view.findViewById(R.id.ai_od_one);
 		one.setOnClickListener(listener);
@@ -162,6 +163,7 @@ public class DialogManager {
 
 		DisplayMetrics dm = activity.getResources().getDisplayMetrics();
 		float density = dm.density;
+	
 		int width= dm.widthPixels;
 		
 		final Dialog buttomDialog = new Dialog(activity, R.style.mDialog);
@@ -189,8 +191,7 @@ public class DialogManager {
 		lv.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 				alertSelectId.onClick(position);
 				buttomDialog.dismiss();
 				lv.requestFocus();
@@ -202,6 +203,45 @@ public class DialogManager {
 		window.setWindowAnimations(R.style.dialog_style);
 		buttomDialog.setContentView(layout);
 		buttomDialog.show();
+	}
+	
+	/**获取隐私信息提醒*/
+	public static void showPrivacy(final BaseAct activity,String alertText){
+		final Dialog privacy = new Dialog(activity, R.style.mDialog);
+		Window window = privacy.getWindow();
+		window.setBackgroundDrawableResource(android.R.color.transparent);
+		
+		View view = View.inflate(activity,R.layout.privacy_dialog,null);
+		privacy.setContentView(view);
+		
+		TextView tvAlert = (TextView) view.findViewById(R.id.pd_alert);
+		tvAlert.setText(alertText);
+		
+		CheckBox cb = (CheckBox) view.findViewById(R.id.pd_cb);
+		
+		cb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				SharedPreUtil spu = new SharedPreUtil(activity);
+				if(isChecked){
+					spu.editPrivacy(C.key.locationPrivacy,C.flag.locationprivacy);
+				}else {
+					spu.editPrivacy(C.key.locationPrivacy,0);
+				}
+			}
+		});
+		
+		Button btnSure = (Button) view.findViewById(R.id.btn_sure);
+		btnSure.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				privacy.dismiss();
+			}
+		});
+		
+		privacy.show();
 	}
 
 	public static boolean progressIsShow() {

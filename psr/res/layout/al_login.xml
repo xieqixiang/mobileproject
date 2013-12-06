@@ -3,36 +3,87 @@
     style="@style/math_width_hight"
     android:background="@color/light_grey" >
 
-    <EditText
-        android:id="@+id/ai_login_user"
-        style="@style/complete"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="90dp"
-        android:background="@drawable/et_normal"
-        android:hint="@string/as_login_user"
-        android:inputType="textEmailAddress"
-        android:maxLength="15"
-        android:singleLine="true" />
+    <RelativeLayout
+        android:id="@+id/ai_login_rl1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="80dp" >
 
-    <EditText
-        android:id="@+id/ai_login_pass"
-        style="@style/complete"
-        android:layout_below="@id/ai_login_user"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/et_normal"
-        android:hint="@string/as_user_password"
-        android:inputType="textPassword"
-        android:maxLength="15" />
+        <AutoCompleteTextView
+            android:id="@+id/ai_login_user"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/et_selector"
+            android:completionThreshold="2"
+            android:gravity="left|center_vertical"
+            android:hint="@string/as_login_user"
+            android:inputType="text"
+            android:paddingLeft="5dp"
+            android:paddingRight="30dp"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/ai_login_user_delete"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/delete"
+            android:onClick="controlClick"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/ai_login_rl2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ai_login_rl1"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="5dp" >
+
+        <EditText
+            android:id="@+id/ai_login_pass"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/et_selector"
+            android:gravity="left|center_vertical"
+            android:hint="@string/as_user_password"
+            android:inputType="text"
+            android:paddingLeft="5dp"
+            android:paddingRight="30dp"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/ai_login_password_delete"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/delete"
+            android:onClick="controlClick"
+            android:visibility="gone" />
+    </RelativeLayout>
 
     <Button
         android:id="@+id/ai_login"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_below="@id/ai_login_pass"
+        android:layout_below="@id/ai_login_rl2"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/blue_btn_selector"
         android:onClick="onClick"
         android:text="@string/login"

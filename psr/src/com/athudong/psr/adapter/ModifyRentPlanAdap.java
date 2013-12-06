@@ -10,6 +10,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.athudong.psr.R;
+import com.athudong.psr.activity.ModifyParkingSpaceAct;
 import com.athudong.psr.activity.ModifyRentManagerAct;
 import com.athudong.psr.base.BaseAct;
 import com.athudong.psr.base.BaseAdap;
@@ -70,6 +71,7 @@ public class ModifyRentPlanAdap extends BaseAdap implements OnClickListener {
 			viewHold.tvParkingSpaceInfo = (TextView) convertView.findViewById(R.id.ai_rmi_parking_info);
 			viewHold.tvModifyDailyRent = (TextView) convertView.findViewById(R.id.ai_rmi_mobile_daily_rent);
 			viewHold.tvModifyTemporaryRent = (TextView) convertView.findViewById(R.id.ai_rmi_mobile_temporary_rent);
+			viewHold.tvModifyParkingSpaceInfo = (TextView) convertView.findViewById(R.id.ai_rmi_mobile_parking_space_info);
 			convertView.setTag(viewHold);
 		}else {
 			viewHold = (ViewHold) convertView.getTag();
@@ -77,6 +79,7 @@ public class ModifyRentPlanAdap extends BaseAdap implements OnClickListener {
 		viewHold.tvParkingSpaceInfo.setOnClickListener(this);
 		viewHold.tvModifyDailyRent.setOnClickListener(this);
 		viewHold.tvModifyTemporaryRent.setOnClickListener(this);
+		viewHold.tvModifyParkingSpaceInfo.setOnClickListener(this);
 		viewHold.tvParkingSpaceInfo.setContentDescription(position+"");
 		viewHold.tvModifyDailyRent.setContentDescription(position+"");
 		viewHold.tvModifyTemporaryRent.setContentDescription(position+"");
@@ -89,13 +92,15 @@ public class ModifyRentPlanAdap extends BaseAdap implements OnClickListener {
 		public TextView tvParkingSpaceInfo;
 		public TextView tvModifyDailyRent;
 		public TextView tvModifyTemporaryRent;
+		public TextView tvModifyParkingSpaceInfo;
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch(v.getId()){
 		case R.id.ai_rmi_mobile_parking_space_info:
-			
+			Intent intent  = new Intent(activity,ModifyParkingSpaceAct.class);
+			activity.startActivity(intent);
 			break;
 		case R.id.ai_rmi_mobile_daily_rent:
 			overLayout(activity,1);

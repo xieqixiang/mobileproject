@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="30dp"
+    android:layout_marginRight="30dp"
+    android:background="@drawable/list_item_selector"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/yi_drop_down_view"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:ellipsize="marquee"
+        android:gravity="left|center_vertical"
+        android:paddingLeft="5dp"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="3dp"
+        android:background="@color/blue" />
+
+</LinearLayout>

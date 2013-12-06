@@ -55,18 +55,18 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/setting_shape"
         android:orientation="vertical" >
 
         <RelativeLayout
-              android:id="@+id/ai_mp_rl1"
+            android:id="@+id/ai_mp_rl1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:onClick="controlClick"
-            android:layout_weight="1" >
+            android:layout_weight="1"
+            android:onClick="controlClick" >
 
             <TextView
                 android:id="@+id/ai_mp_tv"
@@ -101,8 +101,8 @@
             android:id="@+id/ai_mp_rl2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:onClick="controlClick"
-            android:layout_weight="1" >
+            android:layout_weight="1"
+            android:onClick="controlClick" >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -130,24 +130,42 @@
         android:id="@+id/ai_mp_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:background="@drawable/setting_shape"
         android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/ai_mp_btn_bank"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/white_btn_selector"
-            android:gravity="left|center_vertical"
-            android:hint="@string/as_blank"
-            android:onClick="controlClick"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp" >
+
+            <EditText
+                android:id="@+id/ai_mp_et_bank"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingRight="35dp"
+                android:background="@drawable/et_selector"
+                android:gravity="left|center_vertical"
+                android:hint="@string/as_blank_account"
+                android:inputType="text"
+                android:paddingLeft="5dp"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/ai_amp_express"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="3dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:onClick="controlClick"
+                android:background="@drawable/express" />
+        </RelativeLayout>
 
         <View
             android:layout_width="match_parent"

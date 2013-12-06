@@ -1,5 +1,6 @@
 package com.athudong.psr.activity;
 
+import java.util.Date;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -31,6 +32,7 @@ public class ParkingSerachAct extends BaseAct {
 		setContentView(R.layout.al_parking_search);
 		initView();
 		initListener();
+		showLongToast("快速预订将获取你当前的位置信息。");
 	}
 
 	private void initView() {
@@ -50,7 +52,7 @@ public class ParkingSerachAct extends BaseAct {
 		String dateString = datePickWheel.getDate();
 		btnStartTime.setText(dateString);
 		etStopLength.setText("2");
-		tvStopTime.setText("停止时间:"+datePickWheel.getIndexDate(2));
+		tvStopTime.setText(datePickWheel.getIndexDate(2));
 
 		datePickWheel.setTvStopTime(tvStopTime);
 		datePickWheel.setLength(2);
@@ -82,6 +84,7 @@ public class ParkingSerachAct extends BaseAct {
 				String strLength = etStopLength.getText().toString().trim();
 				if (!TextUtils.isEmpty(strLength)) {
 					datePickWheel.setLength(Integer.valueOf(strLength));
+					tvStopTime.setText(datePickWheel.getIndexDate(Integer.valueOf(strLength)));
 				}
 			}
 		});
@@ -96,6 +99,8 @@ public class ParkingSerachAct extends BaseAct {
 			String startTime = btnStartTime.getText().toString().trim();
 			String stopTime = tvStopTime.getText().toString().trim();
 			String address = etAddress.getText().toString().trim();
+			Date date = new Date();
+			long currentTime = date.getTime();
 			if (TextUtils.isEmpty(startTime)) {
 				showToast(getString(R.string.as_error_start_time));
 				break;
@@ -105,10 +110,14 @@ public class ParkingSerachAct extends BaseAct {
 				break;
 			}
 			if(etAddress.getVisibility()==View.VISIBLE){
-				if(TextUtils.isEmpty(address)){
+				if(TextUtils.isEmpty(address)){ 
 					showToast(getString(R.string.as_enter_address ));
 					break;
 				}
+			}
+			if(datePickWheel.getStartStime() < currentTime ){
+				showToast(getString(R.string.as_start_time_error ));
+				break;
 			}
 			Bundle bundle = new Bundle();
 			bundle.putString("startTime", startTime);

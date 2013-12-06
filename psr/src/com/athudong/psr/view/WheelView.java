@@ -325,6 +325,7 @@ public class WheelView extends View {
      */  
 	public int getCurrentItem() {
 		if(currentItem !=0 && adapter instanceof MinuteAdap){
+			
 			return currentItem * 5;
 		}
 		return currentItem;

@@ -54,10 +54,12 @@
     </style>
 
     <style name="space_line">
-        <item name="android:layout_width">280dp</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:background">@color/blue</item>
+        <item name="android:layout_marginLeft">30dp</item>
+        <item name="android:layout_marginRight">30dp</item>
     </style>
 
     <style name="listview">

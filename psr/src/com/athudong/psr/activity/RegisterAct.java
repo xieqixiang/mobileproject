@@ -70,6 +70,7 @@ public class RegisterAct extends BaseAct implements OnClickListener {
 		case R.id.ai_suer:
 			DialogManager.errorDialogdimiss();
 			break;
+			
 		}
 	}
 	
@@ -140,7 +141,9 @@ public class RegisterAct extends BaseAct implements OnClickListener {
 			}
 			ForResult(PaymentAct.class, bundle, this,1001);
 			break;
-		
+		case R.id.ai_register_rl2:
+			cbRent.setChecked(!cbRent.isChecked());
+			break;
 		}
 	}
 	

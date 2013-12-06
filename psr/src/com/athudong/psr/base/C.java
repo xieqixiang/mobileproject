@@ -25,6 +25,8 @@ public class C {
 		public static final String regNum ="regNum";
 		/**系统登录号*/
 		public static final String logNo = "logNo";
+		/**位置隐私*/
+		public static final String locationPrivacy ="location";
 	}
 	
 	public class action{
@@ -54,6 +56,9 @@ public class C {
 		
 		/**停租*/
 		public static final int stopRent = 108;
+		
+		/**位置隐私提醒标记*/
+		public static final int locationprivacy = 109;
 		
 	}
 }

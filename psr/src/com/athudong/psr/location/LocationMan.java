@@ -6,9 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.athudong.psr.R;
 import com.athudong.psr.base.BaseAct;
 import com.athudong.psr.util.Logger;
@@ -37,8 +35,6 @@ public class LocationMan {
 	private LocationClient mLocationClient = null;
 	private LocationData locationData = null;
 	private MyLocationListener myLocationListener = new MyLocationListener();
-	private ProgressBar pBar;
-	private TextView tvAler;
 	private LocationOverlay myLocationOverlay;
 	private LocationMapView myLocationMapView;
 	private boolean isRequest = false;// 是否手动触发请求定位
@@ -54,17 +50,11 @@ public class LocationMan {
 		this.handler = handler;
 	}
 
-	public void setTvAler(TextView tvAler) {
-		this.tvAler = tvAler;
-	}
-
 	public LocationClient getmLocationClient() {
 		return mLocationClient;
 	}
 
-	public void setpBar(ProgressBar pBar) {
-		this.pBar = pBar;
-	}
+	
 
 	public MyLocationListener getMyLocationListener() {
 		return myLocationListener;
@@ -107,6 +97,7 @@ public class LocationMan {
 				//tvAler.setVisibility(View.GONE);
 				locationData.latitude = location.getLatitude();
 				locationData.longitude = location.getLongitude();
+				
 				// 如果不显示定位精度圈，将accuracy赋值为0即可
 				locationData.accuracy = location.getRadius();
 				// 此处可以设置locData的方向信息， 如果定位SDK未返回方向信息，用户可以自己实现罗盘功能添加方向信息。
@@ -123,6 +114,15 @@ public class LocationMan {
 					isRequest = false;
 					myLocationOverlay.setLocationMode(LocationMode.FOLLOWING);
 				}
+				
+				Message message = handler.obtainMessage();
+				message.what = 6;
+				Bundle bundle = new Bundle();
+				bundle.putDouble("latitude", locationData.latitude);
+				bundle.putDouble("longitude", locationData.longitude);
+				message.setData(bundle);
+				handler.sendMessage(message);
+				//mLocationClient.stop();
 			}else {
 				Message message = handler.obtainMessage();
 				message.what = 5;
@@ -141,7 +141,6 @@ public class LocationMan {
 			if (poiLocation == null) {
 				return;
 			}
-			pBar.setVisibility(View.GONE);
 		}
 	}
 
@@ -151,7 +150,7 @@ public class LocationMan {
 		option.setOpenGps(true);
 		option.setCoorType("bd09ll");
 		option.setPriority(LocationClientOption.GpsFirst);
-		option.setScanSpan(10000);
+		option.setScanSpan(30000);
 		mLocationClient.setLocOption(option);
 	}
 

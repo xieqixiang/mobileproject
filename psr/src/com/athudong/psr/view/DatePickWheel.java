@@ -141,8 +141,10 @@ public class DatePickWheel extends LinearLayout {
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
 		int minute = calendar.get(Calendar.MINUTE);
 		wv_day.setCurrentItem(3);
+		hour = minute >=55 ? hour+1:hour;
 		wv_hours.setCurrentItem(hour);
-		wv_mins.setCurrentItem((minute/2));
+		int index = minute /5;
+		wv_mins.setCurrentItem((index+1));
 		return this;
 	}
 
@@ -180,13 +182,21 @@ public class DatePickWheel extends LinearLayout {
 		String dateString = sdf.format(date);
 		return dateString;
 	}
+	
+	public long getStartStime(){
+		Calendar calendar = getSelectCalendar();
+		Date date = calendar.getTime();
+		return date.getTime();
+	}
 
 	private class ScrollListener implements OnWheelScrollFinishListener {
 		@Override
 		public void scrollStop() {
 			if (btStartTime != null && btStartTime instanceof Button) {
 				btStartTime.setText(getDate());
-				tvStopTime.setText("Í£Ö¹Ê±¼ä:"+getIndexDate(length));
+				if(tvStopTime !=null){
+					tvStopTime.setText(getIndexDate(length));
+				}
 			}
 		}
 	}

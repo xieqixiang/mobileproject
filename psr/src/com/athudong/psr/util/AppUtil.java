@@ -123,4 +123,24 @@ public class AppUtil {
 		BitmapDrawable bd = new BitmapDrawable(res, bitmap);
 		return bd;
 	}
+	
+	/**匹配数字、英文、下划线*/
+	public static boolean isMatches(String text){
+		String strPattern = "^[_a-zA-Z0-9]+$";
+		Pattern p = Pattern.compile(strPattern);
+		Matcher m = p.matcher(text);
+		return m.matches();
+	}
+	
+	public static String builder(String [] colums){
+		StringBuilder builder = new StringBuilder();
+		int size = colums.length;
+		for (int i = 0; i < size; i++) {
+			builder.append(colums[i]);
+			if (i < (size - 1)) {
+				builder.append(",");
+			}
+		}
+		return builder.toString();
+	}
 }

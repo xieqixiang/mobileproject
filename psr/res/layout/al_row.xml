@@ -7,10 +7,10 @@
 
     <Button
         android:id="@+id/row_modify_info"
-        android:layout_width="220dp"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/list_item_selector"
         android:textColor="@color/black"

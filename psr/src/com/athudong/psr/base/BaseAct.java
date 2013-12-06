@@ -2,6 +2,7 @@ package com.athudong.psr.base;
 
 import java.util.HashMap;
 
+import com.athudong.psr.sqlite.UserInfoSqlite;
 import com.athudong.psr.util.RequestMedthodUtil;
 
 import android.app.Activity;
@@ -19,12 +20,14 @@ import android.widget.Toast;
 public class BaseAct extends Activity {
 	private BaseTaskPool taskPool;
 	public RequestMedthodUtil rmu ;
+	private UserInfoSqlite userInfoSqlite;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		rmu = new RequestMedthodUtil(this);
 		taskPool = new BaseTaskPool(this);
+		userInfoSqlite = new UserInfoSqlite(this);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -128,4 +131,10 @@ public class BaseAct extends Activity {
 			}
 		}, delayTime,requestParams);
 	}
+
+	public UserInfoSqlite getUserInfoSqlite() {
+		return userInfoSqlite;
+	}
+	
+	
 }
