@@ -36,7 +36,7 @@ public class TaskNetworkThread implements Runnable {
 			case C.task.complete:
 				UserService userService = new UserService(taskArgs);
 				requesXml = userService.requestXml();
-				Logger.d("TaskNetwork",requesXml);
+				//Logger.d("TaskNetwork",requesXml);
 				baseTask.onComplete(httpResult);
 				break;
 			}

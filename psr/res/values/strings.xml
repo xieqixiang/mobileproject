@@ -93,7 +93,7 @@
     <string name="pull_refresh">下拉刷新</string>
     <string name="loading">正在加载数据</string>
     <string name="loosen_refresh">正在刷新数据...</string>
-    <string name="drive_route">驾车方案</string>
+    <string name="drive_route">驾车路线</string>
     <string name="modify_user_info">修改注册信息</string>
     <string name="exist_login">退出登录</string>
     <string name="add">增加</string>
@@ -101,7 +101,8 @@
     <string name="modify">修改</string>
     <string name="delete">删除</string>
     <string name="submit">提交</string>
-    <string name="logout">确定注销此账号?</string>
-    <string name="never_alert">不再提醒？</string>
+    <string name="logout">确定注销此账号</string>
+    <string name="never_alert">下次不提示</string>
+    <string name="alert">提示</string>
 
 </resources>

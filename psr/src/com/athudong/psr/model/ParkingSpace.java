@@ -36,6 +36,7 @@ public class ParkingSpace implements Parcelable{
 	private String strPayMent;
 	/**³ö×â×´Ì¬*/
 	private String strRentalStatus;
+
 	
 	public String getStrRentalStatus() {
 		return strRentalStatus;

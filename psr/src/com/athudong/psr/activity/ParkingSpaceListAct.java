@@ -28,7 +28,7 @@ import com.baidu.location.LocationClient;
 public class ParkingSpaceListAct extends BaseAct {
 
 	private CustomerListView listView;
-	private ParkingSpaceListAdap adapter;
+	public ParkingSpaceListAdap adapter;
 	private LocationMan locationMan;
 	private LocationClient locationClient;
 	private String startTime ;
@@ -86,6 +86,7 @@ public class ParkingSpaceListAct extends BaseAct {
 			parking.setStrCarNum("ิมA W977T");
 			parking.setStrPayMent("40ิช");
 			parking.setStrParkNo("C1");
+			parking.setStrRentalStatus("y");
 			arrayList.add(parking);
 			adapter.setParkingList(arrayList);
 		}else if(flag==C.flag.historyInfo){

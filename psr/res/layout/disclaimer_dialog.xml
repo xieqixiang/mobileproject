@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="240dip"
-    android:layout_height="180dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/dialog_shape"
     android:orientation="vertical" >
 
@@ -16,12 +16,35 @@
     <TextView
         android:id="@+id/ai_alert_message"
         android:layout_width="240dp"
-        android:layout_height="80dp"
-        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:gravity="left"
         android:padding="5dp"
         android:textColor="@android:color/black"
         android:textSize="18sp" >
     </TextView>
+
+    <LinearLayout
+        android:id="@+id/dd_alert_ll"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/dd_alert"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/radio1" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="@string/never_alert"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -30,11 +53,9 @@
         android:background="@color/blue" />
 
     <LinearLayout
-        android:layout_width="220dip"
+        android:layout_width="240dip"
         android:layout_height="35dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:orientation="horizontal" >

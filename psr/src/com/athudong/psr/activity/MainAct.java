@@ -133,7 +133,7 @@ public class MainAct extends SlidingFragmentActivity implements OnClickListener 
 	public void onClick(View v) {
 		switch(v.getId()){
 		case R.id.mf_exist_login:
-			DialogManager.showAlertDialog(this,"",getString(R.string.logout),this);
+			DialogManager.showAlertDialog(this,"",getString(R.string.logout),this,true);
 			break;
 		case R.id.alert_negative:
 			DialogManager.closeAlertDialog();

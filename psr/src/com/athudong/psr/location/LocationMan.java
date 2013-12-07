@@ -150,7 +150,7 @@ public class LocationMan {
 		option.setOpenGps(true);
 		option.setCoorType("bd09ll");
 		option.setPriority(LocationClientOption.GpsFirst);
-		option.setScanSpan(30000);
+		option.setScanSpan(300000);
 		mLocationClient.setLocOption(option);
 	}
 

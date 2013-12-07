@@ -54,7 +54,7 @@ public class BaseApp extends Application {
 			parking.setStrCarNum("ÔÁA W977T");
 			parking.setStrPayMent("40");
 			parking.setStrParkNo("C1");
-			parking.setStrRentalStatus("±»×âÓÃ");
+			parking.setStrRentalStatus("n");
 			parkings.add(parking);
 		}
 		

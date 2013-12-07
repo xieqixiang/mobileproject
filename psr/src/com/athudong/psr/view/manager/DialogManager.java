@@ -2,9 +2,6 @@ package com.athudong.psr.view.manager;
 
 import com.athudong.psr.R;
 import com.athudong.psr.adapter.DialogItemAdap;
-import com.athudong.psr.base.BaseAct;
-import com.athudong.psr.base.C;
-import com.athudong.psr.util.SharedPreUtil;
 import com.athudong.psr.view.listener.OnAlertSelectId;
 import android.app.Activity;
 import android.app.Dialog;
@@ -22,9 +19,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -68,16 +62,13 @@ public class DialogManager {
 	/**
 	 * 错误提示
 	 */
-	public static void showErrorDialog(Context context, String message,
-			OnClickListener listener) {
+	public static void showErrorDialog(Context context, String message,OnClickListener listener) {
 		errorDialog = new Dialog(context, R.style.mDialog);
-		errorDialog.getWindow().setBackgroundDrawableResource(
-				android.R.color.transparent);
+		errorDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 		View view = View.inflate(context, R.layout.al_error_dialog, null);
 		TextView errorTitle = (TextView) view.findViewById(R.id.ai_error_title);
 		errorTitle.setText("");
-		TextView errorMessage = (TextView) view
-				.findViewById(R.id.ai_fail_message);
+		TextView errorMessage = (TextView) view.findViewById(R.id.ai_fail_message);
 		errorMessage.setText(message);
 		errorDialog.setContentView(view);
 		Button sureBtn = (Button) view.findViewById(R.id.ai_suer);
@@ -93,10 +84,10 @@ public class DialogManager {
 	 * @param message
 	 * @param listener
 	 */
-	public static void showAlertDialog(Context context, String title,String message, OnClickListener listener) {
+	public static void showAlertDialog(Context context, String title,String message, OnClickListener listener,boolean isMissOption) {
 		alertDialog = new Dialog(context, R.style.mDialog);
 		alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-		View view = View.inflate(context, R.layout.alert_dialog, null);
+		View view = View.inflate(context, R.layout.disclaimer_dialog, null);
 		TextView tvTitle = (TextView) view.findViewById(R.id.ai_alert_title);
 		if (!TextUtils.isEmpty(title)) {
 			tvTitle.setVisibility(View.VISIBLE);
@@ -107,6 +98,15 @@ public class DialogManager {
 
 		TextView tvMessage = (TextView) view.findViewById(R.id.ai_alert_message);
 		tvMessage.setText(message);
+		
+		LinearLayout ll = (LinearLayout) view.findViewById(R.id.dd_alert_ll);
+		if(isMissOption){
+			ll.setVisibility(View.GONE);
+		}
+		
+		Button btnAlertAgain = (Button) view.findViewById(R.id.dd_alert);
+		btnAlertAgain.setOnClickListener(listener);
+		
 		alertDialog.setContentView(view);
 		Button cancel = (Button) view.findViewById(R.id.alert_negative);
 		cancel.setOnClickListener(listener);
@@ -203,45 +203,6 @@ public class DialogManager {
 		window.setWindowAnimations(R.style.dialog_style);
 		buttomDialog.setContentView(layout);
 		buttomDialog.show();
-	}
-	
-	/**获取隐私信息提醒*/
-	public static void showPrivacy(final BaseAct activity,String alertText){
-		final Dialog privacy = new Dialog(activity, R.style.mDialog);
-		Window window = privacy.getWindow();
-		window.setBackgroundDrawableResource(android.R.color.transparent);
-		
-		View view = View.inflate(activity,R.layout.privacy_dialog,null);
-		privacy.setContentView(view);
-		
-		TextView tvAlert = (TextView) view.findViewById(R.id.pd_alert);
-		tvAlert.setText(alertText);
-		
-		CheckBox cb = (CheckBox) view.findViewById(R.id.pd_cb);
-		
-		cb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				SharedPreUtil spu = new SharedPreUtil(activity);
-				if(isChecked){
-					spu.editPrivacy(C.key.locationPrivacy,C.flag.locationprivacy);
-				}else {
-					spu.editPrivacy(C.key.locationPrivacy,0);
-				}
-			}
-		});
-		
-		Button btnSure = (Button) view.findViewById(R.id.btn_sure);
-		btnSure.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				privacy.dismiss();
-			}
-		});
-		
-		privacy.show();
 	}
 
 	public static boolean progressIsShow() {
