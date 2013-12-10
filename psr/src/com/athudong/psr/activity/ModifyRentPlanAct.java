@@ -35,7 +35,6 @@ public class ModifyRentPlanAct extends BaseAct {
 	
 	private void initView(){
 		cb = getView(R.id.ai_rmo_cb);
-		
 		rl = getView(R.id.ai_rmo_rl1);
 		etDate = getView(R.id.ai_rmo_date);
 		etRentStartTime = getView(R.id.ai_rmo_start_time);

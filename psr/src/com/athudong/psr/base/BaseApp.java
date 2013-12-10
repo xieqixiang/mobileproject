@@ -62,7 +62,7 @@ public class BaseApp extends Application {
 		
 		for(int i = 0 ;i < 10;i++){
 			RentPlan rPlan = new RentPlan();
-			rPlan.setStrDate("周三");
+			rPlan.setStrDate("每周三");
 			rPlan.setStrStartTime("7:00");
 			rPlan.setStrStopTime("23:00");
 			rPlan.setStrPlanType("detail");
