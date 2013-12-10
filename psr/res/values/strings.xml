@@ -27,9 +27,6 @@
     <string name="as_user_email">电子邮箱</string>
     <string name="as_user_name">姓名</string>
     <string name="as_user_password">登录密码</string>
-    <string name="as_sure">确定</string>
-    <string name="as_cancel">取消</string>
-    <string name="as_logining">正在登录...</string>
     <string name="as_confim_pass">确认密码 </string>
     <string name="as_consent">同意</string>
     <string name="as_clause">停车大师服务条款</string>
@@ -58,7 +55,7 @@
     <string name="as_spacking_spece_route">车位路线</string>
     <string name="as_start_rent">放租开始时间</string>
     <string name="as_stop_rent">放租结束时间</string>
-    <string name="as_price">单价/小时</string>
+    <string name="as_price">单价(元)/小时</string>
     <string name="as_indefinite_duration_rent">无限期放租</string>
     <string name="as_indefinite_duration_stop_rent">无限期停租</string>
     <string name="as_modify_daily_rent">日常放租</string>
@@ -78,6 +75,8 @@
     <string name="as_modify_register_info">修改注册资料</string>
     <string name="as_modify_parking_space_info">修改车位资料</string>
     <string name="as_run_out_time">取车时间:</string>
+    <string name="as_rent_stop_date">止租日期</string>
+    
      
     <!-- 通用的字符串 -->
     <string name="start_time">起始时间:</string>
@@ -85,14 +84,14 @@
     <string name="registering">正在注册</string>
     <string name="sure">确定</string>
     <string name="cancel">取消</string>
-    <string name="logining">正在登录...</string>
+    <string name="logining">正在登录</string>
     <string name="login">登录</string>
     <string name="register">注册</string>
     <string name="forget_password">忘记密码</string>
     <string name="parking_log">停车场</string>
     <string name="pull_refresh">下拉刷新</string>
     <string name="loading">正在加载数据</string>
-    <string name="loosen_refresh">正在刷新数据...</string>
+    <string name="loosen_refresh">正在刷新数据</string>
     <string name="drive_route">驾车路线</string>
     <string name="modify_user_info">修改注册信息</string>
     <string name="exist_login">退出登录</string>
@@ -104,5 +103,6 @@
     <string name="logout">确定注销此账号</string>
     <string name="never_alert">下次不提示</string>
     <string name="alert">提示</string>
+    <string name="date">日期</string>
 
 </resources>

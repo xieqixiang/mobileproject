@@ -3,6 +3,7 @@ package com.athudong.psr.adapter;
 import java.util.ArrayList;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.athudong.psr.base.BaseAct;
 import com.athudong.psr.base.BaseAdap;
 import com.athudong.psr.base.C;
 import com.athudong.psr.model.RentPlan;
+import com.athudong.psr.util.AppUtil;
 
 /**
  * 放租方案适配器
@@ -25,13 +27,6 @@ public class RentPlanAdapter extends BaseAdap implements OnClickListener {
 	
 	/**标识方租类型(放租或停租)*/
 	private int flag;
-	
-	/**放租形式*/
-	private int rentOut;
-	
-	public void setRentOut(int rentOut) {
-		this.rentOut = rentOut;
-	}
 
 	public void setArrayList(ArrayList<RentPlan> arrayList) {
 		this.arrayList = arrayList;
@@ -79,21 +74,28 @@ public class RentPlanAdapter extends BaseAdap implements OnClickListener {
 		}
 		
 		RentPlan rp = arrayList.get(position);
-		if(flag==C.flag.startRent){
-			viewHolder.tvRentPlan.setText("放租开始时间\n"+rp.getStrStartTime()+"\n放租结束时间\n"+rp.getStrStopTime()+"\n单价\\小时:"+rp.getStrpPrice());
-		}
-		if(flag==C.flag.stopRent){
-			viewHolder.tvRentPlan.setText("停租开始时间\n"+rp.getStrStartTime()+"\n停租结束时间\n"+rp.getStrStopTime());
-		}
-		
-		if(rentOut==1){
+		if("detail".equals(rp.getStrPlanType())){
 			viewHolder.tvDelete.setVisibility(View.GONE);
 			viewHolder.viewLine.setVisibility(View.GONE);
-		}
-		if(rentOut==2){
+			if(flag==C.flag.startRent){
+				viewHolder.tvRentPlan.setText(AppUtil.appString(new String[]{"日期","开始时间","结束时间","单价(元)/小时"},new String[]{rp.getStrDate(),rp.getStrStartTime(),rp.getStrStopTime(),rp.getStrpPrice()}));
+			}
+			
+			if(flag==C.flag.stopRent){
+				viewHolder.tvRentPlan.setText(AppUtil.appString(new String[]{"日期","开始时间","结束时间"},new String[]{rp.getStrDate(),rp.getStrStartTime(),rp.getStrStopTime()}));
+			}
+		}else {
 			viewHolder.tvDelete.setVisibility(View.VISIBLE);
 			viewHolder.viewLine.setVisibility(View.VISIBLE);
+			if(flag==C.flag.startRent){
+				viewHolder.tvRentPlan.setText(AppUtil.appString(new String[]{"开始时间","结束时间","单价(元)/小时"},new String[]{rp.getStrStartTime(),rp.getStrStopTime(),rp.getStrpPrice()}));
+			}
+			
+			if(flag==C.flag.stopRent){
+				viewHolder.tvRentPlan.setText(AppUtil.appString(new String[]{"开始时间","结束时间"},new String[]{rp.getStrStartTime(),rp.getStrStopTime()}));
+			}
 		}
+		
 		viewHolder.tvDelete.setOnClickListener(this);
 		viewHolder.tvDelete.setContentDescription(position+"");
 		viewHolder.tvModify.setOnClickListener(this);
@@ -113,6 +115,9 @@ public class RentPlanAdapter extends BaseAdap implements OnClickListener {
 		switch(v.getId()){
 		case R.id.ai_vi_modify:
 			Intent intent = new Intent(activity,ModifyRentPlanAct.class);
+			Bundle bundle = new Bundle();
+			bundle.putParcelable("parcelable",arrayList.get(Integer.valueOf(v.getContentDescription().toString())));
+			intent.putExtra("bundle",bundle);
 			activity.startActivity(intent);
 			break;
 		case R.id.ai_vi_delete:

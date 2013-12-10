@@ -14,7 +14,6 @@ import com.athudong.psr.view.listener.OnWheelScrollFinishListener;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.AttributeSet;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -34,10 +33,15 @@ public class DatePickWheel extends LinearLayout {
 	private WheelView wv_mins;
 	private Calendar calendar;
 	private OnWheelScrollFinishListener scrollFinishlistener;
-	private Button btStartTime;
+	private TextView tvStartTime;
 	private TextView tvStopTime;
 	private int length;
+	private boolean justHourMinute;
 	
+	public void setJustHourMinute(boolean justHourMinute) {
+		this.justHourMinute = justHourMinute;
+	}
+
 	public void setLength(int length) {
 		this.length = length;
 	}
@@ -46,8 +50,8 @@ public class DatePickWheel extends LinearLayout {
 		this.tvStopTime = tvStopTime;
 	}
 
-	public void setEtShowTime(Button btStartTime) {
-		this.btStartTime = btStartTime;
+	public void setTvShowTime(TextView tvStartTime) {
+		this.tvStartTime = tvStartTime;
 	}
 
 	// 大月
@@ -176,10 +180,17 @@ public class DatePickWheel extends LinearLayout {
 	}
 	
 	public String getDate(){
+		
 		Calendar calendar = getSelectCalendar();
 		Date date = calendar.getTime();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年M月d日 HH:mm",Locale.CHINA);
 		String dateString = sdf.format(date);
+		
+		if(justHourMinute){
+		 	
+		 	int start= dateString.indexOf("日");
+		 	return dateString.substring((start+2));
+		}
 		return dateString;
 	}
 	
@@ -192,8 +203,8 @@ public class DatePickWheel extends LinearLayout {
 	private class ScrollListener implements OnWheelScrollFinishListener {
 		@Override
 		public void scrollStop() {
-			if (btStartTime != null && btStartTime instanceof Button) {
-				btStartTime.setText(getDate());
+			if (tvStartTime != null && tvStartTime instanceof TextView) {
+				tvStartTime.setText(getDate());
 				if(tvStopTime !=null){
 					tvStopTime.setText(getIndexDate(length));
 				}

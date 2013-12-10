@@ -17,9 +17,10 @@ import com.athudong.psr.adapter.ViewPagerAdap;
 import com.athudong.psr.base.BaseAct;
 import com.athudong.psr.base.BaseApp;
 import com.athudong.psr.base.C;
+import com.athudong.psr.model.RentPlan;
 
 /**
- * 修改租车方案
+ * 修改放租方案
  * @author 谢启祥
  */
 public class ModifyRentManagerAct extends BaseAct {
@@ -30,6 +31,7 @@ public class ModifyRentManagerAct extends BaseAct {
 	private Button btnStartTime, btnStopTime;
 	private Resources resources;
 	private int flag;
+	private ArrayList<RentPlan> arrayList2;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +42,18 @@ public class ModifyRentManagerAct extends BaseAct {
 	}
 
 	private void initView() {
+		BaseApp application = (BaseApp) getApplication();
+		
 		TextView tvTitle = getView(R.id.ai_head_tv);
 		
 		Intent intent = getIntent();
 		Bundle bundle = intent.getBundleExtra("bundle");
 		flag = bundle.getInt("flag");
 		if(flag==1){
+			arrayList2 = application.rPlans;
 			tvTitle.setText(getString(R.string.as_modify_daily_rent));
 		}else {
+			arrayList2 = application.rPlans2;
 			tvTitle.setText(getString(R.string.as_modify_temporary_rent));
 		}
 		
@@ -68,16 +74,14 @@ public class ModifyRentManagerAct extends BaseAct {
 		listView1 = (ListView) viewpage1.findViewById(R.id.lv_viewpage1);
 		listView2 = (ListView) viewpage2.findViewById(R.id.lv_viewpage2);
 		
-		BaseApp application = (BaseApp) getApplication();
+		
 		RentPlanAdapter rpAdapter1 = new RentPlanAdapter(this);
-		rpAdapter1.setRentOut(flag);
-		rpAdapter1.setArrayList(application.rPlans);
+		rpAdapter1.setArrayList(arrayList2);
 		rpAdapter1.setFlag(C.flag.startRent);
 		listView1.setAdapter(rpAdapter1);
 
 		RentPlanAdapter rpAdapter2 = new RentPlanAdapter(this);
-		rpAdapter2.setRentOut(flag);
-		rpAdapter2.setArrayList(application.rPlans);
+		rpAdapter2.setArrayList(arrayList2);
 		rpAdapter2.setFlag(C.flag.stopRent);
 		listView2.setAdapter(rpAdapter2);
 

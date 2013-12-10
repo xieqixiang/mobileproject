@@ -32,6 +32,7 @@ public class BaseApp extends Application {
 	public Map<ImageView,String> removeViews = Collections.synchronizedMap(new WeakHashMap<ImageView,String>());
 	public ArrayList<ParkingSpace> parkings;
 	public ArrayList<RentPlan> rPlans;
+	public ArrayList<RentPlan> rPlans2;
 
 	public static final String strKey = "eVl2GqqXpKgjrqu5Dhk3HjvG";
 
@@ -40,6 +41,7 @@ public class BaseApp extends Application {
 		super.onCreate();
 		activities = new ArrayList<Activity>();
 		rPlans = new ArrayList<RentPlan>();
+		rPlans2 = new ArrayList<RentPlan>();
 		mInstance = this;
 		initEngineManager(this);
 		parkings = new ArrayList<ParkingSpace>();
@@ -58,12 +60,33 @@ public class BaseApp extends Application {
 			parkings.add(parking);
 		}
 		
-		for(int i = 0 ;i < 5;i++){
+		for(int i = 0 ;i < 10;i++){
 			RentPlan rPlan = new RentPlan();
-			rPlan.setStrStartTime("2013年11月29日");
-			rPlan.setStrStopTime("2013年12月29日");
-			rPlan.setStrpPrice("20");
+			rPlan.setStrDate("周三");
+			rPlan.setStrStartTime("7:00");
+			rPlan.setStrStopTime("23:00");
+			rPlan.setStrPlanType("detail");
+			if(i%2==0){
+				rPlan.setStrRentStatus("y");
+				rPlan.setStrpPrice("20");
+			}else {
+				rPlan.setStrRentStatus("n");
+			}
 			rPlans.add(rPlan);
+		}
+		
+		for(int i = 0 ;i < 10;i++){
+			RentPlan rPlan = new RentPlan();
+			rPlan.setStrStartTime("2013年12月10日 7:00");
+			rPlan.setStrStopTime("2013年12月11日 14:00");
+			rPlan.setStrPlanType("temporary");
+			if(i%2==0){
+				rPlan.setStrRentStatus("y");
+				rPlan.setStrpPrice("20");
+			}else {
+				rPlan.setStrRentStatus("n");
+			}
+			rPlans2.add(rPlan);
 		}
 		
 		memoryCache = new MemoryCache();

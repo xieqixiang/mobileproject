@@ -3,87 +3,214 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_grey"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical" >
 
     <include layout="@layout/al_head" />
 
-    <TextView
-        android:id="@+id/ai_rmo_alert1"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginLeft="10dp"
-        android:gravity="left|center_vertical"
-        android:text="@string/as_start_rent"
-        android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:layout_height="match_parent" >
 
-    <EditText
-        android:id="@+id/ai_rmo_start_time"
-        android:layout_width="200dp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="10dp"
-        android:gravity="left|center_vertical"
-        android:inputType="datetime"
-        android:textColor="@color/black"
-        android:textSize="16sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/ai_rmo_alert2"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginLeft="10dp"
-        android:gravity="left|center_vertical"
-        android:text="@string/as_stop_rent"
-        android:textColor="@color/black"
-        android:textSize="16sp" />
+            <RelativeLayout
+                android:id="@+id/ai_rmo_rl1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="center_vertical" >
 
-    <EditText
-        android:id="@+id/ai_rmo_stop_time"
-        android:layout_width="200dp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="10dp"
-        android:gravity="left|center_vertical"
-        android:inputType="datetime"
-        android:textColor="@color/black"
-        android:textSize="16sp" />
+                <EditText
+                    android:id="@+id/ai_rmo_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="45dp"
+                    android:layout_marginRight="45dp"
+                    android:background="@drawable/et_selector"
+                    android:hint="@string/date"
+                    android:inputType="datetime"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="35dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
-    <LinearLayout
-        android:id="@+id/ai_rmo_ll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
+                <Button
+                    android:id="@+id/ai_rmo_express"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignRight="@+id/ai_rmo_date"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/express"
+                    android:onClick="controlClick" />
+            </RelativeLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_marginLeft="10dp"
-            android:gravity="center"
-            android:text="@string/as_price"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/ai_rmo_alert1"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="45dp"
+                android:layout_marginTop="10dp"
+                android:gravity="left|center_vertical"
+                android:text="@string/as_start_rent"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
-        <EditText
-            android:id="@+id/ai_rmo_price"
-            android:layout_width="220dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="10dp"
-            android:gravity="left"
-            android:inputType="number"
-            android:paddingLeft="5dp"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
-    </LinearLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical" >
 
-    <Button
-        android:id="@+id/ai_rmo_submit"
-        android:layout_width="220dp"
-        android:layout_height="35dp"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/red_btn_selector"
-        android:gravity="center"
-        android:text="@string/sure"
-        android:textColor="@android:color/white"
-        android:textSize="18sp" />
+                <EditText
+                    android:id="@+id/ai_rmo_start_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="45dp"
+                    android:layout_marginRight="45dp"
+                    android:background="@drawable/et_selector"
+                    android:gravity="left|center_vertical"
+                    android:inputType="datetime"
+                    android:singleLine="true"
+                    android:onClick="controlClick"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="35dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/ai_rmo_start_express"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignRight="@+id/ai_rmo_start_time"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/express"
+                    android:onClick="controlClick" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/ai_rmo_alert2"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="45dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
+                android:text="@string/as_stop_rent"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical" >
+
+                <EditText
+                    android:id="@+id/ai_rmo_stop_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="45dp"
+                    android:layout_marginRight="45dp"
+                    android:background="@drawable/et_selector"
+                    android:gravity="left|center_vertical"
+                    android:inputType="datetime"
+                    android:onClick="controlClick"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="35dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/ai_rmo_stop_express"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignRight="@+id/ai_rmo_stop_time"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/express"
+                    android:onClick="controlClick" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/ai_rmo_rl2"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="45dp"
+                android:layout_marginRight="45dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/setting_shape"
+                android:onClick="controlClick" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_alignParentLeft="true"
+                    android:gravity="left|center_vertical"
+                    android:paddingLeft="10dp"
+                    android:text="@string/as_start_rent2"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <CheckBox
+                    android:id="@+id/ai_rmo_cb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:checked="true" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/ai_rmo_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="45dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/as_price"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/ai_rmo_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="45dp"
+                    android:layout_marginRight="45dp"
+                    android:background="@drawable/et_selector"
+                    android:gravity="left|center_vertical"
+                    android:inputType="number"
+                    android:paddingLeft="5dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/ai_rmo_submit"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="45dp"
+                android:layout_marginRight="45dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/red_btn_selector"
+                android:gravity="center"
+                android:onClick="controlClick"
+                android:text="@string/sure"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

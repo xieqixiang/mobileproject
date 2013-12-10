@@ -16,7 +16,8 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/et_selector"
         android:gravity="left|center_vertical"
-        android:hint="@string/as_stop_rent"
+        android:hint="@string/as_rent_stop_date"
+        android:paddingLeft="5dp"
         android:textColor="@color/black"
         android:textSize="16sp" />
 
@@ -29,9 +30,10 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/et_selector"
         android:gravity="left|center_vertical"
-        android:inputType="text"
-        android:singleLine="true"
         android:hint="@string/as_blank"
+        android:inputType="text"
+        android:paddingLeft="5dp"
+        android:singleLine="true"
         android:textColor="@color/black"
         android:textSize="16sp" />
 
@@ -42,10 +44,11 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginTop="10dp"
-        android:hint="@string/as_blank_account"
         android:background="@drawable/et_selector"
         android:gravity="left|center_vertical"
+        android:hint="@string/as_blank_account"
         android:inputType="text"
+        android:paddingLeft="5dp"
         android:singleLine="true"
         android:textColor="@color/black"
         android:textSize="16sp" />

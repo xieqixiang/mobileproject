@@ -150,7 +150,7 @@ public class LoginAct extends BaseAct {
 				break;
 			}
 
-			DialogManager.showProgressDialog(this,getString(R.string.as_logining));
+			DialogManager.showProgressDialog(this,getString(R.string.logining));
 			HashMap<String, String> requestParams = new HashMap<String, String>();
 			requestParams.put("nickname", userName);
 			String md5Pass = AppUtil.md5(userPass);

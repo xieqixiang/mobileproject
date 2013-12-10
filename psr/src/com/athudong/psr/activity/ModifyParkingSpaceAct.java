@@ -31,7 +31,7 @@ public class ModifyParkingSpaceAct extends BaseAct {
 		btnStopRentDate = getView(R.id.ai_mpsi_date);
 		datePickWheel = getView(R.id.timePicker1);
 		
-		datePickWheel.setEtShowTime(btnStopRentDate);
+		datePickWheel.setTvShowTime(btnStopRentDate);
 	}
 	
 	public void controlClick(View view){

@@ -47,7 +47,7 @@ public class ParkingSerachAct extends BaseAct {
 		btnStartTime = getView(R.id.ai_ps_btn_start_time);
 		tvStopTime = getView(R.id.ai_ps_btn_stop_time);
 		etStopLength = getView(R.id.ai_ps_et_stop_length);
-		datePickWheel.setEtShowTime(btnStartTime);
+		datePickWheel.setTvShowTime(btnStartTime);
 
 		String dateString = datePickWheel.getDate();
 		btnStartTime.setText(dateString);
