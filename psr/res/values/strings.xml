@@ -39,6 +39,7 @@
     <string name="as_sp_reserve">目的地搜索</string>
     <string name="as_nearby_sp">附近车位搜索</string>
     <string name="as_rent_out">放租管理 </string>
+     <string name="as_parking_space_man">车位管理 </string>
     <string name="as_parking_space_manager">车位管理 </string>
     <string name="as_earning_report">收益报表</string>
     <string name="as_loading_location">正在定位</string>
@@ -70,7 +71,7 @@
     <string name="as_blank">后台支付银行</string>
     <string name="as_blank_account">银行卡号</string>
     <string name="as_payment_method">支付方式</string>
-    <string name="as_dentification">证件名称</string>
+    <string name="as_dentification_type">证件类型</string>
     <string name="as_dentification_num">证件号</string>
     <string name="as_modify_register_info">修改注册资料</string>
     <string name="as_modify_parking_space_info">修改车位资料</string>

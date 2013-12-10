@@ -63,13 +63,37 @@
                 android:inputType="textEmailAddress"
                 android:singleLine="true" />
 
-            <EditText
-                android:id="@+id/ai_reg_identification"
-                style="@style/complete"
-                android:background="@drawable/et_selector"
-                android:hint="@string/as_dentification"
-                android:inputType="textEmailAddress"
-                android:singleLine="true" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="5dp" >
+
+                <EditText
+                    android:id="@+id/ai_reg_identification"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/et_selector"
+                    android:gravity="left|center_vertical"
+                    android:hint="@string/as_dentification_type"
+                    android:inputType="textEmailAddress"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="35dp"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/ai_reg_express"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignRight="@+id/ai_reg_identification"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/express"
+                    android:onClick="controlClick" />
+            </RelativeLayout>
 
             <EditText
                 android:id="@+id/ai_reg_identification_num"
@@ -86,8 +110,8 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="5dp"
-                android:onClick="controlClick"
-                android:background="@drawable/setting_shape" >
+                android:background="@drawable/setting_shape"
+                android:onClick="controlClick" >
 
                 <TextView
                     android:layout_width="wrap_content"

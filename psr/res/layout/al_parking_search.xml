@@ -13,8 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="5dp"
         android:gravity="left|center_vertical"
         android:hint="@string/as_destination"
@@ -27,8 +27,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="5dp"
         android:orientation="horizontal" >
 
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:text="@string/start_time"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/ai_ps_btn_start_time"
@@ -48,15 +48,15 @@
             android:gravity="left|center_vertical"
             android:paddingLeft="5dp"
             android:textColor="@color/red"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="5dp"
         android:orientation="horizontal" >
 
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:text="@string/stop_length"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/ai_ps_et_stop_length"
@@ -80,15 +80,15 @@
             android:maxLength="1"
             android:paddingLeft="5dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="5dp"
         android:orientation="horizontal" >
 
@@ -97,7 +97,7 @@
             android:layout_height="wrap_content"
             android:text="@string/as_run_out_time"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/ai_ps_btn_stop_time"
@@ -107,7 +107,7 @@
             android:gravity="left|center_vertical"
             android:paddingLeft="5dp"
             android:textColor="@color/blue"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
     </LinearLayout>
 
     <include
@@ -124,8 +124,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:background="@color/blue" />
 
     

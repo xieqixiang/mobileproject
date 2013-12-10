@@ -18,6 +18,7 @@ import com.athudong.psr.base.BaseHandle;
 import com.athudong.psr.base.BaseTask;
 import com.athudong.psr.base.C;
 import com.athudong.psr.util.AppUtil;
+import com.athudong.psr.view.listener.OnAlertSelectId;
 import com.athudong.psr.view.manager.DialogManager;
 
 /**
@@ -29,6 +30,7 @@ public class RegisterAct extends BaseAct implements OnClickListener {
 	private TextView tvPayment;
 	private String strBlank ="",strBlankAccount="";
 	private RelativeLayout rlAgreement;
+	private String [] items = new String[]{"身份证","驾驶证"};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +145,14 @@ public class RegisterAct extends BaseAct implements OnClickListener {
 			break;
 		case R.id.ai_register_rl2:
 			cbRent.setChecked(!cbRent.isChecked());
+			break;
+		case R.id.ai_reg_express:
+			DialogManager.showButtomDialog(this, items,new OnAlertSelectId() {
+				@Override
+				public void onClick(int position) {
+					etCertificate.setText(items[position]);
+				}
+			});
 			break;
 		}
 	}

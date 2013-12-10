@@ -12,7 +12,7 @@ import com.athudong.psr.base.BaseApp;
 import com.athudong.psr.view.CustomerListView;
 
 /**
- * 放租管理
+ * 车位管理
  * @author 谢启祥
  */
 public class RentManagerAct extends BaseAct {
@@ -30,7 +30,7 @@ public class RentManagerAct extends BaseAct {
 	
 	private void initView(){
 		TextView tvTitle = getView(R.id.ai_head_tv);
-		tvTitle.setText(R.string.as_rent_out);
+		tvTitle.setText(R.string.as_parking_space_man);
 		
 		listView = getView(R.id.ai_pl_lv);
 		adapter = new ModifyRentPlanAdap(this);

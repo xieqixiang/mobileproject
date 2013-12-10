@@ -75,10 +75,10 @@
                     android:background="@drawable/et_selector"
                     android:gravity="left|center_vertical"
                     android:inputType="datetime"
-                    android:singleLine="true"
                     android:onClick="controlClick"
                     android:paddingLeft="5dp"
                     android:paddingRight="35dp"
+                    android:singleLine="true"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -155,13 +155,14 @@
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
-                <CheckBox
-                    android:id="@+id/ai_rmo_cb"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <Button
+                    android:id="@+id/ai_rmo_btn"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
+                    android:background="@drawable/radio1"
                     android:checked="true" />
             </RelativeLayout>
 

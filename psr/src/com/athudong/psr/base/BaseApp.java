@@ -66,9 +66,9 @@ public class BaseApp extends Application {
 			rPlan.setStrStartTime("7:00");
 			rPlan.setStrStopTime("23:00");
 			rPlan.setStrPlanType("detail");
+			rPlan.setStrpPrice("20");
 			if(i%2==0){
 				rPlan.setStrRentStatus("y");
-				rPlan.setStrpPrice("20");
 			}else {
 				rPlan.setStrRentStatus("n");
 			}

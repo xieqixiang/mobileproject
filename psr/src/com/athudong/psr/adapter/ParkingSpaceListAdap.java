@@ -99,7 +99,7 @@ public class ParkingSpaceListAdap extends BaseAdap implements OnClickListener {
 		holder.tvReserve.setContentDescription(position+"");
 		holder.tvRoute.setOnClickListener(this);
 		if("y".equalsIgnoreCase(parking.getStrRentalStatus())){
-			holder.tvReserve.setText("ÒÑÔ¤¶©");
+			holder.tvReserve.setText("È¡ÏûÔ¤¶©");
 		}else {
 			holder.tvReserve.setText("Ô¤¶©");
 		}

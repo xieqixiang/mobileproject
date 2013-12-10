@@ -3,7 +3,7 @@ package com.athudong.psr.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CheckBox;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,10 +21,10 @@ import com.athudong.psr.view.manager.DialogManager;
 public class ModifyRentPlanAct extends BaseAct {
 	private EditText etDate,etRentStartTime,etRentStopTime,etRentPrice;
 	private RelativeLayout rl;
-	private CheckBox cb;
+	private Button btn;
 	private boolean justHourMinute;
 	private String [] items = new String[]{"元旦","春节","元宵节","清明节","劳动节","端午节","儿童节","七夕节","中秋节","国庆节","周一","周二","周三","周四","周五","周六","周日","每天"};
-	
+	private int flag;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class ModifyRentPlanAct extends BaseAct {
 	}
 	
 	private void initView(){
-		cb = getView(R.id.ai_rmo_cb);
+		btn = getView(R.id.ai_rmo_btn);
 		rl = getView(R.id.ai_rmo_rl1);
 		etDate = getView(R.id.ai_rmo_date);
 		etRentStartTime = getView(R.id.ai_rmo_start_time);
@@ -63,11 +63,14 @@ public class ModifyRentPlanAct extends BaseAct {
 			}
 			String status = rp.getStrRentStatus();
 			if("y".equals(status)){
-				cb.setChecked(true);
+				btn.setBackgroundResource(R.drawable.radio2);
+				flag =1;
 			}else {
-				cb.setChecked(false);
+				btn.setBackgroundResource(R.drawable.radio1);
+				flag = 0;
 			}
 		}else {
+			rl.setVisibility(View.GONE);
 			tvTitle.setText(getString(R.string.add));
 		}
 	}
@@ -81,10 +84,11 @@ public class ModifyRentPlanAct extends BaseAct {
 			DialogManager.showButtomDialog(this, items, new OnClickIndex());
 			break;
 		case R.id.ai_rmo_rl2:
-			cb.setChecked(cb.isChecked() ? false : true);
+			btn.setBackgroundResource(flag==0?R.drawable.radio2:R.drawable.radio1);
+			flag = (flag==0?1:0);
 			break;
 		case R.id.ai_rmo_submit:
-			
+			showToast("未能提交");
 			break;
 		case R.id.ai_rmo_start_express:
 			DialogManager.ShowDateSelectedDialog(this,etRentStartTime,justHourMinute);
