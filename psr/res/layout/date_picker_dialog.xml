@@ -13,20 +13,18 @@
         android:layout_marginTop="5dp"
         android:background="@color/blue" />
 
-    <LinearLayout
-        android:layout_width="240dip"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:orientation="horizontal" >
+        android:layout_marginTop="10dp" >
 
         <Button
             android:id="@+id/dpd_negative"
             android:layout_width="100dp"
             android:layout_height="35dip"
-            android:layout_gravity="center"
-            android:layout_marginRight="10dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
             android:background="@drawable/btn_cancel_selected"
             android:onClick="controlClick"
             android:text="@string/cancel"
@@ -37,13 +35,13 @@
             android:id="@+id/dpd_positive"
             android:layout_width="100dip"
             android:layout_height="35dip"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
             android:background="@drawable/blue_btn_selector"
             android:onClick="controlClick"
             android:text="@string/sure"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

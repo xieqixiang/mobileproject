@@ -169,6 +169,7 @@ public class DialogManager {
 		int width= dm.widthPixels;
 		
 		final Dialog buttomDialog = new Dialog(activity, R.style.mDialog);
+		
 		LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.buttom_dialog, null);
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int) (width-(30*density)),(int) (230*density));
@@ -200,6 +201,7 @@ public class DialogManager {
 			}
 		});
 		Window window = buttomDialog.getWindow();
+		
 		window.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
 		window.setBackgroundDrawableResource(android.R.color.transparent);
 		window.setWindowAnimations(R.style.dialog_style);
