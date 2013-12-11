@@ -26,7 +26,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="10dp"
             android:background="@drawable/btn_cancel_selected"
-            android:onClick="controlClick"
+            android:onClick="controlClick" 
             android:text="@string/cancel"
             android:textColor="@color/dark_grey"
             android:textSize="18sp" />
