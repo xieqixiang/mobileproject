@@ -8,4 +8,6 @@
     <color name="drak_blue">#49788A</color>
     <color name="green">#58BB05</color>
     <color name="red">#FF0000</color>
+    <color name="drak_green">#004000</color>
+    <color name="copper">#400000</color>
 </resources>

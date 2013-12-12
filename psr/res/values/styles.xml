@@ -65,13 +65,13 @@
     <style name="listview">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_marginLeft">7dp</item>
-        <item name="android:layout_marginRight">7dp</item>
-        <item name="android:layout_marginBottom">7dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
         <item name="android:background">@android:color/transparent</item>
         <item name="android:cacheColorHint">#00000000</item>
         <item name="android:divider">@color/light_grey</item>
-        <item name="android:dividerHeight">8dp</item>
+        <item name="android:dividerHeight">10dp</item>
         <item name="android:fadingEdge">none</item>
         <item name="android:listSelector">@android:color/transparent</item>
         <item name="android:scrollbarStyle">outsideOverlay</item>

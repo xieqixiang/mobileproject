@@ -31,7 +31,7 @@
         android:paddingLeft="5dp"
         android:textColor="@color/black"
         android:textSize="16sp" />
-    
+
     <TextView
         android:id="@+id/ai_psli_trading_info"
         android:layout_width="match_parent"
@@ -39,7 +39,6 @@
         android:layout_marginTop="5dp"
         android:gravity="left|center_vertical"
         android:paddingLeft="5dp"
-       
         android:textColor="@color/black"
         android:textSize="16sp"
         android:visibility="gone" />
@@ -56,13 +55,17 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginLeft="10dp" />
+        android:background="@color/light_grey" />
 
     <LinearLayout
         android:id="@+id/ai_psli_buttom"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:background="@drawable/list_item_normal"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:background="@drawable/ll2"
+        android:gravity="center_vertical"
         android:orientation="horizontal" >
 
         <TextView
@@ -77,6 +80,13 @@
             android:textColor="@color/dark_grey"
             android:textSize="16sp" />
 
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="2dp"
+            android:background="@color/light_grey" />
+
         <TextView
             android:id="@+id/ai_psli_parking_space_route"
             android:layout_width="0dp"
@@ -89,6 +99,13 @@
             android:textColor="@color/dark_grey"
             android:textSize="16sp"
             android:visibility="gone" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="2dp"
+            android:background="@color/light_grey" />
 
         <TextView
             android:id="@+id/ai_psli_route"

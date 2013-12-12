@@ -80,7 +80,6 @@ public class MainAct extends SlidingFragmentActivity implements OnClickListener 
 			public void onPageSelected(int arg0) {
 				//setSelector(arg0);
 			}
-
 			@Override
 			public void onPageScrolled(int arg0, float arg1, int arg2) {}
 
@@ -96,6 +95,7 @@ public class MainAct extends SlidingFragmentActivity implements OnClickListener 
 			app.mBMapManager.destroy();
 			app.mBMapManager = null;
 		}
+		
 		super.onDestroy();
 	}
 
@@ -128,6 +128,8 @@ public class MainAct extends SlidingFragmentActivity implements OnClickListener 
 			break;
 		}
 	}
+	
+	
 
 	@Override
 	public void onClick(View v) {

@@ -36,6 +36,7 @@ public class SampleListFragment extends ListFragment implements OnClickListener 
 		adapter.add(new SampleItem("车位管理"));
 		adapter.add(new SampleItem("收益报表"));
 		adapter.add(new SampleItem("修改注册资料"));
+		adapter.add(new SampleItem("检查新版本"));
 		setListAdapter(adapter);
 	}
 	

@@ -2,12 +2,12 @@ package com.athudong.psr.activity;
 
 import java.util.Date;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.athudong.psr.R;
@@ -22,10 +22,11 @@ import com.athudong.psr.view.DatePickWheel;
 public class ParkingSerachAct extends BaseAct {
 	private DatePickWheel datePickWheel;
 	private EditText etAddress, etStopLength;
-	private Button btnStartTime;
+	private TextView tvStartTime;
 	private TextView tvStopTime;
     private int flag ;
-	
+	private Resources resources;
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -36,6 +37,8 @@ public class ParkingSerachAct extends BaseAct {
 	}
 
 	private void initView() {
+		resources = getResources();
+		
 		Intent intent = getIntent();
 		Bundle bundle = intent.getBundleExtra("bundle");
 		flag = bundle.getInt("flag");
@@ -44,13 +47,14 @@ public class ParkingSerachAct extends BaseAct {
 		
 		datePickWheel = getView(R.id.timePicker1);
 		etAddress = getView(R.id.ai_ps_destination);
-		btnStartTime = getView(R.id.ai_ps_btn_start_time);
+		tvStartTime = getView(R.id.ai_ps_tv_start_time);
 		tvStopTime = getView(R.id.ai_ps_btn_stop_time);
 		etStopLength = getView(R.id.ai_ps_et_stop_length);
-		datePickWheel.setTvShowTime(btnStartTime);
+		datePickWheel.setResources(resources);
+		datePickWheel.setTvShowTime(tvStartTime);
 
 		String dateString = datePickWheel.getDate();
-		btnStartTime.setText(dateString);
+		tvStartTime.setText(dateString);
 		etStopLength.setText("2");
 		tvStopTime.setText(datePickWheel.getIndexDate(2));
 
@@ -62,6 +66,8 @@ public class ParkingSerachAct extends BaseAct {
 		}else {
 			title.setText(getString(R.string.as_sp_reserve));
 		}
+		
+		
 	}
 
 	private void initListener() {
@@ -69,14 +75,12 @@ public class ParkingSerachAct extends BaseAct {
 		etStopLength.addTextChangedListener(new TextWatcher() {
 
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
+			public void onTextChanged(CharSequence s, int start, int before,int count) {
 			}
 
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-
+			public void beforeTextChanged(CharSequence s, int start, int count,int after) {
+				
 			}
 
 			@Override
@@ -85,9 +89,12 @@ public class ParkingSerachAct extends BaseAct {
 				if (!TextUtils.isEmpty(strLength)) {
 					datePickWheel.setLength(Integer.valueOf(strLength));
 					tvStopTime.setText(datePickWheel.getIndexDate(Integer.valueOf(strLength)));
+					int color = tvStopTime.getCurrentTextColor();
+					tvStopTime.setTextColor(color==resources.getColor(R.color.drak_green)?resources.getColor(R.color.blue):resources.getColor(R.color.drak_green));
 				}
 			}
 		});
+		
 	}
 
 	public void controlClick(View view) {
@@ -96,7 +103,7 @@ public class ParkingSerachAct extends BaseAct {
 			this.finish();
 			break;
 		case R.id.ai_ps_search:
-			String startTime = btnStartTime.getText().toString().trim();
+			String startTime = tvStartTime.getText().toString().trim();
 			String stopTime = tvStopTime.getText().toString().trim();
 			String address = etAddress.getText().toString().trim();
 			Date date = new Date();

@@ -14,7 +14,7 @@
     <string name="as_error_stop_time">请选择停止时间</string>
     <string name="as_error_start_time">请选择开始时间</string>
     <string name="as_enter_address">请输入目的地</string>
-    <string name="as_start_time_error">租车开始时间小于当前时间</string>
+    <string name="as_start_time_error">租车开始时间不能小于当前时间</string>
 
     <!-- 其他字符串 -->
     <string name="as_login">登录</string>

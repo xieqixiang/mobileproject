@@ -309,7 +309,6 @@ public class DialogManager {
 	public static void closeAlertDialog() {
 		if (alertDialog != null && alertDialog.isShowing()) {
 			alertDialog.dismiss();
-			alertDialog = null;
 		}
 	}
 }

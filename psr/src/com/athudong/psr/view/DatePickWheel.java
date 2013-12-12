@@ -37,7 +37,12 @@ public class DatePickWheel extends LinearLayout {
 	private TextView tvStopTime;
 	private int length;
 	private boolean justHourMinute;
+	private Resources resources;
 	
+	public void setResources(Resources resources) {
+		this.resources = resources;
+	}
+
 	public void setJustHourMinute(boolean justHourMinute) {
 		this.justHourMinute = justHourMinute;
 	}
@@ -205,8 +210,12 @@ public class DatePickWheel extends LinearLayout {
 		public void scrollStop() {
 			if (tvStartTime != null && tvStartTime instanceof TextView) {
 				tvStartTime.setText(getDate());
+				int color = tvStartTime.getCurrentTextColor();
+				tvStartTime.setTextColor(color==resources.getColor(R.color.red)?resources.getColor(R.color.drak_blue):resources.getColor(R.color.red));
 				if(tvStopTime !=null){
 					tvStopTime.setText(getIndexDate(length));
+					int color2 = tvStopTime.getCurrentTextColor();
+					tvStopTime.setTextColor(color2==resources.getColor(R.color.drak_green)?resources.getColor(R.color.blue):resources.getColor(R.color.drak_green));
 				}
 			}
 		}
