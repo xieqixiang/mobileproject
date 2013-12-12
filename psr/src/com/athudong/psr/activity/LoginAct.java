@@ -50,10 +50,12 @@ public class LoginAct extends BaseAct {
 	private void initView() {
 		actvUserName = getView(R.id.ai_login_user);
 		etUserPass = getView(R.id.ai_login_pass);
+		
 		actvUserName.setAdapter(new UserAdapter(this));
 		btnDeletePass = getView(R.id.ai_login_password_delete);
 		btnDeleteUser = getView(R.id.ai_login_user_delete);
-
+		actvUserName.setDropDownBackgroundResource(R.drawable.while_stroke);
+		
 	}
 	
 	private void initListener(){

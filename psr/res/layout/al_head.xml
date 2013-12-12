@@ -4,14 +4,18 @@
     android:layout_height="50dp"
     android:background="@drawable/head_blue_shape" >
 
-    <ImageButton
+    <Button
         android:id="@+id/ai_head_left"
-        android:layout_width="30dp"
+        android:layout_width="50dp"
         android:layout_height="30dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
-        android:background="@drawable/ad_return"
+        android:background="@drawable/btn_light_grey_selector"
+        android:text="返回"
+        android:textColor="@color/dark_grey"
+        android:textSize="14sp"
+        android:gravity="center"
         android:contentDescription="@null"
         android:onClick="controlClick" />
 

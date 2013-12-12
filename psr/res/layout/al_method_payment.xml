@@ -20,7 +20,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/btn_cancel_selected"
+            android:background="@drawable/btn_light_grey_selector"
             android:gravity="center"
             android:onClick="controlClick"
             android:text="@string/cancel"

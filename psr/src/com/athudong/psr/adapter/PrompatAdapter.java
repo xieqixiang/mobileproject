@@ -65,7 +65,7 @@ public abstract class PrompatAdapter extends BaseAdap implements Filterable {
 			holder = new ViewHolder();
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			convertView = inflater.inflate(R.layout.drop_down_view, null);
-			holder.searItem = (TextView) convertView.findViewById(R.id.yi_drop_down_view);
+			holder.searItem = (TextView) convertView.findViewById(R.id.ai_drop_down_view);
 		    convertView.setTag(holder);
 		}else {
 			holder = (ViewHolder) convertView.getTag();

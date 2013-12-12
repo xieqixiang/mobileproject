@@ -18,6 +18,9 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/et_selector"
             android:completionThreshold="2"
+            android:drawingCacheQuality="low"
+            android:dropDownSelector="@null"
+            android:dropDownVerticalOffset="1dp"
             android:gravity="left|center_vertical"
             android:hint="@string/as_login_user"
             android:inputType="text"
@@ -91,6 +94,21 @@
         android:textSize="20sp" />
 
     <Button
+        android:id="@+id/ai_register"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/ai_login"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/btn_light_grey_selector"
+        android:onClick="onClick"
+        android:text="@string/register"
+        android:textColor="@color/dark_grey"
+        android:textSize="20sp" />
+
+    <Button
         android:id="@+id/ai_forget_pass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -102,18 +120,6 @@
         android:onClick="onClick"
         android:text="@string/forget_password"
         android:textColor="@drawable/color_selector"
-        android:textSize="20sp" />
-
-    <Button
-        android:id="@+id/ai_register"
-        android:layout_width="240dp"
-        android:layout_height="40dp"
-        android:layout_above="@id/ai_forget_pass"
-        android:layout_centerHorizontal="true"
-        android:background="@android:color/transparent"
-        android:onClick="onClick"
-        android:text="@string/register"
-        android:textColor="@drawable/color_selector"
-        android:textSize="20sp" />
+        android:textSize="16sp" />
 
 </RelativeLayout>

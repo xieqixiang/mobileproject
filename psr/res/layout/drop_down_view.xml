@@ -4,11 +4,11 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="30dp"
     android:layout_marginRight="30dp"
-    android:background="@drawable/list_item_selector"
+    android:background="@drawable/white_rectangle_selector"
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/yi_drop_down_view"
+        android:id="@+id/ai_drop_down_view"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:ellipsize="marquee"
@@ -21,7 +21,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="3dp"
-        android:background="@color/blue" />
+        android:background="#DDDDDD" />
 
 </LinearLayout>
