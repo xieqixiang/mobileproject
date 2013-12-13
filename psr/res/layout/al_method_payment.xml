@@ -15,7 +15,7 @@
 
         <Button
             android:id="@+id/ai_mp_cancel"
-            android:layout_width="60dp"
+            android:layout_width="50dp"
             android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
@@ -29,7 +29,7 @@
 
         <Button
             android:id="@+id/ai_mp_sure"
-            android:layout_width="60dp"
+            android:layout_width="50dp"
             android:layout_height="35dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
@@ -149,7 +149,7 @@
                 android:paddingRight="35dp"
                 android:background="@drawable/et_selector"
                 android:gravity="left|center_vertical"
-                android:hint="@string/as_blank_account"
+                android:hint="@string/as_blank"
                 android:inputType="text"
                 android:paddingLeft="5dp"
                 android:singleLine="true"

@@ -1,7 +1,6 @@
 package com.athudong.psr.adapter;
 
 import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -76,15 +75,26 @@ public class ModifyRentPlanAdap extends BaseAdap implements OnClickListener {
 		}else {
 			viewHold = (ViewHold) convertView.getTag();
 		}
+		
+		ParkingSpace ps = arrayList.get(position);
+		
 		viewHold.tvParkingSpaceInfo.setOnClickListener(this);
 		viewHold.tvModifyDailyRent.setOnClickListener(this);
 		viewHold.tvModifyTemporaryRent.setOnClickListener(this);
 		viewHold.tvModifyParkingSpaceInfo.setOnClickListener(this);
+		
+		String rentStatus = ps.getStrRentalStatus();
+		String status = "";
+		if("y".equals(rentStatus)){
+			status = "正在出租";
+		}else {
+			status = "空闲";
+		}
 		viewHold.tvParkingSpaceInfo.setContentDescription(position+"");
 		viewHold.tvModifyDailyRent.setContentDescription(position+"");
 		viewHold.tvModifyTemporaryRent.setContentDescription(position+"");
-		ParkingSpace ps = arrayList.get(position);
-		viewHold.tvParkingSpaceInfo.setText(AppUtil.appString(new String []{"车位地址","出租状态"},new String []{ps.getStrParkName()+ps.getStrParkNo(),ps.getStrRentalStatus()}));
+		
+		viewHold.tvParkingSpaceInfo.setText(AppUtil.appString(new String []{"车位地址","出租状态"},new String []{ps.getStrParkName()+ps.getStrParkNo(),status}));
 		return convertView;
 	}
 	

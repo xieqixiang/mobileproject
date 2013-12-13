@@ -104,11 +104,11 @@ public class ModifyRentManagerAct extends BaseAct {
 			public void onPageSelected(int arg0) {
 				if (arg0 == 0) {
 					btnStartTime.setTextColor(getResources().getColor(R.color.red));
-					btnStopTime.setTextColor(getResources().getColor(R.color.black));
+					btnStopTime.setTextColor(getResources().getColor(R.color.dark_grey));
 				}
 				if (arg0 == 1) {
 					btnStopTime.setTextColor(resources.getColor(R.color.red));
-					btnStartTime.setTextColor(getResources().getColor(R.color.black));
+					btnStartTime.setTextColor(getResources().getColor(R.color.dark_grey));
 				}
 			}
 

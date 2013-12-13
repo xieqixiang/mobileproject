@@ -108,18 +108,43 @@
         android:textColor="@color/dark_grey"
         android:textSize="20sp" />
 
-    <Button
-        android:id="@+id/ai_forget_pass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@android:color/transparent"
-        android:onClick="onClick"
-        android:text="@string/forget_password"
-        android:textColor="@drawable/color_selector"
-        android:textSize="16sp" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/ai_forget_pass"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:onClick="onClick"
+            android:text="@string/forget_password"
+            android:textColor="@drawable/color_selector"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/blue" />
+
+        <Button
+            android:id="@+id/ai_check_newversion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:onClick="onClick"
+            android:text="@string/check_new_version"
+            android:textColor="@drawable/color_selector"
+            android:textSize="16sp" />
+    </LinearLayout>
 
 </RelativeLayout>
