@@ -3,7 +3,12 @@ package com.athudong.psr.adapter;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Message;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -93,7 +98,12 @@ public class ParkingSpaceListAdap extends BaseAdap implements OnClickListener {
 		}
 		ParkingSpace parking = parkingList.get(position);
 		holder.tvAddress.setText(parking.getStrParkAddress()+parking.getStrParkNo()+"车位");
-		holder.tvPrice.setText("单价:"+parking.getStrRentPrice()+"元/小时");
+		SpannableString sp = new SpannableString("单价:"+parking.getStrRentPrice()+"元/小时");
+		int length = sp.length();
+		length = length -4;
+		sp.setSpan(new ForegroundColorSpan(Color.RED),3,length, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+		
+		holder.tvPrice.setText(sp);
 		holder.ivImage.setBackgroundResource(R.drawable.ic_launcher);
 		holder.tvReserve.setOnClickListener(this);
 		holder.tvReserve.setContentDescription(position+"");

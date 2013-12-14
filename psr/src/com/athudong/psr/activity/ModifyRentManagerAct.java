@@ -143,6 +143,7 @@ public class ModifyRentManagerAct extends BaseAct {
 		case R.id.ai_rmp2_add:
 			overLayer(ModifyRentPlanAct.class, this);
 			break;
+		
 		}
 	}
 }

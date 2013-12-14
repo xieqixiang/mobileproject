@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
+    android:background="@drawable/list_item_normal"
     android:orientation="vertical" >
 
     <TextView
@@ -12,12 +12,16 @@
         android:gravity="left|center_vertical"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
+        android:paddingTop="5dp"
         android:textColor="@color/dark_grey"
         android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="30dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
         android:orientation="horizontal" >
 
         <TextView
@@ -25,24 +29,24 @@
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_weight="1"
-            android:background="@drawable/tv_selector"
+            android:background="@drawable/left_shape_selector"
             android:gravity="center"
             android:text="@string/modify"
             android:textColor="@color/dark_grey"
             android:textSize="16sp" />
-        
+
         <View
-            android:id="@+id/ai_vi_line" 
+            android:id="@+id/ai_vi_line"
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/dark_grey"/>
+            android:background="@color/light_grey" />
 
         <TextView
             android:id="@+id/ai_vi_delete"
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_weight="1"
-            android:background="@drawable/tv_selector"
+            android:background="@drawable/right_shape_selector"
             android:gravity="center"
             android:text="@string/delete"
             android:textColor="@color/dark_grey"

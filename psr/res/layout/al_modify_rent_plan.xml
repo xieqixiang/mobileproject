@@ -12,8 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="7dp"
-        android:layout_marginRight="7dp"
         android:background="@android:color/white"
         android:orientation="horizontal" >
 
@@ -24,6 +22,7 @@
             android:layout_weight="1"
             android:background="@android:color/white"
             android:gravity="center"
+            android:onClick="controlClick"
             android:text="@string/as_start_rent2"
             android:textColor="@color/dark_grey"
             android:textSize="18sp" />
@@ -40,6 +39,7 @@
             android:layout_weight="1"
             android:background="@android:color/white"
             android:gravity="center"
+            android:onClick="controlClick"
             android:text="@string/as_stop_rent2"
             android:textColor="@color/dark_grey"
             android:textSize="18sp" />

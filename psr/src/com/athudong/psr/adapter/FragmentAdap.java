@@ -25,6 +25,7 @@ public class FragmentAdap extends SherlockFragment implements OnClickListener{
 	
 	public android.view.View onCreateView(android.view.LayoutInflater inflater, android.view.ViewGroup container, android.os.Bundle savedInstanceState) {
 		View rootView = null;
+		
 		rootView = inflater.inflate(R.layout.al_parking_space, container,false);
 		llParkingSpace = (LinearLayout) rootView.findViewById(R.id.ai_ps_ll_nearby_sp);
 		llParkingSearch = (LinearLayout) rootView.findViewById(R.id.ai_ps_ll_reserve);
