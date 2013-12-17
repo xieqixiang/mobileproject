@@ -92,6 +92,7 @@ public class ParkingSpaceListAdap extends BaseAdap implements OnClickListener {
 			holder.tvSpaceintSpaceRoute = (TextView) convertView.findViewById(R.id.ai_psli_parking_space_route);
 			holder.tvReserveInfo = (TextView) convertView.findViewById(R.id.ai_psli_trading_info);
 			holder.llBottom = (LinearLayout) convertView.findViewById(R.id.ai_psli_buttom);
+			holder.view = convertView.findViewById(R.id.ai_psli_view);
 			convertView.setTag(holder);
 		}else {
 			holder = (ViewHolder) convertView.getTag();
@@ -104,7 +105,7 @@ public class ParkingSpaceListAdap extends BaseAdap implements OnClickListener {
 		sp.setSpan(new ForegroundColorSpan(Color.RED),3,length, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
 		
 		holder.tvPrice.setText(sp);
-		holder.ivImage.setBackgroundResource(R.drawable.ic_launcher);
+		
 		holder.tvReserve.setOnClickListener(this);
 		holder.tvReserve.setContentDescription(position+"");
 		holder.tvRoute.setOnClickListener(this);
@@ -126,6 +127,7 @@ public class ParkingSpaceListAdap extends BaseAdap implements OnClickListener {
 			holder.tvSpaceintSpaceRoute.setVisibility(View.GONE);
 			holder.tvReserveInfo.setVisibility(View.GONE);
 		}else if(flag == C.flag.income){
+			holder.view.setVisibility(View.GONE);
 			holder.tvReserveInfo.setVisibility(View.VISIBLE);
 			holder.tvReserveInfo.setText(AppUtil.appString(new String[]{"交易手机号","车牌号","停车开始时间","停车结束时间","结算金额"},new String[]{parking.getStrTraderPhone(),parking.getStrCarNum(),parking.getStrStartTime(),parking.getStrStopTime(),parking.getStrPayMent()})) ;
 			holder.llBottom.setVisibility(View.GONE);
@@ -134,6 +136,7 @@ public class ParkingSpaceListAdap extends BaseAdap implements OnClickListener {
 	}
 	
 	private class ViewHolder{
+		public View view;
 		public TextView tvAddress;
 		public TextView tvPrice;
 		public ImageView ivImage;

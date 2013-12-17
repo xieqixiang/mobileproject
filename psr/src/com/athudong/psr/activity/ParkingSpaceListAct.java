@@ -94,6 +94,7 @@ public class ParkingSpaceListAct extends BaseAct {
 			adapter.setParkingList(application.parkings);
 		}else if(flag == C.flag.income){
 			tView.setText(getString(R.string.as_earning_report));
+			
 			adapter.setParkingList(application.parkings);
 		}
 	}
