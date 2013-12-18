@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.athudong.psr.R;
 import com.athudong.psr.base.BaseAct;
-import com.athudong.psr.base.C;
 import com.athudong.psr.view.DatePickWheel;
 
 /**
@@ -33,7 +32,6 @@ public class ParkingSerachAct extends BaseAct {
 		setContentView(R.layout.al_parking_search);
 		initView();
 		initListener();
-		showLongToast("快速预订将获取你当前的位置信息。");
 	}
 
 	private void initView() {
@@ -60,13 +58,7 @@ public class ParkingSerachAct extends BaseAct {
 
 		datePickWheel.setTvStopTime(tvStopTime);
 		datePickWheel.setLength(2);
-		if (flag==C.flag.locationSearch) {
-			etAddress.setVisibility(View.GONE);
-			title.setText(getString(R.string.as_nearby_sp));
-		}else {
-			title.setText(getString(R.string.as_sp_reserve));
-		}
-		
+		title.setText(getString(R.string.as_parking_space_search));
 		
 	}
 
@@ -115,12 +107,6 @@ public class ParkingSerachAct extends BaseAct {
 			if (TextUtils.isEmpty(stopTime)) {
 				showToast(getString(R.string.as_error_stop_time));
 				break;
-			}
-			if(etAddress.getVisibility()==View.VISIBLE){
-				if(TextUtils.isEmpty(address)){ 
-					showToast(getString(R.string.as_enter_address ));
-					break;
-				}
 			}
 			if(datePickWheel.getStartStime() < currentTime ){
 				showToast(getString(R.string.as_start_time_error ));

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">车位易</string>
+    <string name="app_name">车易停</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="as_asslogan">去到哪，停到哪</string>
@@ -46,7 +46,6 @@
     <string name="as_loading_map">正在加载图片</string>
     <string name="as_destination">请输入你的目的地</string>
     <string name="search1">马上搜索</string>
-    <string name="search">搜索</string>
     <string name="stop_length">停车时长:</string>
     <string name="as_stop_length_alert">1-9(不足1小时按1小时计算)</string>
     <string name="as_reservate">预订</string>
@@ -77,6 +76,7 @@
     <string name="as_modify_parking_space_info">修改车位资料</string>
     <string name="as_run_out_time">取车时间:</string>
     <string name="as_rent_stop_date">止租日期</string>
+    <string name="as_parking_space_search">车位搜索</string>
     
      
     <!-- 通用的字符串 -->
@@ -107,5 +107,6 @@
     <string name="date">日期</string>
     <string name="returnning">返回</string>
     <string name="check_new_version">检查新版本</string>
+    <string name="search">搜索</string>
   
 </resources>

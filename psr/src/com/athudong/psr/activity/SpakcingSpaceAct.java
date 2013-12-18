@@ -14,6 +14,6 @@ public class SpakcingSpaceAct extends BaseAct {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.al_parking_space);
+		setContentView(R.layout.al_main_page1);
 	}
 }

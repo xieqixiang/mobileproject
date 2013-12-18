@@ -17,7 +17,6 @@ import com.athudong.psr.base.C;
  */
 public class FragmentAdap extends SherlockFragment implements OnClickListener{
 	public static final String ARG_OBJECT = "object";
-	private LinearLayout llParkingSpace;
 	private LinearLayout llParkingSearch;
 	private LinearLayout llHistoryLook;
 	private LinearLayout llParkingMap;
@@ -26,26 +25,21 @@ public class FragmentAdap extends SherlockFragment implements OnClickListener{
 	public android.view.View onCreateView(android.view.LayoutInflater inflater, android.view.ViewGroup container, android.os.Bundle savedInstanceState) {
 		View rootView = null;
 		
-		rootView = inflater.inflate(R.layout.al_parking_space, container,false);
-		llParkingSpace = (LinearLayout) rootView.findViewById(R.id.ai_ps_ll_nearby_sp);
-		llParkingSearch = (LinearLayout) rootView.findViewById(R.id.ai_ps_ll_reserve);
+		rootView = inflater.inflate(R.layout.al_main_page1, container,false);
+		llParkingSearch = (LinearLayout) rootView.findViewById(R.id.ai_main_parking_space_search);
 		llHistoryLook = (LinearLayout) rootView.findViewById(R.id.ai_ps_ll_history_look);
 		llParkingMap = (LinearLayout) rootView.findViewById(R.id.ai_ps_ll_parking_map);
 		llHistoryLook.setOnClickListener(this);
 		llParkingMap.setOnClickListener(this);
 		llParkingSearch.setOnClickListener(this);
-		llParkingSpace.setOnClickListener(this);
 		return rootView;
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch(v.getId()){
-		case R.id.ai_ps_ll_nearby_sp:
+		case R.id.ai_main_parking_space_search:
 			overLayout(ParkingSerachAct.class,C.flag.locationSearch);
-			break;
-		case R.id.ai_ps_ll_reserve:
-			overLayout(ParkingSerachAct.class,C.flag.destinationSearcy);
 			break;
 		case R.id.ai_ps_ll_history_look:
 			overLayout(ParkingSpaceListAct.class,C.flag.historyInfo);
