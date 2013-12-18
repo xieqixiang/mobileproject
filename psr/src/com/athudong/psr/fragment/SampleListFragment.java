@@ -8,6 +8,7 @@ import com.athudong.psr.activity.RentManagerAct;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -37,6 +38,7 @@ public class SampleListFragment extends ListFragment implements OnClickListener 
 		adapter.add(new SampleItem("收益报表"));
 		adapter.add(new SampleItem("修改注册资料"));
 		adapter.add(new SampleItem("检查新版本"));
+		adapter.add(new SampleItem("联系我们"));
 		setListAdapter(adapter);
 	}
 	
@@ -85,6 +87,10 @@ public class SampleListFragment extends ListFragment implements OnClickListener 
 					bundle.putString("flag","modifyInfo");
 					intent.putExtra("bundle",bundle);
 					startActivity(intent);
+					break;
+				case 4:
+					Intent callIntent = new Intent(Intent.ACTION_CALL,Uri.parse("tel:10086"));
+					startActivity(callIntent);
 					break;
 			}
 		}
