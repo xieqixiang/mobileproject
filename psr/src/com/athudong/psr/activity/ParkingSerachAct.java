@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.athudong.psr.R;
 import com.athudong.psr.base.BaseAct;
+import com.athudong.psr.util.Logger;
 import com.athudong.psr.view.DatePickWheel;
 
 /**
@@ -68,11 +69,18 @@ public class ParkingSerachAct extends BaseAct {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,int count) {
+				if(!TextUtils.isEmpty(s)){
+					int stopLength = Integer.valueOf(s.toString());
+					if( stopLength>24 && stopLength !=30){
+						showToast(getString(R.string.as_exceed_max));
+						 
+					}
+				}
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,int after) {
-				
+				Logger.d("ParkingSearchAct","beforeTextChanged  "+s+"");
 			}
 
 			@Override
