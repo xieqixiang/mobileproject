@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.athudong.psr.R;
@@ -12,6 +14,7 @@ import com.athudong.psr.base.BaseAct;
 import com.athudong.psr.base.BaseApp;
 import com.athudong.psr.base.C;
 import com.athudong.psr.view.CustomerListView;
+import com.athudong.psr.view.manager.DialogManager;
 
 /**
  * 所有车位的收益情况
@@ -21,6 +24,10 @@ public class IncomeAct extends BaseAct {
 	private CustomerListView listView;
 	private ParkingSpaceIncomeAdap adapter;
 	private TextView tvTotal;
+	private LinearLayout llIcome;
+	private Button btnStartTime;
+	private Button btnStopTime;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -31,6 +38,9 @@ public class IncomeAct extends BaseAct {
 	
 	private void initView(){
 		listView = getView(R.id.ai_income_listview);
+		llIcome = getView(R.id.ai_income_ll);
+		btnStartTime = getView(R.id.ai_income_start_time);
+		btnStopTime = getView(R.id.ai_income_stop_time);
 		adapter = new ParkingSpaceIncomeAdap(this);
 		BaseApp application = (BaseApp) getApplication();
 		adapter.setParkingSpaces(application.parkings);
@@ -58,7 +68,24 @@ public class IncomeAct extends BaseAct {
 	public void controlClick(View view){
 		switch(view.getId()){
 		case R.id.ai_head_left:
-			this.finish();
+			if(llIcome.getVisibility()==View.VISIBLE){
+				this.finish();
+				break;
+			}
+			llIcome.setVisibility(View.VISIBLE);
+			listView.setVisibility(View.GONE);
+			tvTotal.setVisibility(View.GONE);
+			break;
+		case R.id.ai_income_search:
+			llIcome.setVisibility(View.GONE);
+			listView.setVisibility(View.VISIBLE);
+			tvTotal.setVisibility(View.VISIBLE);
+			break;
+		case R.id.ai_income_stop_time:
+			DialogManager.ShowDateSelectedDialog(this,btnStopTime,false);
+			break;
+		case R.id.ai_income_start_time:
+			DialogManager.ShowDateSelectedDialog(this,btnStartTime,false);
 			break;
 		}
 	}

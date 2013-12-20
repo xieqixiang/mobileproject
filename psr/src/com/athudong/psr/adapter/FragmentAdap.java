@@ -8,6 +8,7 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.athudong.psr.R;
+import com.athudong.psr.activity.ParkingListAct;
 import com.athudong.psr.activity.ParkingSerachAct;
 import com.athudong.psr.activity.ParkingSpaceListAct;
 import com.athudong.psr.base.C;
@@ -42,7 +43,7 @@ public class FragmentAdap extends SherlockFragment implements OnClickListener{
 			overLayout(ParkingSerachAct.class,C.flag.locationSearch);
 			break;
 		case R.id.ai_ps_ll_history_look:
-			overLayout(ParkingSpaceListAct.class,C.flag.historyInfo);
+			overLayout(ParkingListAct.class,C.flag.historyInfo);
 			break;
 		case R.id.ai_ps_ll_parking_map:
 			overLayout(ParkingSpaceListAct.class,C.flag.nowInfo);

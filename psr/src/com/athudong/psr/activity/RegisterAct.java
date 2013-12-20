@@ -41,7 +41,6 @@ public class RegisterAct extends BaseAct implements OnClickListener {
 	
 	private void initView(){
 		Intent intent = getIntent();
-		
 		etPass = getView(R.id.ai_reg_pass);
 		etPhone = getView(R.id.ai_reg_phone);
 		etConfim = getView(R.id.ai_reg_confirm_pass);

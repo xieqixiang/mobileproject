@@ -190,6 +190,7 @@ public class LoginAct extends BaseAct {
 				ArrayList<String> lists = sqlite.queryAll();
 				if (lists != null && lists.size() > 0) {
 					for (int i = 0; i < lists.size(); i++) {
+						Logger.d("LoginActi", "Î»ÖÃ:"+i);
 						if (!actLogin.userName.equals(lists.get(i))) {
 							sqlite.insert(actLogin.userName);
 						}

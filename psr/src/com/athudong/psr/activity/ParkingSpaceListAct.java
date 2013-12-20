@@ -31,8 +31,8 @@ public class ParkingSpaceListAct extends BaseAct {
 	public ParkingSpaceListAdap adapter;
 	private LocationMan locationMan;
 	private LocationClient locationClient;
-	private String startTime ;
-	private String stopTime;
+	private String startTime ="";
+	private String stopTime ="",address = "";
 	private BaseApp application;
 	private RequestMedthodUtil rmu;
 	private IndexHandler handler;
@@ -55,11 +55,13 @@ public class ParkingSpaceListAct extends BaseAct {
 	
 		Intent intent = getIntent();
 		Bundle bundle = intent.getBundleExtra("bundle");
-		startTime = bundle.getString("startTime");
-		stopTime = bundle.getString("stopTime");
-		String address = bundle.getString("address");
-		application = (BaseApp) getApplication();
-		flag = bundle.getInt("flag");
+		if(bundle !=null){
+			startTime = bundle.getString("startTime");
+			stopTime = bundle.getString("stopTime");
+			address = bundle.getString("address");
+			application = (BaseApp) getApplication();
+			flag = bundle.getInt("flag");
+		}
 		
 		adapter.setFlag(flag);
 		if(flag==C.flag.locationSearch){

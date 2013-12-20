@@ -176,8 +176,25 @@ public class DatePickWheel extends LinearLayout {
 		return calendar2;
 	}
 	
+	public Calendar getIndexCalender(int hour,int minute) {
+		TimeObject timeObject = wv_day.getAdapter().getTimeObjects().get(3);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(timeObject.startTime);
+		Calendar calendar2 = Calendar.getInstance();
+		calendar2.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH),(wv_hours.getCurrentItem()+hour),(wv_mins.getCurrentItem()+minute), 0);
+		return calendar2;
+	}
+	
 	public String getIndexDate(int index){
 		Calendar calendar = getIndexCalender(index);
+		Date date = calendar.getTime();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年M月d日 HH:mm",Locale.CHINA);
+		String dateString = sdf.format(date);
+		return dateString;
+	}
+	
+	public String getIndexDate(int hour , int minute){
+		Calendar calendar = getIndexCalender(hour,minute);
 		Date date = calendar.getTime();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年M月d日 HH:mm",Locale.CHINA);
 		String dateString = sdf.format(date);

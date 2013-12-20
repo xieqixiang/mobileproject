@@ -49,7 +49,7 @@ public class BaseApp extends Application {
 			ParkingSpace parking = new ParkingSpace();
 			parking.setStrParkName("正佳广场");
 			parking.setStrRentPrice("20");
-			parking.setStrParkAddress("正佳广场负一层");
+			parking.setStrParkAddress("广州天河正佳广场负一层");
 			parking.setStrStartTime("2013年11月27日 14:00");
 			parking.setStrStopTime("2013年11月27日 16:00");
 			parking.setStrTraderPhone("13538715695");

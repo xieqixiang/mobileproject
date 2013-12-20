@@ -5,23 +5,71 @@
     android:background="@color/light_grey"
     android:orientation="vertical" >
 
-    <include
-        layout="@layout/al_head" />
+    <include layout="@layout/al_head" />
 
     <com.athudong.psr.view.CustomerListView
         android:id="@+id/ai_income_listview"
+        style="@style/listview"
         android:layout_weight="1"
-        style="@style/listview" />
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/ai_income_total"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="10dp"
-        android:gravity="center"
         android:layout_marginRight="10dp"
+        android:gravity="center"
         android:textColor="@color/red"
         android:textSize="20sp"
-         />
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/ai_income_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_left"
+        android:layout_marginRight="@dimen/margin_right"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/ai_income_start_time"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/list_item_selector"
+            android:gravity="left|center_vertical"
+            android:hint="@string/start_time1"
+            android:onClick="controlClick"
+            android:paddingLeft="5dp"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/ai_income_stop_time"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/list_item_selector"
+            android:gravity="left|center_vertical"
+            android:hint="@string/start_time1"
+            android:onClick="controlClick"
+            android:paddingLeft="5dp"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/ai_income_search"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/blue_btn_selector"
+            android:gravity="center"
+            android:onClick="controlClick"
+            android:paddingLeft="5dp"
+            android:text="@string/search"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+    </LinearLayout>
 
 </LinearLayout>
