@@ -28,7 +28,7 @@ public class UserInfoSqlite extends BaseSqlite {
 
 	@Override
 	protected String tableName() {
-		return "auxiliary";
+		return "authudongauxiliary";
 	}
 
 

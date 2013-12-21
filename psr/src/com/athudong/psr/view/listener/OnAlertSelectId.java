@@ -9,4 +9,5 @@ public interface OnAlertSelectId {
 	/**µã»÷Ê±´¥·¢*/
 	public void onClick(int position);
 	
+	
 }

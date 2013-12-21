@@ -44,10 +44,9 @@
     <string name="as_earning_report">收益报表</string>
     <string name="as_loading_location">正在定位</string>
      <string name="as_loading_map">正在加载图片</string>
-    <string name="as_destination">请输入你的目的地</string>
+    <string name="as_destination">请输入目的地(空时，会自动定位)</string>
     <string name="search1">马上搜索</string>
     <string name="stop_length">停车时长:</string>
-    <string name="as_stop_length_alert">1-24(小时)(不足30分钟按30分钟计算超过30分钟按1小时计算,输入30代表30分钟)</string>
     <string name="as_reservate">预订</string>
     <string name="as_location">定位</string>
     <string name="as_spacking_space">车位</string>
@@ -74,14 +73,14 @@
     <string name="as_dentification_num">证件号</string>
     <string name="as_modify_register_info">修改注册资料</string>
     <string name="as_modify_parking_space_info">修改车位资料</string>
-    <string name="as_run_out_time">取车时间:</string>
+    <string name="as_run_out_time">取车时间</string>
     <string name="as_rent_stop_date">止租日期</string>
     <string name="as_parking_space_search">车位搜索</string>
     <string name="as_exceed_max">请输入1-24(小时)或30(30代表30分钟)</string>
     <string name="as_parking_list">车位列表</string>
      
     <!-- 通用的字符串 -->
-    <string name="start_time">起始时间:</string>
+    <string name="start_time">起始时间</string>
     <string name="stop_time">终止时间:</string>
     <string name="start_time1">开始时间:</string>
     <string name="stop_time1">结束时间:</string>

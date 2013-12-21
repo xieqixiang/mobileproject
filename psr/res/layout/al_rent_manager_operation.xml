@@ -46,7 +46,7 @@
                     android:layout_alignRight="@+id/ai_rmo_date"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/express"
+                    android:background="@drawable/auxiliary_selector"
                     android:onClick="controlClick" />
             </RelativeLayout>
 
@@ -89,7 +89,7 @@
                     android:layout_alignRight="@+id/ai_rmo_start_time"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/express"
+                    android:background="@drawable/auxiliary_selector"
                     android:onClick="controlClick" />
             </RelativeLayout>
 
@@ -131,7 +131,7 @@
                     android:layout_alignRight="@+id/ai_rmo_stop_time"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/express"
+                    android:background="@drawable/auxiliary_selector"
                     android:onClick="controlClick" />
             </RelativeLayout>
 

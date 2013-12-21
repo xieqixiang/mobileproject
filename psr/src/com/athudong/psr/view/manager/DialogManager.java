@@ -247,6 +247,46 @@ public class DialogManager {
 		dialog.show();
 	}
 	
+	/**以对话框的方式弹出时间选择器*/
+	public static DatePickWheel ShowDateSelectedDialog(Activity activity,final TextView tv,boolean justHourMinue,final TextView tv2,final int hour,final int minute){
+		final Dialog dialog = new Dialog(activity, R.style.mDialog);
+		Window window = dialog.getWindow();
+		window.setBackgroundDrawableResource(android.R.color.transparent);
+
+		View view = View.inflate(activity, R.layout.date_picker_dialog,null);
+		final DatePickWheel dpw = (DatePickWheel) view.findViewById(R.id.timePicker1);
+		DayWheelView dwv = (DayWheelView) view.findViewById(R.id.day);
+		dpw.setJustHourMinute(justHourMinue);
+		if(justHourMinue){
+			dwv.setVisibility(View.GONE);
+		}
+		
+		Button cancel = (Button) view.findViewById(R.id.dpd_negative);
+		Button sure = (Button) view.findViewById(R.id.dpd_positive);
+		
+		cancel.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+		
+		sure.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				tv.setText(dpw.getDate());
+				tv2.setText(dpw.getIndexDate(hour,minute));
+				dialog.dismiss();
+			}
+		});
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.setContentView(view);
+		dialog.show();
+		return dpw;
+	}
+	
 
 	public static boolean progressIsShow() {
 		if (progressDialog != null && progressDialog.isShowing()) {

@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import com.athudong.psr.R;
 import com.athudong.psr.adapter.FragmentPagerAdap;
 import com.athudong.psr.base.BaseApp;
@@ -53,8 +52,7 @@ public class MainAct extends SlidingFragmentActivity implements OnClickListener 
 		ft.commit();
 		
 		sm = getSlidingMenu();
-		Button btnExistLogin = (Button) sm.findViewById(R.id.mf_exist_login);
-		btnExistLogin.setOnClickListener(this);
+		
 		sm.setShadowWidthRes(R.dimen.shadow_width);
 	    
 		sm.setShadowDrawable(R.drawable.ad_shadow);
@@ -126,6 +124,9 @@ public class MainAct extends SlidingFragmentActivity implements OnClickListener 
 		case R.id.ai_main_menu:
 			sm.toggle();
 			break;
+		case R.id.sm_exist_login:
+			DialogManager.showAlertDialog(this, "",getString(R.string.logout), this, true);
+			break;
 		}
 	}
 	
@@ -134,9 +135,6 @@ public class MainAct extends SlidingFragmentActivity implements OnClickListener 
 	@Override
 	public void onClick(View v) {
 		switch(v.getId()){
-		case R.id.mf_exist_login:
-			DialogManager.showAlertDialog(this,"",getString(R.string.logout),this,true);
-			break;
 		case R.id.alert_negative:
 			DialogManager.closeAlertDialog();
 			break;

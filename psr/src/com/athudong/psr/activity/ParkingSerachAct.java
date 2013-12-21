@@ -8,7 +8,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.ViewDebug.IntToString;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -32,12 +31,13 @@ public class ParkingSerachAct extends BaseAct {
     private int flag ;
 	private Resources resources;
 	private String [] items;
-    
+    private int hour = 0,minute=0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.al_parking_search);
 		initView();
+		initListener();
 	}
 
 	private void initView() {
@@ -53,26 +53,45 @@ public class ParkingSerachAct extends BaseAct {
 		Intent intent = getIntent();
 		Bundle bundle = intent.getBundleExtra("bundle");
 		flag = bundle.getInt("flag");
-		
 		TextView title = getView(R.id.ai_head_tv);
-		
 		datePickWheel = getView(R.id.timePicker1);
 		etAddress = getView(R.id.ai_ps_destination);
 		tvStartTime = getView(R.id.ai_ps_tv_start_time);
-		tvStopTime = getView(R.id.ai_ps_btn_stop_time);
+		tvStopTime = getView(R.id.ai_ps_tv_stop_time);
 		btnStopLength = getView(R.id.ai_ps_btn_stop_length);
 		datePickWheel.setResources(resources);
-		datePickWheel.setTvShowTime(tvStartTime);
+		datePickWheel.setTvShowTime(null);
 
 		String dateString = datePickWheel.getDate();
 		tvStartTime.setText(dateString);
 		btnStopLength.setText(items[3]);
 		tvStopTime.setText(datePickWheel.getIndexDate(2));
 
-		datePickWheel.setTvStopTime(tvStopTime);
+		datePickWheel.setTvStopTime(null);
 		datePickWheel.setLength(2);
 		title.setText(getString(R.string.as_parking_space_search));
 		
+		hour = 2;
+	}
+	
+	private void initListener(){
+		tvStartTime.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,int after) {}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				int color = tvStartTime.getCurrentTextColor();
+				tvStartTime.setTextColor(color==resources.getColor(R.color.red)?resources.getColor(R.color.drak_blue):resources.getColor(R.color.red));
+				tvStopTime.setText(datePickWheel.getIndexDate(hour,minute));
+				int color2 = tvStopTime.getCurrentTextColor();
+				tvStopTime.setTextColor(color2==resources.getColor(R.color.drak_green)?resources.getColor(R.color.blue):resources.getColor(R.color.drak_green));
+			}
+		});
 	}
 
 	public void controlClick(View view) {
@@ -111,8 +130,7 @@ public class ParkingSerachAct extends BaseAct {
 				@Override
 				public void onClick(int position) {
 					String strTime = items[position];
-					int hour = 0;
-					int minute = 0;
+					
 					if(position==0){
 						hour = 0;
 						minute  = 30;
@@ -132,6 +150,15 @@ public class ParkingSerachAct extends BaseAct {
 				}
 			});
 			break;
+		case R.id.ai_ps_btn_start_time:
+			this.datePickWheel =DialogManager.ShowDateSelectedDialog(this,tvStartTime,false,tvStopTime,hour,minute);
+			break;
 		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		
+		super.onDestroy();
 	}
 }

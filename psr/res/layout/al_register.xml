@@ -91,7 +91,7 @@
                     android:layout_alignRight="@+id/ai_reg_identification"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/express"
+                    android:background="@drawable/auxiliary_selector"
                     android:onClick="controlClick" />
             </RelativeLayout>
 

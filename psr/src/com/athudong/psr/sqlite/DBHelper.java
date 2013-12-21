@@ -18,7 +18,7 @@ public class DBHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		//创建辅助表用于输入提示
-		db.execSQL("CREATE TABLE IF NOT EXISTS auxiliary ( id INTEGER PRIMARY KEY AUTOINCREMENT , auxiliarytext VARCHAR(20) );");
+		db.execSQL("CREATE TABLE IF NOT EXISTS authudongauxiliary ( id INTEGER PRIMARY KEY AUTOINCREMENT , auxiliarytext VARCHAR(20) );");
 	}
 
 	@Override

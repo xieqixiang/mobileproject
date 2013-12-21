@@ -43,6 +43,26 @@ public class DatePickWheel extends LinearLayout {
 		this.resources = resources;
 	}
 
+	public WheelView getWv_year() {
+		return wv_year;
+	}
+
+	public WheelView getWv_month() {
+		return wv_month;
+	}
+
+	public DayWheelView getWv_day() {
+		return wv_day;
+	}
+
+	public WheelView getWv_hours() {
+		return wv_hours;
+	}
+
+	public WheelView getWv_mins() {
+		return wv_mins;
+	}
+
 	public void setJustHourMinute(boolean justHourMinute) {
 		this.justHourMinute = justHourMinute;
 	}
