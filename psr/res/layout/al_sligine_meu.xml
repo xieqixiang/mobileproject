@@ -15,7 +15,7 @@
         android:layout_weight="1"
         android:background="@android:color/transparent"
         android:cacheColorHint="#00000000"
-        android:divider="@color/light_grey"
+        android:divider="#969696"
         android:dividerHeight="0.5dp"
         android:fadingEdge="none"
         android:listSelector="@android:color/transparent"
