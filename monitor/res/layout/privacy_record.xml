@@ -2,14 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    
     android:background="@color/light_grey"
     android:orientation="vertical" >
 
-    <include layout="@layout/al_head" />
+    <include layout="@layout/header" />
 
-    <com.athudong.psr.view.CustomerListView
-        android:id="@+id/ai_pl_lv"
+    <ListView
+        android:id="@+id/lv_privacy"
         style="@style/listview" />
 
 </LinearLayout>

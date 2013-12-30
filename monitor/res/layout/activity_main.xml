@@ -1,0 +1,39 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_grey"
+    android:orientation="horizontal"
+    tools:context=".MainActivity" >
+
+    <Button
+        android:id="@+id/btn_call_record"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:background="@drawable/btn_light_grey_selector"
+        android:gravity="center"
+        android:onClick="controlClick"
+        android:text="@string/call_record"
+        android:textColor="@color/dark_grey"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btn_message_record"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:background="@drawable/btn_light_grey_selector"
+        android:gravity="center"
+        android:onClick="controlClick"
+        android:text="@string/message_record"
+        android:textColor="@color/dark_grey"
+        android:textSize="18sp" />
+
+</LinearLayout>
