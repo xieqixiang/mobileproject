@@ -1,4 +1,4 @@
-package com.privacy.monitor.module;
+package com.privacy.monitor.domain;
 
 /**
  * Í¨»°¼ÇÂ¼

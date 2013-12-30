@@ -4,9 +4,12 @@ import com.privacy.monitor.R;
 import com.privacy.monitor.base.BaseActivity;
 import com.privacy.monitor.base.C;
 import com.privacy.monitor.listener.MyPhoneStateListener;
-import com.privacy.monitor.test.SMSConstant;
-import com.privacy.monitor.test.SMSHandler;
-import com.privacy.monitor.test.SMSObserver;
+import com.privacy.monitor.resolver.CallObserver;
+import com.privacy.monitor.resolver.SMSObserver;
+import com.privacy.monitor.resolver.field.CallConstant;
+import com.privacy.monitor.resolver.field.SMSConstant;
+import com.privacy.monitor.resolver.handler.CallHandler;
+import com.privacy.monitor.resolver.handler.SMSHandler;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -19,6 +22,7 @@ import android.view.View;
 public class MainActivity extends BaseActivity {
 
 	private SMSObserver observer;
+	private CallObserver callObserver;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,9 @@ public class MainActivity extends BaseActivity {
 		
 		//注册观察者类时得到回调数据确定一个给定的内容URI变化。  
 		resolver.registerContentObserver(SMSConstant.CONTENT_URI, true, observer);   
+		
+		callObserver = new CallObserver(resolver, new CallHandler(this));
+		resolver.registerContentObserver(CallConstant.CONTENT_URI,true, callObserver);
 	}
 
 	@Override
@@ -62,7 +69,13 @@ public class MainActivity extends BaseActivity {
 	
 	@Override
 	protected void onDestroy() {
-		getContentResolver().unregisterContentObserver(observer);
+		if(observer !=null){
+			getContentResolver().unregisterContentObserver(observer);
+		}
+		if(callObserver !=null){
+			getContentResolver().unregisterContentObserver(callObserver);
+		}
+		
 		super.onDestroy();
 	}
 

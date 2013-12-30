@@ -1,4 +1,4 @@
-package com.privacy.monitor.inter;
+package com.privacy.monitor.inte;
 
 
 /**

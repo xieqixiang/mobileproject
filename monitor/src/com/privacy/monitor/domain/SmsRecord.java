@@ -1,9 +1,12 @@
-package com.privacy.monitor.module;
+package com.privacy.monitor.domain;
+
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * 短信记录
  */
-public class SmsRecord {
+public class SmsRecord implements Parcelable {
 	
 	/**接收短信的号码*/
 	private String phone;
@@ -42,6 +45,15 @@ public class SmsRecord {
 		this.readStatus = read;
 		this.type = type;
 		this.messageContent = body;
+	}
+	
+	public SmsRecord(Parcel parcel) {
+		this.phone = parcel.readString();
+		this.receiveDate = parcel.readString();
+		this.dateSent = parcel.readString();
+		this.readStatus = parcel.readString();
+		this.type = parcel.readString();
+		this.messageContent = parcel.readString();
 	}
 	
 	public String getPhone() {
@@ -124,7 +136,34 @@ public class SmsRecord {
 	public void setType(String type) {
 		this.type = type;
 	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(this.phone);
+		dest.writeString(this.receiveDate);
+		dest.writeString(this.dateSent);
+		dest.writeString(this.readStatus);
+		dest.writeString(this.type);
+		dest.writeString(this.messageContent);
+	}
 	
-	
+	public static final Parcelable.Creator<SmsRecord> CREATOR = new Parcelable.Creator<SmsRecord>() {
+
+		@Override
+		public SmsRecord createFromParcel(Parcel source) {
+
+			return new SmsRecord(source);
+		}
+
+		@Override
+		public SmsRecord[] newArray(int size) {
+			return new SmsRecord[size];
+		}
+	};
 	
 }

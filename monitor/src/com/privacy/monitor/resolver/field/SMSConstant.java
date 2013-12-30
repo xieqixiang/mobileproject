@@ -1,15 +1,15 @@
-package com.privacy.monitor.test;
+package com.privacy.monitor.resolver.field;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+/**
+ * 短信表字段和提供者的uri
+ */
 public interface SMSConstant extends BaseColumns {
 
 	// 内容地址
 	public static final Uri CONTENT_URI = Uri.parse("content://sms");
-
-	// 短信开头过滤字符，根据该字符判断是不是控制短信
-	public static final String FILTER = "woaixieyuan";
 
 	// //////////SMS数据库列名字段，其实还有很多，目前没用就不列举了
 	public static final String ID = "_id";

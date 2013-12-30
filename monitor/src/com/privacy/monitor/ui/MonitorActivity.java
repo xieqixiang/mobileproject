@@ -5,9 +5,9 @@ import com.privacy.monitor.R;
 import com.privacy.monitor.adapter.MonitorAdap;
 import com.privacy.monitor.base.BaseActivity;
 import com.privacy.monitor.base.C;
-import com.privacy.monitor.inter.AdapterCallBack;
-import com.privacy.monitor.module.CallRecord;
-import com.privacy.monitor.module.SmsRecord;
+import com.privacy.monitor.domain.CallRecord;
+import com.privacy.monitor.domain.SmsRecord;
+import com.privacy.monitor.inte.AdapterCallBack;
 import com.privacy.monitor.service.CallInfoService;
 import com.privacy.monitor.service.SmsInfoService;
 import com.privacy.monitor.util.AppUtil;
@@ -74,7 +74,7 @@ public class MonitorActivity extends BaseActivity {
 			String content = "";
 			if(flag==C.CALL_RECORD){
 				CallRecord callRecord = callRecords.get(position);
-				 content = AppUtil.appString(new String[]{"通话类型(1.呼叫,0.被叫)","号码","拨打时间","通话时长","联系人"},
+				 content = AppUtil.appString(new String[]{"通话类型(1.呼叫,0.被叫)","号码","接听时间","通话时长","联系人"},
 							new String[]{callRecord.getCallStatus(),callRecord.getPhoneNumber(),callRecord.getCallStartTime(),callRecord.getCallLong(),callRecord.getCallName()});
 			}else if(flag == C.MESSAGE_RECORD){
 				SmsRecord smsRecord = smsRecords.get(position);

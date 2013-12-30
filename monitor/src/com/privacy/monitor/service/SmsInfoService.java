@@ -6,7 +6,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import com.privacy.monitor.module.SmsRecord;
+
+import com.privacy.monitor.domain.SmsRecord;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;

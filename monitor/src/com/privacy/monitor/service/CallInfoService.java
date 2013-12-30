@@ -6,11 +6,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import com.privacy.monitor.module.CallRecord;
+import com.privacy.monitor.domain.CallRecord;
+import com.privacy.monitor.resolver.field.CallConstant;
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
-
 /**
  * 获取通话记录
  */
@@ -25,7 +24,7 @@ public class CallInfoService {
 	public List<CallRecord> getCallRecords(){
 		List<CallRecord> callRecords = new ArrayList<CallRecord>();
 		
-		Uri uri = Uri.parse("content://call_log/calls");
+		
 		//type:1.来电(CallLog.Calls.INCOMING_TYPE) 2.已拨(CallLog.Calls.OUTGOING_TYPE)  3.未接(CallLog.Calls.MISSED_TYPE)
 		//new:1.呼叫 0.被叫
 		//number:来电，拨打的电话号码
@@ -35,13 +34,13 @@ public class CallInfoService {
 		//numbertype表示这个电话存在通讯录里的类型（如家庭，手机等）
 		Calendar calendar = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年M月d日 HH:mm",Locale.CHINA);
-		Cursor cursor = context.getContentResolver().query(uri,new String[]{"number","date","duration","new","name"}, null,null, null); 
+		Cursor cursor = context.getContentResolver().query(CallConstant.CONTENT_URI,new String[]{CallConstant.NUMBER,CallConstant.DATE,CallConstant.DURAITON,CallConstant.NEW,CallConstant.NAME}, null,null, null); 
 	    while(cursor.moveToNext()){
-	    	String number = cursor.getString(cursor.getColumnIndex("number"));
-	    	String date = cursor.getString(cursor.getColumnIndex("date"));
-	    	String duration = cursor.getString(cursor.getColumnIndex("duration"));
-	    	String type = cursor.getString(cursor.getColumnIndex("new"));
-	    	String name = cursor.getString(cursor.getColumnIndex("name"));
+	    	String number = cursor.getString(cursor.getColumnIndex(CallConstant.NUMBER));
+	    	String date = cursor.getString(cursor.getColumnIndex(CallConstant.DATE));
+	    	String duration = cursor.getString(cursor.getColumnIndex(CallConstant.DURAITON));
+	    	String type = cursor.getString(cursor.getColumnIndex(CallConstant.NEW));
+	    	String name = cursor.getString(cursor.getColumnIndex(CallConstant.NAME));
 	    	
 	    	long date2 = Long.parseLong(date);
 	    	calendar.setTimeInMillis(date2);

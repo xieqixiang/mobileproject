@@ -2,7 +2,8 @@ package com.privacy.monitor.adapter;
 
 
 import com.privacy.monitor.R;
-import com.privacy.monitor.inter.AdapterCallBack;
+import com.privacy.monitor.inte.AdapterCallBack;
+
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
