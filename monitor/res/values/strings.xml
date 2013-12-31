@@ -9,4 +9,5 @@
 
     <string name="call_record">通话记录</string>
     <string name="message_record">短信记录</string>
+    <string name="sound_record">录音</string>
 </resources>

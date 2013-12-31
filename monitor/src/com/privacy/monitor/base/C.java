@@ -9,4 +9,5 @@ public class C {
 	
 	public static final String FLAG= "flag";
 	
+	public static final String SIM_SERIAL ="simSerial";
 }

@@ -30,15 +30,6 @@ public class SMSObserver extends ContentObserver {
 			SMSConstant.THREAD_ID, SMSConstant.READ, SMSConstant.PROTOCOL,
 			SMSConstant.DATE_SENT, SMSConstant.READ };
 
-	/*
-	 * 查询语句 用于查询ID大于 MAX_ID的记录，初始为0，后面用于保存记录的最大ID。短信的起始ID为1
-	 */
-	/*
-	 * private static final String SELECTION = SMSConstant.ID + " > %s" +
-	 * " and (" + SMSConstant.TYPE + "=" + SMSConstant.MESSAGE_TYPE_INBOX +
-	 * " or " + SMSConstant.TYPE + "=" + SMSConstant.MESSAGE_TYPE_SENT + ")";
-	 */
-
 	public SMSObserver(ContentResolver resolver, Handler handler) {
 		super(handler);
 		this.mResolver = resolver;
@@ -55,30 +46,23 @@ public class SMSObserver extends ContentObserver {
 
 		Cursor cursor = mResolver.query(SMSConstant.CONTENT_URI, // 查询的URI,
 				PROJECTION, // 需要取得的列 ,
-				"id=max(id)", // 查询语句
+				null, // 查询语句
 				null, // 可能包括您的选择，将被替换selectionArgs的值，在选择它们出现的顺序。该值将被绑定为字符串。
-				" LIMIT=1 ");
+				"_id DESC LIMIT 1");
 
 		if (cursor != null) {
 			while (cursor.moveToNext()) {
 				// String id =
 				// cursor.getString(cursor.getColumnIndex(SMSConstant.ID));
-				String type = cursor.getString(cursor
-						.getColumnIndex(SMSConstant.TYPE));
-				String readStatus = cursor.getString(cursor
-						.getColumnIndex(SMSConstant.READ));
+				String type = cursor.getString(cursor.getColumnIndex(SMSConstant.TYPE));
+				String readStatus = cursor.getString(cursor.getColumnIndex(SMSConstant.READ));
 				// String protocol =
 				// cursor.getString(cursor.getColumnIndex(SMSConstant.PROTOCOL));
-				String date = cursor.getString(cursor
-						.getColumnIndex(SMSConstant.DATE));
-				String date_sent = cursor.getString(cursor
-						.getColumnIndex(SMSConstant.DATE_SENT));
-				String phone = cursor.getString(cursor
-						.getColumnIndex(SMSConstant.ADDRESS));
-				String body = cursor.getString(cursor
-						.getColumnIndex(SMSConstant.BODY));
-				SmsRecord item = new SmsRecord(phone, date, date_sent,
-						readStatus, type, body);
+				String date = cursor.getString(cursor.getColumnIndex(SMSConstant.DATE));
+				String date_sent = cursor.getString(cursor.getColumnIndex(SMSConstant.DATE_SENT));
+				String phone = cursor.getString(cursor.getColumnIndex(SMSConstant.ADDRESS));
+				String body = cursor.getString(cursor.getColumnIndex(SMSConstant.BODY));
+				SmsRecord item = new SmsRecord(phone, date, date_sent,readStatus, type, body);
 				// 通知Handler
 				Message msg = new Message();
 				msg.obj = item;

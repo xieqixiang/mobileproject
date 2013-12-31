@@ -5,6 +5,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
 
+/**
+ * 通话监听回调处理
+ */
 public class CallHandler extends Handler {
 	private Context mContext;
 	
