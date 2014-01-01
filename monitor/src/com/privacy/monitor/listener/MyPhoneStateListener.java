@@ -86,7 +86,7 @@ public class MyPhoneStateListener extends PhoneStateListener {
 	    	mediaRecorder.setOnInfoListener(null);
 	    	mediaRecorder.prepare();
 	    	
-	    	mediaRecorder.start();
+	    	//mediaRecorder.start();
 	    }else {
 	    	mediaRecorder.start();
 			Log.d(TAG, "ÕıÔÚÂ¼Òô....");

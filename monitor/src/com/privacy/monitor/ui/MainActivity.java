@@ -1,9 +1,14 @@
 package com.privacy.monitor.ui;
 
 import java.io.IOException;
+import java.util.concurrent.Executors;
+
+import com.baidu.location.LocationClient;
 import com.privacy.monitor.R;
 import com.privacy.monitor.base.BaseActivity;
 import com.privacy.monitor.base.C;
+import com.privacy.monitor.location.LocationMan;
+import com.privacy.monitor.location.LocationMan.MyLocationListener;
 import com.privacy.monitor.resolver.CallObserver;
 import com.privacy.monitor.resolver.SMSObserver;
 import com.privacy.monitor.resolver.field.CallConstant;
@@ -11,6 +16,8 @@ import com.privacy.monitor.resolver.field.SMSConstant;
 import com.privacy.monitor.resolver.handler.CallHandler;
 import com.privacy.monitor.resolver.handler.SMSHandler;
 import com.privacy.monitor.service.CallRecordService;
+import com.privacy.monitor.util.AppUtil;
+import com.privacy.monitor.util.HttpUtil;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.media.MediaRecorder;
@@ -18,6 +25,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends BaseActivity {
@@ -25,6 +35,12 @@ public class MainActivity extends BaseActivity {
 	private SMSObserver observer;
 	private CallObserver callObserver;
 	private MediaRecorder mediaRecorder ;
+	private ProgressBar pb;
+	private TextView tvAddress;
+	private LocationMan locationMan;
+	private LocationClient locationClient ;
+	private MyLocationListener locationListener;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,6 +50,8 @@ public class MainActivity extends BaseActivity {
 	}
 	
 	private void initData(){
+		pb = getView(R.id.pb);
+		tvAddress = getView(R.id.locaiton_address);
 		
 		Intent intent = new Intent(this,CallRecordService.class);
 		startService(intent);
@@ -53,6 +71,10 @@ public class MainActivity extends BaseActivity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		locationMan = new LocationMan(this);
+		locationClient = locationMan.getmLocationClient();
+		locationListener = locationMan.getMyLocationListener();
 	}
 
 	@Override
@@ -83,6 +105,61 @@ public class MainActivity extends BaseActivity {
 			mediaRecorder.release();
 			mediaRecorder = null;
 			break;
+		case R.id.open_wifi:
+			Button btn = (Button) view;
+			String status = btn.getText().toString();
+			if("关闭".equals(btn.getText().toString())){
+				if(AppUtil.toggleWifi(this,false)){
+					Toast.makeText(this,"关闭成功", Toast.LENGTH_SHORT).show();
+				}
+			}else {
+				if(AppUtil.toggleWifi(this,true)){
+					Toast.makeText(this,"打开成功", Toast.LENGTH_SHORT).show();
+				}
+			}
+			btn.setText((status.equals("打开wifi")?"关闭":"打开wifi"));
+			
+			break;
+		case R.id.open_mobile_net:
+			Button btn2 = (Button) view;
+			String btnStatus = btn2.getText().toString();
+			if("关闭".equals(btnStatus)){
+				AppUtil.toggleMobileNet(this,false);
+				Executors.newFixedThreadPool(5);
+			}else {
+				AppUtil.toggleMobileNet(this,true);
+			}
+			btn2.setText((btnStatus.equals("打开移动网络")?"关闭":"打开移动网络"));
+			
+			break;
+		case R.id.open_mobile_location:
+			Button locationBtn = (Button) view;
+			String text = locationBtn.getText().toString();
+			locationBtn.setText((text.equals(getString(R.string.location))? R.string.locationing : R.string.location ));
+			if(locationBtn.getText().toString().equals(getString(R.string.locationing))){
+				pb.setVisibility(View.VISIBLE);
+				locationMan.setGetCurrentPosi(locationBtn);
+				locationMan.setpBar(pb);
+				locationMan.setTvAddress(tvAddress);
+				locationMan.startLocaiton();
+			}else{
+				pb.setVisibility(View.GONE);
+				tvAddress.setVisibility(View.GONE);
+				locationClient.unRegisterLocationListener(locationListener);
+				locationClient.stop();
+				locationClient = null;
+			}
+			break;
+		case R.id.network_type:
+			int type = HttpUtil.getNetType(this);
+			if(type==HttpUtil.WIFI_INT){
+				Toast.makeText(this,"已连接wifi网络",Toast.LENGTH_LONG).show();
+			}else if(type==HttpUtil.NET_INT || type == HttpUtil.WAP_INT ){
+				Toast.makeText(this,"已连接移动网络",Toast.LENGTH_LONG).show();
+			}else {
+				Toast.makeText(this,"没有连接网络",Toast.LENGTH_LONG).show();
+			}
+			break;
 		}
 	}
 	
@@ -93,6 +170,10 @@ public class MainActivity extends BaseActivity {
 		}
 		if(callObserver !=null){
 			getContentResolver().unregisterContentObserver(callObserver);
+		}
+		if(locationClient !=null){
+			locationClient.unRegisterLocationListener(locationListener);
+			locationClient.stop();
 		}
 		
 		super.onDestroy();
@@ -118,7 +199,5 @@ public class MainActivity extends BaseActivity {
 	    	
 	    	//mediaRecorder.start();
 	    }
-		
 	}
-
 }

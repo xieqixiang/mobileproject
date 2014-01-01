@@ -84,13 +84,14 @@ public class AppUtil {
 	}
 	
 	/**WIFI网络开关*/
-	public static void toggleWifi(Context con,boolean enabled){
+	public static boolean toggleWifi(Context con,boolean enabled){
 		WifiManager wm = (WifiManager) con.getSystemService(Context.WIFI_SERVICE);
-		wm.setWifiEnabled(enabled);
+		return  wm.setWifiEnabled(enabled);
+		
 	}
 	
 	/**移动网络开关*/
-	public static void setMobileDataEnable(Context context, boolean enabled) {
+	public static void toggleMobileNet(Context context, boolean enabled) {
 		Class conmanClass;
 
 		ConnectivityManager conman = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

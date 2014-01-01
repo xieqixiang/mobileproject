@@ -12,7 +12,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 /**
- * 拦截开启广播
+ * 拦截开机广播
  */
 public class BootReceiver extends BroadcastReceiver {
 
