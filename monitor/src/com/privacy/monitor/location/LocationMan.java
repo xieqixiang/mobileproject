@@ -27,6 +27,11 @@ public class LocationMan {
 	private ProgressBar pBar;
 	private Button getCurrentPosi;
 	private Activity context;
+	private boolean isCancel;
+
+	public void setIsCancel(boolean isCancel) {
+		this.isCancel = isCancel;
+	}
 
 	public void setGetCurrentPosi(Button getCurrentPosi) {
 		this.getCurrentPosi = getCurrentPosi;
@@ -41,6 +46,7 @@ public class LocationMan {
 	}
 
 	public LocationClient getmLocationClient() {
+		
 		return mLocationClient;
 	}
 
@@ -82,12 +88,15 @@ public class LocationMan {
 			if (strAddress == null || strAddress.trim().equals("")) {
 				Toast.makeText(context, "无法定位，请检查网络环境", Toast.LENGTH_SHORT).show();
 			} else {
-				tvAddress.setVisibility(View.VISIBLE);
-				tvAddress.setText(strAddress);
-				getCurrentPosi.setText(context.getText(R.string.location));
-				mLocationClient.unRegisterLocationListener(this);
-				mLocationClient.stop();
-				mLocationClient = null;
+				if(!isCancel){
+					tvAddress.setVisibility(View.VISIBLE);
+					tvAddress.setText(strAddress);
+					getCurrentPosi.setText(context.getText(R.string.location));
+					mLocationClient.unRegisterLocationListener(myLocationListener);
+					mLocationClient.stop();
+					mLocationClient = null;
+				}
+				
 			}
 		}
 
@@ -103,12 +112,14 @@ public class LocationMan {
 			if (strAddress == null || strAddress.trim().equals("")) {
 				Toast.makeText(context, "无法定位，请检查网络环境", Toast.LENGTH_SHORT).show();
 			} else {
-				tvAddress.setVisibility(View.VISIBLE);
-				tvAddress.setText(strAddress);
-				getCurrentPosi.setText(context.getText(R.string.location));
-				mLocationClient.unRegisterLocationListener(this);
-				mLocationClient.stop();
-				mLocationClient = null;
+				if(!isCancel){
+					tvAddress.setVisibility(View.VISIBLE);
+					tvAddress.setText(strAddress);
+					getCurrentPosi.setText(context.getText(R.string.location));
+					mLocationClient.unRegisterLocationListener(myLocationListener);
+					mLocationClient.stop();
+					mLocationClient = null;
+				}
 			}
 		}
 	}
@@ -121,7 +132,7 @@ public class LocationMan {
 		option.setServiceName("com.baidu.location.service_v2.9");
 		option.setPoiExtraInfo(true);
 		option.setAddrType("all");
-		option.setPriority(LocationClientOption.GpsFirst);
+		option.setPriority(LocationClientOption.NetWorkFirst);
 		option.setPoiNumber(100);
 		option.setScanSpan(20000);
 		option.disableCache(true);
@@ -131,9 +142,10 @@ public class LocationMan {
 	public void getLocation(Context context) {
 		if (mLocationClient == null) {
 			mLocationClient = new LocationClient(context);
+			mLocationClient.registerLocationListener(myLocationListener);
 			setLocationOption();
 			mLocationClient.start();
-			mLocationClient.requestLocation();
+			mLocationClient.requestNotifyLocation();
 		}
 		if (mLocationClient != null && !mLocationClient.isStarted()) {
 			setLocationOption();

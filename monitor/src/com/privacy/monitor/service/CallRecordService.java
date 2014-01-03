@@ -32,9 +32,7 @@ public class CallRecordService extends Service {
 		if(!path.exists()){
 			path.mkdir();
 		}
-		
 		TelephonyManager mTelephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-
 		mTelephonyManager.listen(new MyPhoneStateListener(this,path),PhoneStateListener.LISTEN_CALL_STATE);
 	}
 
