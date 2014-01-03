@@ -18,12 +18,6 @@ public class SMSObserver extends ContentObserver {
 	// 内容解析器，和ContentProvider刚好相反,一个提供，一个解析
 	private ContentResolver mResolver;
 
-	// 需要取得的短信条数
-	// private static final int MAX_NUMS = 10;
-
-	// 用于保存记录中最大的ID
-	// private static final int MAX_ID = 0;
-
 	// 需要获得的字段列
 	private static final String[] PROJECTION = { SMSConstant.TYPE,
 			SMSConstant.ADDRESS, SMSConstant.BODY, SMSConstant.DATE,

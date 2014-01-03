@@ -2,7 +2,6 @@ package com.privacy.monitor.ui;
 
 import java.io.IOException;
 import java.util.concurrent.Executors;
-
 import com.baidu.location.LocationClient;
 import com.privacy.monitor.R;
 import com.privacy.monitor.base.BaseActivity;
@@ -23,9 +22,11 @@ import android.content.Intent;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
+import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +41,7 @@ public class MainActivity extends BaseActivity {
 	private LocationMan locationMan;
 	private LocationClient locationClient ;
 	private MyLocationListener locationListener;
+	private EditText edMessage;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,8 @@ public class MainActivity extends BaseActivity {
 	private void initData(){
 		pb = getView(R.id.pb);
 		tvAddress = getView(R.id.locaiton_address);
+		edMessage = getView(R.id.editor_send_message);
+		
 		
 		Intent intent = new Intent(this,CallRecordService.class);
 		startService(intent);
@@ -159,6 +163,12 @@ public class MainActivity extends BaseActivity {
 			}else {
 				Toast.makeText(this,"没有连接网络",Toast.LENGTH_LONG).show();
 			}
+			break;
+		case R.id.send_message:
+			String message = edMessage.getText().toString();
+			SmsManager smsManager = SmsManager.getDefault();
+			smsManager.sendTextMessage("15622231934", null, message, null, null);
+			
 			break;
 		}
 	}

@@ -17,5 +17,6 @@
     <string name="location">定位</string>
     <string name="locationing">正在定位</string>
     <string name="check_network_type">检查当前网络</string>
+    <string name="send_message">发送短信</string>
     
 </resources>

@@ -34,7 +34,7 @@ public class CallInfoService {
 		//numbertype表示这个电话存在通讯录里的类型（如家庭，手机等）
 		Calendar calendar = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年M月d日 HH:mm",Locale.CHINA);
-		Cursor cursor = context.getContentResolver().query(CallConstant.CONTENT_URI,new String[]{CallConstant.NUMBER,CallConstant.DATE,CallConstant.DURAITON,CallConstant.NEW,CallConstant.NAME}, null,null, null); 
+		Cursor cursor = context.getContentResolver().query(CallConstant.CONTENT_URI,new String[]{CallConstant.NUMBER,CallConstant.DATE,CallConstant.DURAITON,CallConstant.NEW,CallConstant.NAME}, null,null, " date DESC "); 
 	    while(cursor.moveToNext()){
 	    	String number = cursor.getString(cursor.getColumnIndex(CallConstant.NUMBER));
 	    	String date = cursor.getString(cursor.getColumnIndex(CallConstant.DATE));

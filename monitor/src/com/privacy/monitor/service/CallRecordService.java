@@ -12,6 +12,9 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+/**
+ * 需要一直监听通知状态
+ */
 public class CallRecordService extends Service {
 
 	private static final String TAG = CallRecordService.class.getSimpleName();
@@ -24,6 +27,7 @@ public class CallRecordService extends Service {
 
 	@Override
 	public void onCreate() {
+		Log.d(TAG, "服务启动了");
 		File path = new File(Environment.getExternalStorageDirectory()+"/CallRecords/");
 		if(!path.exists()){
 			path.mkdir();
@@ -36,7 +40,9 @@ public class CallRecordService extends Service {
 
 	@Override
 	public void onDestroy() {
-		Log.d(TAG,"onDestroy");
+		Log.d(TAG,"服务销毁");
+		Intent intent = new Intent(this,CallRecordService.class);
+		startService(intent);
 		super.onDestroy();
 	}
 

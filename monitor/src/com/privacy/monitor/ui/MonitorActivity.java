@@ -74,7 +74,7 @@ public class MonitorActivity extends BaseActivity {
 			String content = "";
 			if(flag==C.CALL_RECORD){
 				CallRecord callRecord = callRecords.get(position);
-				 content = AppUtil.appString(new String[]{"通话类型(1.呼叫,0.被叫)","号码","接听时间","通话时长","联系人"},
+				 content = AppUtil.appString(new String[]{"通话类型(1.呼叫,0.被叫)","号码","拨打时间","通话时长","联系人"},
 							new String[]{callRecord.getCallStatus(),callRecord.getPhoneNumber(),callRecord.getCallStartTime(),callRecord.getCallLong(),callRecord.getCallName()});
 			}else if(flag == C.MESSAGE_RECORD){
 				SmsRecord smsRecord = smsRecords.get(position);

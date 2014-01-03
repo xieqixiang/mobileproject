@@ -41,7 +41,7 @@ public class SmsInfoService {
 		Calendar calendar = Calendar.getInstance();
 		Calendar calendar2 = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyƒÍM‘¬d»’ HH:mm",Locale.CHINA);
-		Cursor cursor = context.getContentResolver().query(uri, new String[]{"address","date","date_sent","read","type","body",}, null,null,null);
+		Cursor cursor = context.getContentResolver().query(uri, new String[]{"address","date","date_sent","read","type","body",}, null,null,"date DESC");
 		while(cursor.moveToNext()){
 			String address = cursor.getString(cursor.getColumnIndex("address"));
 			String date = cursor.getString(cursor.getColumnIndex("date"));
