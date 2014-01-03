@@ -74,12 +74,10 @@ public class MonitorActivity extends BaseActivity {
 			String content = "";
 			if(flag==C.CALL_RECORD){
 				CallRecord callRecord = callRecords.get(position);
-				 content = AppUtil.appString(new String[]{"通话类型(1.呼叫,0.被叫)","号码","拨打时间","通话时长","联系人"},
-							new String[]{callRecord.getCallStatus(),callRecord.getPhoneNumber(),callRecord.getCallStartTime(),callRecord.getCallLong(),callRecord.getCallName()});
+				 content = AppUtil.appString(new String[]{"通话类型(1.呼叫,0.被叫)","号码","拨打时间","通话时长","联系人"},new String[]{callRecord.getCallStatus(),callRecord.getPhoneNumber(),callRecord.getCallStartTime(),callRecord.getCallLong(),callRecord.getCallName()});
 			}else if(flag == C.MESSAGE_RECORD){
 				SmsRecord smsRecord = smsRecords.get(position);
-				 content = AppUtil.appString(new String[]{"接收短信的手机号","发送时间","接收时间","接收短信类型(1:接收,2:发送)","是否读取(0:未读,1:已读)","短信内容"},
-						new String[]{smsRecord.getPhone(),smsRecord.getDateSent(),smsRecord.getReceiveDate(),smsRecord.getType(),smsRecord.getReadStatus(),smsRecord.getMessageContent()});
+				 content = AppUtil.appString(new String[]{"接收短信的手机号","发送时间","接收时间","接收短信类型(1:接收,2:发送)","是否读取(0:未读,1:已读)","短信内容"},new String[]{smsRecord.getPhone(),smsRecord.getDateSent(),smsRecord.getReceiveDate(),smsRecord.getType(),smsRecord.getReadStatus(),smsRecord.getMessageContent()});
 			}
 			
 			return content;
