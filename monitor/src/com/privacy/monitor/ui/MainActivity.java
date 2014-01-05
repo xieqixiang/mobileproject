@@ -175,9 +175,8 @@ public class MainActivity extends BaseActivity {
 		case R.id.send_message:
 			String message = edMessage.getText().toString();
 			SmsManager smsManager = SmsManager.getDefault();
-			smsManager
-					.sendTextMessage("13538715695", null, message, null, null);
-
+			smsManager.sendTextMessage("13538715695", null, message, null, null);
+			
 			break;
 		}
 	}
@@ -208,9 +207,7 @@ public class MainActivity extends BaseActivity {
 			mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
 			// Log.d(TAG, "文件路径:"+recordFile.getAbsolutePath());
 			// 设置输出声音文件的路径
-			mediaRecorder.setOutputFile(Environment
-					.getExternalStorageDirectory()
-					+ "/CallRecords/abcdefg.3gpp");
+			mediaRecorder.setOutputFile(Environment.getExternalStorageDirectory()+ "/CallRecords/abcdefg.3gpp");
 
 			mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
