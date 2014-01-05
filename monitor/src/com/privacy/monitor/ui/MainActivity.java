@@ -109,6 +109,7 @@ public class MainActivity extends BaseActivity {
 			mediaRecorder.reset();
 			mediaRecorder.release();
 			mediaRecorder = null;
+			Toast.makeText(this, "Í£Ö¹³É¹¦", Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.open_wifi:
 			Button btn = (Button) view;

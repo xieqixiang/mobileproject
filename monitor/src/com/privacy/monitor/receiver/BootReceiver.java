@@ -1,6 +1,7 @@
 package com.privacy.monitor.receiver;
 
 import com.privacy.monitor.base.C;
+import com.privacy.monitor.service.SmsReceiverService;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -21,6 +22,9 @@ public class BootReceiver extends BroadcastReceiver {
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		Intent serIntent = new Intent(context, SmsReceiverService.class);
+		context.startActivity(serIntent);
+		
 		tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 
 		sp = context.getSharedPreferences("config",Context.MODE_PRIVATE);
