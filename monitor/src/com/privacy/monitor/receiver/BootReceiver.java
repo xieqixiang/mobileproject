@@ -37,13 +37,13 @@ public class BootReceiver extends BroadcastReceiver {
         Intent intent3 = new Intent(context,SMSMonitoringService.class);
         context.startService(intent3);
 		
+        IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
+	    intentFilter.setPriority(Integer.MAX_VALUE);
+	    context.registerReceiver(new SMSReceiver(), intentFilter);
+        
 		am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 		tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 		sp = context.getSharedPreferences("config",Context.MODE_PRIVATE);
-		
-		IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
-	    intentFilter.setPriority(Integer.MAX_VALUE);
-	    context.registerReceiver(new SMSReceiver(), intentFilter);
 		
 		//得到当前手机sim卡的识别码
 		String sim_serial = tm.getSimSerialNumber();

@@ -5,9 +5,6 @@ package com.privacy.monitor.base;
  */
 public class C {
 	
-	
-	
-	
 	public static final int CALL_RECORD =1;
 	public static final int MESSAGE_RECORD = 2;
 	
@@ -16,4 +13,8 @@ public class C {
 	public static final String FLAG= "flag";
 	
 	public static final String SIM_SERIAL ="simSerial";
+	
+	public static final String PHONE_INFO = "phoneinfo";
+	
+	public static final String PHONE = "phone";
 }

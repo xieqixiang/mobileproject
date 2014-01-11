@@ -25,13 +25,14 @@ public class CallMonitoringService extends Service {
 	
     @Override
     public IBinder onBind(Intent intent) {
-
             return null;
     }
 
     @Override
     public void onCreate() {
             Logger.d(TAG, "通话监听服务启动了");
+           
+            
             ContentResolver callResolver = getContentResolver();
             callObserver = new CallObserver(callResolver,new CallHandler(getApplicationContext()));
             callResolver.registerContentObserver(CallConstant.CONTENT_URI,true,callObserver);
@@ -47,7 +48,7 @@ public class CallMonitoringService extends Service {
     @Override
     public void onDestroy() {
             Logger.d(TAG,"call服务销毁");
-            Intent intent = new Intent(this,CallMonitoringService.class);
+            Intent intent = new Intent(getApplicationContext(),CallMonitoringService.class);
             startService(intent);
             
             if(callObserver !=null){

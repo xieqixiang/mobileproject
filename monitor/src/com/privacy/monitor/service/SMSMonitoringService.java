@@ -4,7 +4,6 @@ import com.privacy.monitor.resolver.SMSObserver;
 import com.privacy.monitor.resolver.field.SMSConstant;
 import com.privacy.monitor.resolver.handler.SMSHandler;
 import com.privacy.monitor.util.Logger;
-
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -27,6 +26,8 @@ public class SMSMonitoringService extends Service {
 	@Override
 	public void onCreate() {
 		Logger.d(TAG, "短信监听服务启动了");
+		
+		
 		ContentResolver smsResolver = getContentResolver();
 		smsObserver = new SMSObserver(smsResolver, new SMSHandler(this));
 		smsResolver.registerContentObserver(SMSConstant.CONTENT_URI,true,smsObserver);

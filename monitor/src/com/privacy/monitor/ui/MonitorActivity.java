@@ -1,41 +1,90 @@
 package com.privacy.monitor.ui;
 
-import java.util.List;
 import com.privacy.monitor.R;
-import com.privacy.monitor.adapter.MonitorAdap;
 import com.privacy.monitor.base.BaseActivity;
 import com.privacy.monitor.base.C;
-import com.privacy.monitor.domain.CallRecord;
-import com.privacy.monitor.domain.SmsRecord;
-import com.privacy.monitor.inte.AdapterCallBack;
-import com.privacy.monitor.service.utilservice.CallInfoService;
-import com.privacy.monitor.service.utilservice.SmsInfoService;
-import com.privacy.monitor.util.AppUtil;
+import com.privacy.monitor.receiver.MyAppWidgetReceiver;
+import com.privacy.monitor.service.CallMonitoringService;
+import com.privacy.monitor.service.SMSMonitoringService;
+
+import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RemoteViews;
 
 /**
  * 短信、通话记录
  */
-public class MonitorActivity extends BaseActivity {
+public class MonitorActivity extends BaseActivity implements OnClickListener{
 
-	private MonitorAdap adapter;
+	/*private MonitorAdap adapter;
 	private ListView lv;
 	private List<SmsRecord> smsRecords;
 	private List<CallRecord> callRecords;
 	private int flag;
-	
+	*/
+	private EditText etPhone ;
+	private SharedPreferences sp;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.privacy_record);
-		initView();
+		setContentView(R.layout.write_phone);
+		
+		Button btn = getView(R.id.left);
+		btn.setOnClickListener(this);
+		
+		etPhone = getView(R.id.et_phone);
+		
+		Button savePhone = getView(R.id.save_phone);
+		savePhone.setOnClickListener(this);
+		sp = getSharedPreferences(C.PHONE_INFO,Context.MODE_PRIVATE);
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch(v.getId()){
+		case R.id.left:
+			this.finish();
+			break;
+		case R.id.save_phone:
+			String phone = etPhone.getText().toString();
+			Editor editor = sp.edit();
+			editor.putString(C.PHONE,phone);
+	        editor.commit();
+	        
+	        Intent intent2 = new Intent(this,CallMonitoringService.class);
+	        this.startService(intent2);
+			
+	        Intent intent3 = new Intent(this,SMSMonitoringService.class);
+	        this.startService(intent3);
+	        
+	        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
+			RemoteViews views = new RemoteViews(getPackageName(),R.layout.app_widget_info);
+			
+			Intent intent = new Intent(Settings.ACTION_QUICK_LAUNCH_SETTINGS);
+			PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+			views.setOnClickPendingIntent(R.id.open_btn, pendingIntent);
+			ComponentName provider = new ComponentName(getApplicationContext(), MyAppWidgetReceiver.class);
+			appWidgetManager.updateAppWidget(provider, views);
+	        
+	        this.finish();
+			break;
+		}
 	}
 	
-	private void initView(){
+	
+	
+	/*private void initView(){
 		lv = getView(R.id.lv_privacy);
 		TextView tvTitle = getView(R.id.title);
 		
@@ -84,5 +133,5 @@ public class MonitorActivity extends BaseActivity {
 			
 			return content;
 		}	
-	}
+	}*/
 }
