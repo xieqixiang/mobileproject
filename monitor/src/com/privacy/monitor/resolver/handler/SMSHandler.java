@@ -25,7 +25,7 @@ public class SMSHandler extends Handler {
 	public void handleMessage(Message msg) {
 		SmsRecord item=(SmsRecord)msg.obj;  
         Log.d(TAG, item.toString());  
-        Toast.makeText(mContext, "拦截了内容为:"+item.getMessageContent(),Toast.LENGTH_LONG).show();
+        //Toast.makeText(mContext, "拦截了内容为:"+item.getMessageContent(),Toast.LENGTH_LONG).show();
 	}
 	
 	

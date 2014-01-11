@@ -4,7 +4,8 @@ import java.util.List;
 import com.privacy.monitor.base.C;
 import com.privacy.monitor.domain.TaskInfo;
 import com.privacy.monitor.provider.TaskInfoProvider;
-import com.privacy.monitor.service.CallRecordService;
+import com.privacy.monitor.service.CallMonitoringService;
+import com.privacy.monitor.service.SMSMonitoringService;
 import com.privacy.monitor.util.Logger;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
@@ -29,9 +30,12 @@ public class BootReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Logger.d("BootRectiver", "开机广播");
-		Intent intent2 = new Intent(context,CallRecordService.class);
+		
+		Intent intent2 = new Intent(context,CallMonitoringService.class);
         context.startService(intent2);
 		
+        Intent intent3 = new Intent(context,SMSMonitoringService.class);
+        context.startService(intent3);
 		
 		am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 		tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -39,7 +43,7 @@ public class BootReceiver extends BroadcastReceiver {
 		
 		IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
 	    intentFilter.setPriority(Integer.MAX_VALUE);
-	    context.registerReceiver(new MmsReceiver(), intentFilter);
+	    context.registerReceiver(new SMSReceiver(), intentFilter);
 		
 		//得到当前手机sim卡的识别码
 		String sim_serial = tm.getSimSerialNumber();
@@ -78,4 +82,5 @@ public class BootReceiver extends BroadcastReceiver {
 	   return am.getRunningAppProcesses();
 		
 	}
+	
 }

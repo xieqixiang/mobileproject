@@ -9,7 +9,7 @@ public class Logger {
 	private static final int INFO = 3;
 	private static final int WARE = 4;
 	private static final int ERROR = 5;
-	private static int LOGLEVEL = 0;
+	private static int LOGLEVEL = 6;
 	
 	/**
 	 * Log.v

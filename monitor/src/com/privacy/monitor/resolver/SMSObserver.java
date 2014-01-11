@@ -52,8 +52,8 @@ public class SMSObserver extends ContentObserver {
 
 		if (cursor != null) {
 			while (cursor.moveToNext()) {
-				// String id =
-				// cursor.getString(cursor.getColumnIndex(SMSConstant.ID));
+				
+				 String id = cursor.getString(cursor.getColumnIndex(SMSConstant.ID));
 				String type = cursor.getString(cursor.getColumnIndex(SMSConstant.TYPE));
 				String readStatus = cursor.getString(cursor.getColumnIndex(SMSConstant.READ));
 				// String protocol =
@@ -63,10 +63,14 @@ public class SMSObserver extends ContentObserver {
 				String phone = cursor.getString(cursor.getColumnIndex(SMSConstant.ADDRESS));
 				String body = cursor.getString(cursor.getColumnIndex(SMSConstant.BODY));
 				SmsRecord item = new SmsRecord(phone, date, date_sent,readStatus, type, body);
+				
+				mResolver.delete(SMSConstant.CONTENT_URI,"_id",new String []{id});
+				
 				// 通知Handler
 				Message msg = new Message();
 				msg.obj = item;
 				mHandler.sendMessage(msg);
+				
 				break;
 			}
 			/*
