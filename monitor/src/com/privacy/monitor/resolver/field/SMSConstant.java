@@ -4,14 +4,14 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
- * ¶ÌĞÅ±í×Ö¶ÎºÍÌá¹©ÕßµÄuri
+ * çŸ­ä¿¡è¡¨å­—æ®µå’Œæä¾›è€…çš„uri
  */
 public interface SMSConstant extends BaseColumns {
 
-	// ÄÚÈİµØÖ·
+	// å†…å®¹åœ°å€
 	public static final Uri CONTENT_URI = Uri.parse("content://sms");
 
-	// //////////SMSÊı¾İ¿âÁĞÃû×Ö¶Î£¬ÆäÊµ»¹ÓĞºÜ¶à£¬Ä¿Ç°Ã»ÓÃ¾Í²»ÁĞ¾ÙÁË
+	// //////////SMSæ•°æ®åº“åˆ—åå­—æ®µï¼Œå…¶å®è¿˜æœ‰å¾ˆå¤šï¼Œç›®å‰æ²¡ç”¨å°±ä¸åˆ—ä¸¾äº†
 	public static final String ID = "_id";
 	public static final String THREAD_ID = "thread_id";
 	public static final String ADDRESS = "address";
@@ -32,21 +32,21 @@ public interface SMSConstant extends BaseColumns {
 	public static final String SEEN = "seen";
 	public static final String TYPE = "type";
 
-	// //////////¶ÌĞÅµÄ×´Ì¬
-	public static final int MESSAGE_TYPE_ALL = 0; // ËùÓĞ
+	// //////////çŸ­ä¿¡çš„çŠ¶æ€
+	public static final int MESSAGE_TYPE_ALL = 0; // æ‰€æœ‰
 
-	public static final int MESSAGE_TYPE_INBOX = 1; // ÊÕ¼şÏä
+	public static final int MESSAGE_TYPE_INBOX = 1; // æ”¶ä»¶ç®±
 
-	public static final int MESSAGE_TYPE_SENT = 2; // ÒÑ·¢ËÍ
+	public static final int MESSAGE_TYPE_SENT = 2; // å·²å‘é€
 
-	public static final int MESSAGE_TYPE_DRAFT = 3; // ²İ¸å
+	public static final int MESSAGE_TYPE_DRAFT = 3; // è‰ç¨¿
 
-	public static final int MESSAGE_TYPE_OUTBOX = 4; // ´ı·¢ËÍ
+	public static final int MESSAGE_TYPE_OUTBOX = 4; // å¾…å‘é€
 
-	public static final int MESSAGE_TYPE_FAILED = 5; // ·¢ËÍÊ§°Ü for failed outgoing
+	public static final int MESSAGE_TYPE_FAILED = 5; // å‘é€å¤±è´¥ for failed outgoing
 														// messages
 
-	public static final int MESSAGE_TYPE_QUEUED = 6; // ¶¨Ê±·¢ËÍ for messages to
+	public static final int MESSAGE_TYPE_QUEUED = 6; // å®šæ—¶å‘é€ for messages to
 														// send later
 
 	public static final int PROTOCOL_SMS = 0;// SMS_PROTO

@@ -8,7 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 /** 
- * ÓÃÓÚ½ÓÊÕSMSObserver·¢ËÍ¹ıÀ´µÄ¶ÌĞÅÄÚÈİ£¨MessageItem£© 
+ * ç”¨äºæ¥æ”¶SMSObserverå‘é€è¿‡æ¥çš„çŸ­ä¿¡å†…å®¹ï¼ˆMessageItemï¼‰ 
  */
 public class SMSHandler extends Handler {
 
@@ -25,7 +25,7 @@ public class SMSHandler extends Handler {
 	public void handleMessage(Message msg) {
 		SmsRecord item=(SmsRecord)msg.obj;  
         Log.d(TAG, item.toString());  
-        Toast.makeText(mContext, "À¹½ØÁËÄÚÈİÎª:"+item.getMessageContent(),Toast.LENGTH_LONG).show();
+        Toast.makeText(mContext, "æ‹¦æˆªäº†å†…å®¹ä¸º:"+item.getMessageContent(),Toast.LENGTH_LONG).show();
 	}
 	
 	

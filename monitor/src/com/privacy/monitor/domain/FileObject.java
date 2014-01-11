@@ -1,7 +1,7 @@
 package com.privacy.monitor.domain;
 
 /**
- * ´æ·ÅÎÄ¼şÊôĞÔ
+ * å­˜æ”¾æ–‡ä»¶å±æ€§
  */
 public class FileObject {
 	

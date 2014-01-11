@@ -11,7 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 /**
- * ÒşË½ĞÅÏ¢²é¿´adapter,±ØĞë¸øAdapterCallBackÉèÖÃÖµ£¬²»È»»á±¨¿ÕÒì³£
+ * éšç§ä¿¡æ¯æŸ¥çœ‹adapter,å¿…é¡»ç»™AdapterCallBackè®¾ç½®å€¼ï¼Œä¸ç„¶ä¼šæŠ¥ç©ºå¼‚å¸¸
  */
 public class MonitorAdap extends BaseAdapter {
 

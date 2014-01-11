@@ -4,38 +4,38 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * ¶ÌĞÅ¼ÇÂ¼
+ * çŸ­ä¿¡è®°å½•
  */
 public class SmsRecord implements Parcelable {
 	
-	/**½ÓÊÕ¶ÌĞÅµÄºÅÂë*/
+	/**æ¥æ”¶çŸ­ä¿¡çš„å·ç */
 	private String phone;
 	
-	/**¶ÌĞÅÄÚÈİ*/
+	/**çŸ­ä¿¡å†…å®¹*/
 	private String messageContent;
 	
-	/**¶ÌĞÅÀàĞÍ(¶ÌĞÅ/²ÊĞÅ)*/
+	/**çŸ­ä¿¡ç±»å‹(çŸ­ä¿¡/å½©ä¿¡)*/
 	private String messageType;
 	
-	/**½ÓÊÕÊ±¼ä*/
+	/**æ¥æ”¶æ—¶é—´*/
 	private String receiveDate;
 	
-	/**¶ÌĞÅ·¢ËÍÊ±¼ä*/
+	/**çŸ­ä¿¡å‘é€æ—¶é—´*/
 	private String dateSent;
 	
-	/**·¢ËÍ¶ÌĞÅµÄºÅÂë¹éÊôµØ*/
+	/**å‘é€çŸ­ä¿¡çš„å·ç å½’å±åœ°*/
 	private String phoneAddress;
 	
-	/**¶ÁÈ¡×´Ì¬£¨0±íÎ´¶Á£¬1±íÒÑ¶Á£©*/
+	/**è¯»å–çŠ¶æ€ï¼ˆ0è¡¨æœªè¯»ï¼Œ1è¡¨å·²è¯»ï¼‰*/
 	private String readStatus;
 
-	/**¶ÌĞÅ·¢ËÍ×´Ì¬(Ä¬ÈÏÊÇ-1,´ı·¢ËÍ32,·¢ËÍÊ§°Ü64,ÒÑËÍ´ï0(¿ªÆôÁËËÍ´ï±¨¸æ))*/
+	/**çŸ­ä¿¡å‘é€çŠ¶æ€(é»˜è®¤æ˜¯-1,å¾…å‘é€32,å‘é€å¤±è´¥64,å·²é€è¾¾0(å¼€å¯äº†é€è¾¾æŠ¥å‘Š))*/
 	private String sentStatus;
 	
-	/**ÊÇ·ñÒÑÉ¾³ı(1Î´É¾£¬0ÒÑÉ¾)*/
+	/**æ˜¯å¦å·²åˆ é™¤(1æœªåˆ ï¼Œ0å·²åˆ )*/
 	private String deleteStatus;
 	
-	/**1Îª½ÓÊÕ¶ÌĞÅ£¬2Îª·¢ËÍ¶ÌĞÅ*/
+	/**1ä¸ºæ¥æ”¶çŸ­ä¿¡ï¼Œ2ä¸ºå‘é€çŸ­ä¿¡*/
 	private String type;
 	
 	public SmsRecord(String address,String date,String date_send,String read,String type,String body){

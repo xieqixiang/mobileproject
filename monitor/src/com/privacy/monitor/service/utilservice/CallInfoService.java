@@ -11,7 +11,7 @@ import com.privacy.monitor.resolver.field.CallConstant;
 import android.content.Context;
 import android.database.Cursor;
 /**
- * »ñÈ¡Í¨»°¼ÇÂ¼
+ * è·å–é€šè¯è®°å½•
  */
 public class CallInfoService {
 	
@@ -25,16 +25,16 @@ public class CallInfoService {
 		List<CallRecord> callRecords = new ArrayList<CallRecord>();
 		
 		
-		//type:1.À´µç(CallLog.Calls.INCOMING_TYPE) 2.ÒÑ²¦(CallLog.Calls.OUTGOING_TYPE)  3.Î´½Ó(CallLog.Calls.MISSED_TYPE)
-		//new:1.ºô½Ğ 0.±»½Ğ
-		//number:À´µç£¬²¦´òµÄµç»°ºÅÂë
-		//date:²¦´ò¿ªÊ¼Ê±¼ä
-		//duration:Í¨»°Ê±³¤(ÃëÎªµ¥Î»)
-		//name:±íÊ¾Õâ¸öºÅÂë¶ÔÓ¦µÄÔÚÍ¨Ñ¶Â¼ÀïµÄÃû×Ö
-		//numbertype±íÊ¾Õâ¸öµç»°´æÔÚÍ¨Ñ¶Â¼ÀïµÄÀàĞÍ£¨Èç¼ÒÍ¥£¬ÊÖ»úµÈ£©
+		//type:1.æ¥ç”µ(CallLog.Calls.INCOMING_TYPE) 2.å·²æ‹¨(CallLog.Calls.OUTGOING_TYPE)  3.æœªæ¥(CallLog.Calls.MISSED_TYPE)
+		//new:1.å‘¼å« 0.è¢«å«
+		//number:æ¥ç”µï¼Œæ‹¨æ‰“çš„ç”µè¯å·ç 
+		//date:æ‹¨æ‰“å¼€å§‹æ—¶é—´
+		//duration:é€šè¯æ—¶é•¿(ç§’ä¸ºå•ä½)
+		//name:è¡¨ç¤ºè¿™ä¸ªå·ç å¯¹åº”çš„åœ¨é€šè®¯å½•é‡Œçš„åå­—
+		//numbertypeè¡¨ç¤ºè¿™ä¸ªç”µè¯å­˜åœ¨é€šè®¯å½•é‡Œçš„ç±»å‹ï¼ˆå¦‚å®¶åº­ï¼Œæ‰‹æœºç­‰ï¼‰
 		Calendar calendar = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyÄêMÔÂdÈÕ HH:mm",Locale.CHINA);
-		Cursor cursor = context.getContentResolver().query(CallConstant.CONTENT_URI,new String[]{CallConstant.NUMBER,CallConstant.DATE,CallConstant.DURAITON,CallConstant.NEW,CallConstant.NAME}, null,null, " date DESC "); 
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyå¹´Mæœˆdæ—¥ HH:mm",Locale.CHINA);
+		Cursor cursor = context.getContentResolver().query(CallConstant.CONTENT_URI,new String[]{CallConstant.NUMBER,CallConstant.DATE,CallConstant.DURAITON,CallConstant.NEW,CallConstant.NAME}, null,null, null); 
 	    while(cursor.moveToNext()){
 	    	String number = cursor.getString(cursor.getColumnIndex(CallConstant.NUMBER));
 	    	String date = cursor.getString(cursor.getColumnIndex(CallConstant.DATE));
@@ -53,16 +53,16 @@ public class CallInfoService {
 	    	if(durationIng>60 && durationIng < 3600){
 	    		int minute = durationIng/60;
 	    		int second = durationIng%60;
-	    		duration2 = minute+"·Ö"+second +"Ãë";
+	    		duration2 = minute+"åˆ†"+second +"ç§’";
 	    		
 	    	}else if(durationIng >= 3600){
 	    		int hour = durationIng / 3600;
 	    		int minute = (durationIng-3600)/60;
 	    		int second = (durationIng-3600)%60;
-	    		duration2 = hour+"Ğ¡Ê±"+minute+"·Ö"+second+"Ãë";
+	    		duration2 = hour+"å°æ—¶"+minute+"åˆ†"+second+"ç§’";
 	    		
 	    	}else {
-				duration2 = duration+"Ãë";
+				duration2 = duration+"ç§’";
 			}
 	    	
 	    	CallRecord callRecord = new CallRecord(number, date4, duration2, type, name);

@@ -15,7 +15,7 @@ import android.net.Uri;
 
 
 /**
- * »ñÈ¡¶ÌĞÅĞÅÏ¢·şÎñ
+ * è·å–çŸ­ä¿¡ä¿¡æ¯æœåŠ¡
  */
 public class SmsInfoService {
 	
@@ -28,20 +28,20 @@ public class SmsInfoService {
 	public List<SmsRecord> getSmsInfos(){
 		List<SmsRecord> smsInfos = new ArrayList<SmsRecord>();
 		Uri uri = Uri.parse("content://sms");
-		//addressÎª½ÓÊÕ¶ÌĞÅµÄºÅÂë
-		//date¶ÌĞÅµÄ½ÓÊÕÊ±¼ä
-		//date_send¶ÌĞÅ·¢ËÍÊ±¼ä
-		//read(ÓÃ»§ÊÇ·ñ¿´¹ıÕâÌõĞÅÏ¢0Î´¶Á£¬1ÒÑ¶Á)
-		//status(ĞÅÏ¢×´Ì¬,Ä¬ÈÏÊÇ-1,´ı·¢ËÍ32£¬·¢ËÍÊ§°Ü64,ÒÑËÍ´ï0(¿ªÆôÁËËÍ´ï±¨¸æ))
-		//seen(ÓÃ»§ÊÇ·ñ¿´¹ıÕâÌõĞÅÏ¢µÄÍ¨Öª0Ã»¿´¹ı£¬1¿´¹ıÁË)
-		//service_center(·şÎñÖĞĞÄ¼´¶ÌĞÅÖĞĞÄ£¬Ö»ÓĞgsm¿¨ÓĞ£¬Èç+8613800100500) 
-		//type(1Îª½ÓÊÕ¶ÌĞÅ,2Îª·¢ËÍ¶ÌĞÅ)
-		//body:¶ÌĞÅÄÚÈİ
-		//delete:1Î´É¾ 0ÒÑÉ¾
+		//addressä¸ºæ¥æ”¶çŸ­ä¿¡çš„å·ç 
+		//dateçŸ­ä¿¡çš„æ¥æ”¶æ—¶é—´
+		//date_sendçŸ­ä¿¡å‘é€æ—¶é—´
+		//read(ç”¨æˆ·æ˜¯å¦çœ‹è¿‡è¿™æ¡ä¿¡æ¯0æœªè¯»ï¼Œ1å·²è¯»)
+		//status(ä¿¡æ¯çŠ¶æ€,é»˜è®¤æ˜¯-1,å¾…å‘é€32ï¼Œå‘é€å¤±è´¥64,å·²é€è¾¾0(å¼€å¯äº†é€è¾¾æŠ¥å‘Š))
+		//seen(ç”¨æˆ·æ˜¯å¦çœ‹è¿‡è¿™æ¡ä¿¡æ¯çš„é€šçŸ¥0æ²¡çœ‹è¿‡ï¼Œ1çœ‹è¿‡äº†)
+		//service_center(æœåŠ¡ä¸­å¿ƒå³çŸ­ä¿¡ä¸­å¿ƒï¼Œåªæœ‰gsmå¡æœ‰ï¼Œå¦‚+8613800100500) 
+		//type(1ä¸ºæ¥æ”¶çŸ­ä¿¡,2ä¸ºå‘é€çŸ­ä¿¡)
+		//body:çŸ­ä¿¡å†…å®¹
+		//delete:1æœªåˆ  0å·²åˆ 
 		Calendar calendar = Calendar.getInstance();
 		Calendar calendar2 = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyÄêMÔÂdÈÕ HH:mm",Locale.CHINA);
-		Cursor cursor = context.getContentResolver().query(uri, new String[]{"address","date","date_sent","read","type","body",}, null,null,"date DESC");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyå¹´Mæœˆdæ—¥ HH:mm",Locale.CHINA);
+		Cursor cursor = context.getContentResolver().query(uri, new String[]{"address","date","date_sent","read","type","body",}, null,null,null);
 		while(cursor.moveToNext()){
 			String address = cursor.getString(cursor.getColumnIndex("address"));
 			String date = cursor.getString(cursor.getColumnIndex("date"));

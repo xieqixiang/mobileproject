@@ -2,7 +2,7 @@ package com.privacy.monitor.inte;
 
 
 /**
- * 当适配器不确定所传输的数据类型可以使用此接口回调在确定数据类型时
+ * 褰撻�傞厤鍣ㄤ笉纭畾鎵�浼犺緭鐨勬暟鎹被鍨嬪彲浠ヤ娇鐢ㄦ鎺ュ彛鍥炶皟鍦ㄧ‘瀹氭暟鎹被鍨嬫椂
  */
 public interface AdapterCallBack {
 

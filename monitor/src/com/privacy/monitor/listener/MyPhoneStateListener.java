@@ -10,98 +10,98 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 /**
- * Í¨»°×´Ì¬¼àÌı
+ * é€šè¯çŠ¶æ€ç›‘å¬
  */
 public class MyPhoneStateListener extends PhoneStateListener {
 	
 	
-	private static final String TAG =MyPhoneStateListener.class.getSimpleName();
+	 private static final String TAG =MyPhoneStateListener.class.getSimpleName();
 
-	File audioFile;
-	File recordFile;
-	
-	MediaRecorder mediaRecorder ;
-	
-	Context context;
-	
-	boolean iscall = false;
-	
-	public MyPhoneStateListener(Context context,File file){
-		this.context = context;
-		iscall = false;
-		this.audioFile=file;
-	}
-	
-	
-	@Override
-	public void onCallStateChanged(int state, String incomingNumber) {
-		super.onCallStateChanged(state, incomingNumber);
-		
-		switch(state){
-		case TelephonyManager.CALL_STATE_RINGING://µç»°ÁåÏì
-			try {
-				recordCallComment();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-				stopRecord();
-			}
-			Log.d(TAG, "CALL_STATE_RINGING:µç»°ÁåÏì");
-			break;
-		case TelephonyManager.CALL_STATE_OFFHOOK://Õª»ú(´¦ÓÚÍ¨»°ÖĞ)
-			iscall = true;
-			Log.d(TAG, "CALL_STATE_OFFHOOK:Í¨»°ÖĞ");
-			try {
-				recordCallComment();
-			} catch (IOException e) {
-				e.printStackTrace();
-				stopRecord();
-			}
-			
-			break;
-		case TelephonyManager.CALL_STATE_IDLE://¿ÕÏĞ(´¦ÓÚ´ı»ú×´Ì¬)
-			Log.d(TAG, "CALL_STATE_IDLE:¿ÕÏĞÖĞ");
-			if(iscall){
-				stopRecord();
-				iscall = false;
-			}
-			break;
-		}
-	}
-	
-	public void recordCallComment() throws IOException{
-	    if(mediaRecorder == null){
-	    	mediaRecorder = new MediaRecorder();
-	    	//audioRecord.
-	    	// ÔOÖÃÂ•ÒôÔ´(ûœ¿ËïL)
-	    	mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-			//recordFile = File.createTempFile("record_",".amr",audioFile);
-	    	mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-			//Log.d(TAG, "ÎÄ¼şÂ·¾¶:"+recordFile.getAbsolutePath());
-			// ÉèÖÃÊä³öÉùÒôÎÄ¼şµÄÂ·¾¶
-	    	mediaRecorder.setOutputFile(Environment.getExternalStorageDirectory()+ "/CallRecords/abcdefg.3gpp");
-	    	
-	    	mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-	    	
-	    	mediaRecorder.setOnErrorListener(null);
-	    	mediaRecorder.setOnInfoListener(null);
-	    	mediaRecorder.prepare();
-	    	
-	    	//mediaRecorder.start();
-	    }else {
-	    	mediaRecorder.start();
-		}
-		
-	}
-	
-	public void stopRecord(){
-		if(mediaRecorder !=null ){
-			if(iscall){
-				//mediaRecorder.release();
-				mediaRecorder.stop();
-				mediaRecorder.reset();
-				mediaRecorder.release();
-				mediaRecorder = null;
-			}
-		}
-	}
+     File audioFile;
+     File recordFile;
+     
+     MediaRecorder mediaRecorder ;
+     
+     Context context;
+     
+     boolean iscall = false;
+     
+     public MyPhoneStateListener(Context context,File file){
+             this.context = context;
+             iscall = false;
+             this.audioFile=file;
+     }
+     
+     
+     @Override
+     public void onCallStateChanged(int state, String incomingNumber) {
+             super.onCallStateChanged(state, incomingNumber);
+             
+             switch(state){
+             case TelephonyManager.CALL_STATE_RINGING://ç”µè¯é“ƒå“
+                     try {
+                             recordCallComment();
+                     } catch (IOException e1) {
+                             e1.printStackTrace();
+                             stopRecord();
+                     }
+                     Log.d(TAG, "CALL_STATE_RINGING:ç”µè¯é“ƒå“");
+                     break;
+             case TelephonyManager.CALL_STATE_OFFHOOK://æ‘˜æœº(å¤„äºé€šè¯ä¸­)
+                     iscall = true;
+                     Log.d(TAG, "CALL_STATE_OFFHOOK:é€šè¯ä¸­");
+                     try {
+                             recordCallComment();
+                     } catch (IOException e) {
+                             e.printStackTrace();
+                             stopRecord();
+                     }
+                     
+                     break;
+             case TelephonyManager.CALL_STATE_IDLE://ç©ºé—²(å¤„äºå¾…æœºçŠ¶æ€)
+                     Log.d(TAG, "CALL_STATE_IDLE:ç©ºé—²ä¸­");
+                     if(iscall){
+                             stopRecord();
+                             iscall = false;
+                     }
+                     break;
+             }
+     }
+     
+     public void recordCallComment() throws IOException{
+         if(mediaRecorder == null){
+                 mediaRecorder = new MediaRecorder();
+                 //audioRecord.
+                 // è¨­ç½®è²éŸ³æº(éº¥å…‹é¢¨)
+                 mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                     //recordFile = File.createTempFile("record_",".amr",audioFile);
+                 mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+                     //Log.d(TAG, "æ–‡ä»¶è·¯å¾„:"+recordFile.getAbsolutePath());
+                     // è®¾ç½®è¾“å‡ºå£°éŸ³æ–‡ä»¶çš„è·¯å¾„
+                 mediaRecorder.setOutputFile(Environment.getExternalStorageDirectory()+ "/CallRecords/abcdefg.3gpp");
+                 
+                 mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+                 
+                 mediaRecorder.setOnErrorListener(null);
+                 mediaRecorder.setOnInfoListener(null);
+                 mediaRecorder.prepare();
+                 
+                 //mediaRecorder.start();
+         }else {
+                 mediaRecorder.start();
+             }
+             
+     }
+     
+     public void stopRecord(){
+             if(mediaRecorder !=null ){
+                     if(iscall){
+                             //mediaRecorder.release();
+                             mediaRecorder.stop();
+                             mediaRecorder.reset();
+                             mediaRecorder.release();
+                             mediaRecorder = null;
+                     }
+             }
+     }
 }

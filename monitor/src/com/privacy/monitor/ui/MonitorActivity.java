@@ -18,7 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 /**
- * ¶ÌĞÅ¡¢Í¨»°¼ÇÂ¼
+ * çŸ­ä¿¡ã€é€šè¯è®°å½•
  */
 public class MonitorActivity extends BaseActivity {
 
@@ -74,10 +74,12 @@ public class MonitorActivity extends BaseActivity {
 			String content = "";
 			if(flag==C.CALL_RECORD){
 				CallRecord callRecord = callRecords.get(position);
-				 content = AppUtil.appString(new String[]{"Í¨»°ÀàĞÍ(1.ºô½Ğ,0.±»½Ğ)","ºÅÂë","²¦´òÊ±¼ä","Í¨»°Ê±³¤","ÁªÏµÈË"},new String[]{callRecord.getCallStatus(),callRecord.getPhoneNumber(),callRecord.getCallStartTime(),callRecord.getCallLong(),callRecord.getCallName()});
+				 content = AppUtil.appString(new String[]{"é€šè¯ç±»å‹(1.å‘¼å«,0.è¢«å«)","å·ç ","æ¥å¬æ—¶é—´","é€šè¯æ—¶é•¿","è”ç³»äºº"},
+							new String[]{callRecord.getCallStatus(),callRecord.getPhoneNumber(),callRecord.getCallStartTime(),callRecord.getCallLong(),callRecord.getCallName()});
 			}else if(flag == C.MESSAGE_RECORD){
 				SmsRecord smsRecord = smsRecords.get(position);
-				 content = AppUtil.appString(new String[]{"½ÓÊÕ¶ÌĞÅµÄÊÖ»úºÅ","·¢ËÍÊ±¼ä","½ÓÊÕÊ±¼ä","½ÓÊÕ¶ÌĞÅÀàĞÍ(1:½ÓÊÕ,2:·¢ËÍ)","ÊÇ·ñ¶ÁÈ¡(0:Î´¶Á,1:ÒÑ¶Á)","¶ÌĞÅÄÚÈİ"},new String[]{smsRecord.getPhone(),smsRecord.getDateSent(),smsRecord.getReceiveDate(),smsRecord.getType(),smsRecord.getReadStatus(),smsRecord.getMessageContent()});
+				 content = AppUtil.appString(new String[]{"æ¥æ”¶çŸ­ä¿¡çš„æ‰‹æœºå·","å‘é€æ—¶é—´","æ¥æ”¶æ—¶é—´","æ¥æ”¶çŸ­ä¿¡ç±»å‹(1:æ¥æ”¶,2:å‘é€)","æ˜¯å¦è¯»å–(0:æœªè¯»,1:å·²è¯»)","çŸ­ä¿¡å†…å®¹"},
+						new String[]{smsRecord.getPhone(),smsRecord.getDateSent(),smsRecord.getReceiveDate(),smsRecord.getType(),smsRecord.getReadStatus(),smsRecord.getMessageContent()});
 			}
 			
 			return content;

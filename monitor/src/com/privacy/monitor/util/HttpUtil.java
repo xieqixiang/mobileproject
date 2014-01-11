@@ -7,7 +7,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 
 /**
- * ÅĞ¶Ïµ±Ç°ÊÖ»úÁªÍøµÄÇşµÀ
+ * åˆ¤æ–­å½“å‰æ‰‹æœºè”ç½‘çš„æ¸ é“
  */
 public class HttpUtil {
 	
@@ -18,7 +18,7 @@ public class HttpUtil {
 	private static Uri APN_URI = null;
 
 	/**
-	 * »ñÈ¡ÍøÂçÀàĞÍ
+	 * è·å–ç½‘ç»œç±»å‹
 	 */
 	public static int getNetType(Context ctx) {
 		ConnectivityManager conn = null;
@@ -55,7 +55,7 @@ public class HttpUtil {
 	}
 	
 	/**
-	 * ¼ì²éÍøÂçÊÇ·ñ¿ÉÓÃ
+	 * æ£€æŸ¥ç½‘ç»œæ˜¯å¦å¯ç”¨
 	 */
 	public static boolean detect(Context act){
 		ConnectivityManager manager = (ConnectivityManager) act.getSystemService(Context.CONNECTIVITY_SERVICE);

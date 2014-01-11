@@ -10,7 +10,7 @@ import android.os.Message;
 import android.util.Log;
 
 /**
- * Í¨»°¼ÇÂ¼¹Û²ìÕß
+ * é€šè¯è®°å½•è§‚å¯Ÿè€…
  */
 public class CallObserver extends ContentObserver {
 
@@ -32,7 +32,7 @@ public class CallObserver extends ContentObserver {
 	@Override
 	public void onChange(boolean selfChange) {
 		super.onChange(selfChange);
-		Log.d("CallObserver","¼àÌıÍ¨»°¼ÇÂ¼¸Ä±äÁË....");
+		Log.d("CallObserver","ç›‘å¬é€šè¯è®°å½•æ”¹å˜äº†....");
 		Cursor cursor = mResolver.query(CallConstant.CONTENT_URI, new String[] {
 				CallConstant.NAME, CallConstant.DATE, CallConstant.DURAITON,
 				CallConstant.NUMBER, CallConstant.NEW }, null, null,"_id DESC LIMIT 1");
@@ -45,14 +45,14 @@ public class CallObserver extends ContentObserver {
 				String newss = cursor.getString(cursor.getColumnIndex(CallConstant.NEW));
 
 				CallRecord callRecord = new CallRecord(number, date, duration,newss, name);
-				// Í¨ÖªHandler
+				// é€šçŸ¥Handler
 				Message msg = new Message();
 				msg.obj = callRecord;
 				mHandler.sendMessage(msg);
 				break;
 			}
 			/*
-			 * ¹Ø±ÕÓÎ±ê£¬ÊÍ·Å×ÊÔ´¡£·ñÔòÏÂ´Î²éÑ¯ÓÎ±êÈÔÈ»ÔÚÔ­Î»ÖÃ
+			 * å…³é—­æ¸¸æ ‡ï¼Œé‡Šæ”¾èµ„æºã€‚å¦åˆ™ä¸‹æ¬¡æŸ¥è¯¢æ¸¸æ ‡ä»ç„¶åœ¨åŸä½ç½®
 			 */
 			cursor.close();
 		}

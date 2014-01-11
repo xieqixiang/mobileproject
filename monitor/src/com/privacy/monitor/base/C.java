@@ -1,5 +1,8 @@
 package com.privacy.monitor.base;
 
+/**
+ * 常量
+ */
 public class C {
 	
 	public static final int CALL_RECORD =1;

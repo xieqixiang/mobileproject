@@ -15,142 +15,142 @@ import com.baidu.location.LocationClientOption;
 import com.privacy.monitor.R;
 
 /**
- *  π”√∞Ÿ∂»Ã·π©µƒSDK£¨ªÒ»°µ±«∞Œª÷√–≈œ¢
+ * ‰ΩøÁî®ÁôæÂ∫¶Êèê‰æõÁöÑSDKÔºåËé∑ÂèñÂΩìÂâç‰ΩçÁΩÆ‰ø°ÊÅØ
  */
 public class LocationMan {
 
-	private LocationClient mLocationClient = null;
-	private MyLocationListener myLocationListener = new MyLocationListener();
-	private String strAddress;
-	private String strTime;
-	private TextView tvAddress;
-	private ProgressBar pBar;
-	private Button getCurrentPosi;
-	private Activity context;
-	private boolean isCancel;
+	 private LocationClient mLocationClient = null;
+     private MyLocationListener myLocationListener = new MyLocationListener();
+     private String strAddress;
+     private String strTime;
+     private TextView tvAddress;
+     private ProgressBar pBar;
+     private Button getCurrentPosi;
+     private Activity context;
+     private boolean isCancel;
 
-	public void setIsCancel(boolean isCancel) {
-		this.isCancel = isCancel;
-	}
+     public void setIsCancel(boolean isCancel) {
+             this.isCancel = isCancel;
+     }
 
-	public void setGetCurrentPosi(Button getCurrentPosi) {
-		this.getCurrentPosi = getCurrentPosi;
-	}
+     public void setGetCurrentPosi(Button getCurrentPosi) {
+             this.getCurrentPosi = getCurrentPosi;
+     }
 
-	public void setTvAddress(TextView tvAddress) {
-		this.tvAddress = tvAddress;
-	}
+     public void setTvAddress(TextView tvAddress) {
+             this.tvAddress = tvAddress;
+     }
 
-	public void setpBar(ProgressBar pBar) {
-		this.pBar = pBar;
-	}
+     public void setpBar(ProgressBar pBar) {
+             this.pBar = pBar;
+     }
 
-	public LocationClient getmLocationClient() {
-		
-		return mLocationClient;
-	}
+     public LocationClient getmLocationClient() {
+             
+             return mLocationClient;
+     }
 
-	public String getStrAddress() {
-		return strAddress;
-	}
+     public String getStrAddress() {
+             return strAddress;
+     }
 
-	public String getStrTime() {
-		return strTime;
-	}
+     public String getStrTime() {
+             return strTime;
+     }
 
-	public MyLocationListener getMyLocationListener() {
-		return myLocationListener;
-	}
+     public MyLocationListener getMyLocationListener() {
+             return myLocationListener;
+     }
 
-	public LocationMan(Activity context) {
-		this.context = context;
-		mLocationClient = new LocationClient(context);
-		mLocationClient.registerLocationListener(myLocationListener);
-	}
+     public LocationMan(Activity context) {
+             this.context = context;
+             mLocationClient = new LocationClient(context);
+             mLocationClient.registerLocationListener(myLocationListener);
+     }
 
-	public void startLocaiton() {
-		getLocation(context);
-	}
+     public void startLocaiton() {
+             getLocation(context);
+     }
 
-	// ªÒ»°Œª÷√º‡Ã˝
-	public class MyLocationListener implements BDLocationListener {
+     // Ëé∑Âèñ‰ΩçÁΩÆÁõëÂê¨
+     public class MyLocationListener implements BDLocationListener {
 
-		@Override
-		public void onReceiveLocation(BDLocation location) {
-			if (location == null) {
-				mLocationClient.requestLocation();
-				return;
-			}
-			pBar.setVisibility(View.GONE);
-			// getCurrentPosi.setVisibility(View.VISIBLE);
-			strAddress = location.getAddrStr();
-			strTime = location.getTime();
-			if (strAddress == null || strAddress.trim().equals("")) {
-				Toast.makeText(context, "Œﬁ∑®∂®Œª£¨«ÎºÏ≤ÈÕ¯¬Áª∑æ≥", Toast.LENGTH_SHORT).show();
-			} else {
-				if(!isCancel){
-					tvAddress.setVisibility(View.VISIBLE);
-					tvAddress.setText(strAddress);
-					getCurrentPosi.setText(context.getText(R.string.location));
-					mLocationClient.unRegisterLocationListener(myLocationListener);
-					mLocationClient.stop();
-					mLocationClient = null;
-				}
-				
-			}
-		}
+             @Override
+             public void onReceiveLocation(BDLocation location) {
+                     if (location == null) {
+                             mLocationClient.requestLocation();
+                             return;
+                     }
+                     pBar.setVisibility(View.GONE);
+                     // getCurrentPosi.setVisibility(View.VISIBLE);
+                     strAddress = location.getAddrStr();
+                     strTime = location.getTime();
+                     if (strAddress == null || strAddress.trim().equals("")) {
+                             Toast.makeText(context, "Êó†Ê≥ïÂÆö‰ΩçÔºåËØ∑Ê£ÄÊü•ÁΩëÁªúÁéØÂ¢É", Toast.LENGTH_SHORT).show();
+                     } else {
+                             if(!isCancel){
+                                     tvAddress.setVisibility(View.VISIBLE);
+                                     tvAddress.setText(strAddress);
+                                     getCurrentPosi.setText(context.getText(R.string.location));
+                                     mLocationClient.unRegisterLocationListener(myLocationListener);
+                                     mLocationClient.stop();
+                                     mLocationClient = null;
+                             }
+                             
+                     }
+             }
 
-		@Override
-		public void onReceivePoi(BDLocation poiLocation) {
-			if (poiLocation == null) {
-				return;
-			}
-			pBar.setVisibility(View.GONE);
-			// getCurrentPosi.setVisibility(View.VISIBLE);
-			strAddress = poiLocation.getAddrStr();
-			strTime = poiLocation.getTime();
-			if (strAddress == null || strAddress.trim().equals("")) {
-				Toast.makeText(context, "Œﬁ∑®∂®Œª£¨«ÎºÏ≤ÈÕ¯¬Áª∑æ≥", Toast.LENGTH_SHORT).show();
-			} else {
-				if(!isCancel){
-					tvAddress.setVisibility(View.VISIBLE);
-					tvAddress.setText(strAddress);
-					getCurrentPosi.setText(context.getText(R.string.location));
-					mLocationClient.unRegisterLocationListener(myLocationListener);
-					mLocationClient.stop();
-					mLocationClient = null;
-				}
-			}
-		}
-	}
+             @Override
+             public void onReceivePoi(BDLocation poiLocation) {
+                     if (poiLocation == null) {
+                             return;
+                     }
+                     pBar.setVisibility(View.GONE);
+                     // getCurrentPosi.setVisibility(View.VISIBLE);
+                     strAddress = poiLocation.getAddrStr();
+                     strTime = poiLocation.getTime();
+                     if (strAddress == null || strAddress.trim().equals("")) {
+                             Toast.makeText(context, "Êó†Ê≥ïÂÆö‰ΩçÔºåËØ∑Ê£ÄÊü•ÁΩëÁªúÁéØÂ¢É", Toast.LENGTH_SHORT).show();
+                     } else {
+                             if(!isCancel){
+                                     tvAddress.setVisibility(View.VISIBLE);
+                                     tvAddress.setText(strAddress);
+                                     getCurrentPosi.setText(context.getText(R.string.location));
+                                     mLocationClient.unRegisterLocationListener(myLocationListener);
+                                     mLocationClient.stop();
+                                     mLocationClient = null;
+                             }
+                     }
+             }
+     }
 
-	// …Ë÷√œ‡πÿ≤Œ ˝
-	private void setLocationOption() {
-		LocationClientOption option = new LocationClientOption();
-		option.setOpenGps(true);
-		option.setCoorType("bd09ll");
-		option.setServiceName("com.baidu.location.service_v2.9");
-		option.setPoiExtraInfo(true);
-		option.setAddrType("all");
-		option.setPriority(LocationClientOption.NetWorkFirst);
-		option.setPoiNumber(100);
-		option.setScanSpan(20000);
-		option.disableCache(true);
-		mLocationClient.setLocOption(option);
-	}
+     // ËÆæÁΩÆÁõ∏ÂÖ≥ÂèÇÊï∞
+     private void setLocationOption() {
+             LocationClientOption option = new LocationClientOption();
+             option.setOpenGps(true);
+             option.setCoorType("bd09ll");
+             option.setServiceName("com.baidu.location.service_v2.9");
+             option.setPoiExtraInfo(true);
+             option.setAddrType("all");
+             option.setPriority(LocationClientOption.NetWorkFirst);
+             option.setPoiNumber(100);
+             option.setScanSpan(20000);
+             option.disableCache(true);
+             mLocationClient.setLocOption(option);
+     }
 
-	public void getLocation(Context context) {
-		if (mLocationClient == null) {
-			mLocationClient = new LocationClient(context);
-			mLocationClient.registerLocationListener(myLocationListener);
-			setLocationOption();
-			mLocationClient.start();
-			mLocationClient.requestNotifyLocation();
-		}
-		if (mLocationClient != null && !mLocationClient.isStarted()) {
-			setLocationOption();
-			mLocationClient.start();
-			mLocationClient.requestLocation();
-		}
-	}
+     public void getLocation(Context context) {
+             if (mLocationClient == null) {
+                     mLocationClient = new LocationClient(context);
+                     mLocationClient.registerLocationListener(myLocationListener);
+                     setLocationOption();
+                     mLocationClient.start();
+                     mLocationClient.requestNotifyLocation();
+             }
+             if (mLocationClient != null && !mLocationClient.isStarted()) {
+                     setLocationOption();
+                     mLocationClient.start();
+                     mLocationClient.requestLocation();
+             }
+     }
 }

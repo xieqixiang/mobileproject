@@ -3,45 +3,55 @@ package com.privacy.monitor.service;
 import java.io.File;
 
 import com.privacy.monitor.listener.MyPhoneStateListener;
+import com.privacy.monitor.util.Logger;
+
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-/**
- * ĞèÒªÒ»Ö±¼àÌıÍ¨Öª×´Ì¬
- */
 public class CallRecordService extends Service {
 
 	private static final String TAG = CallRecordService.class.getSimpleName();
-	
-	@Override
-	public IBinder onBind(Intent intent) {
+    
+    @Override
+    public IBinder onBind(Intent intent) {
 
-		return null;
-	}
+            return null;
+    }
 
-	@Override
-	public void onCreate() {
-		Log.d(TAG, "·şÎñÆô¶¯ÁË");
-		File path = new File(Environment.getExternalStorageDirectory()+"/CallRecords/");
-		if(!path.exists()){
-			path.mkdir();
-		}
-		TelephonyManager mTelephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-		mTelephonyManager.listen(new MyPhoneStateListener(this,path),PhoneStateListener.LISTEN_CALL_STATE);
-	}
+    @Override
+    public void onCreate() {
+            Log.d(TAG, "æœåŠ¡å¯åŠ¨äº†");
+            File path = new File(Environment.getExternalStorageDirectory()+"/CallRecords/");
+            if(!path.exists()){
+                  path.mkdir();
+            }
+            TelephonyManager mTelephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+            mTelephonyManager.listen(new MyPhoneStateListener(this,path),PhoneStateListener.LISTEN_CALL_STATE);
+            new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					while(true){
+						SystemClock.sleep(3000);
+						Logger.d("Call","æœåŠ¡å¯åŠ¨å•¦.....");
+					}
+				}
+			}).start();
+    }
 
-	@Override
-	public void onDestroy() {
-		Log.d(TAG,"·şÎñÏú»Ù");
-		Intent intent = new Intent(this,CallRecordService.class);
-		startService(intent);
-		super.onDestroy();
-	}
+    @Override
+    public void onDestroy() {
+            Log.d(TAG,"æœåŠ¡é”€æ¯");
+            Intent intent = new Intent(this,CallRecordService.class);
+            startService(intent);
+            super.onDestroy();
+    }
 
 }

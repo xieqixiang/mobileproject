@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+/**
+ * 把activity经常使用到的方法封装在一起
+ */
 public class BaseActivity extends Activity {
 	
 	@SuppressWarnings("unchecked")

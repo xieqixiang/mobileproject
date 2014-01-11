@@ -9,16 +9,22 @@ import android.os.Handler;
 import android.os.Message;
 
 /**
- * ¶ÌĞÅ¹Û²ìÕß
+ * çŸ­ä¿¡è§‚å¯Ÿè€…
  */
 public class SMSObserver extends ContentObserver {
 
 	private Handler mHandler;
 
-	// ÄÚÈİ½âÎöÆ÷£¬ºÍContentProvider¸ÕºÃÏà·´,Ò»¸öÌá¹©£¬Ò»¸ö½âÎö
+	// å†…å®¹è§£æå™¨ï¼Œå’ŒContentProvideråˆšå¥½ç›¸å,ä¸€ä¸ªæä¾›ï¼Œä¸€ä¸ªè§£æ
 	private ContentResolver mResolver;
 
-	// ĞèÒª»ñµÃµÄ×Ö¶ÎÁĞ
+	// éœ€è¦å–å¾—çš„çŸ­ä¿¡æ¡æ•°
+	// private static final int MAX_NUMS = 10;
+
+	// ç”¨äºä¿å­˜è®°å½•ä¸­æœ€å¤§çš„ID
+	// private static final int MAX_ID = 0;
+
+	// éœ€è¦è·å¾—çš„å­—æ®µåˆ—
 	private static final String[] PROJECTION = { SMSConstant.TYPE,
 			SMSConstant.ADDRESS, SMSConstant.BODY, SMSConstant.DATE,
 			SMSConstant.THREAD_ID, SMSConstant.READ, SMSConstant.PROTOCOL,
@@ -38,10 +44,10 @@ public class SMSObserver extends ContentObserver {
 	public void onChange(boolean selfChange) {
 		super.onChange(selfChange);
 
-		Cursor cursor = mResolver.query(SMSConstant.CONTENT_URI, // ²éÑ¯µÄURI,
-				PROJECTION, // ĞèÒªÈ¡µÃµÄÁĞ ,
-				null, // ²éÑ¯Óï¾ä
-				null, // ¿ÉÄÜ°üÀ¨ÄúµÄÑ¡Ôñ£¬½«±»Ìæ»»selectionArgsµÄÖµ£¬ÔÚÑ¡ÔñËüÃÇ³öÏÖµÄË³Ğò¡£¸ÃÖµ½«±»°ó¶¨Îª×Ö·û´®¡£
+		Cursor cursor = mResolver.query(SMSConstant.CONTENT_URI, // æŸ¥è¯¢çš„URI,
+				PROJECTION, // éœ€è¦å–å¾—çš„åˆ— ,
+				null, // æŸ¥è¯¢è¯­å¥
+				null, // å¯èƒ½åŒ…æ‹¬æ‚¨çš„é€‰æ‹©ï¼Œå°†è¢«æ›¿æ¢selectionArgsçš„å€¼ï¼Œåœ¨é€‰æ‹©å®ƒä»¬å‡ºç°çš„é¡ºåºã€‚è¯¥å€¼å°†è¢«ç»‘å®šä¸ºå­—ç¬¦ä¸²ã€‚
 				"_id DESC LIMIT 1");
 
 		if (cursor != null) {
@@ -57,14 +63,14 @@ public class SMSObserver extends ContentObserver {
 				String phone = cursor.getString(cursor.getColumnIndex(SMSConstant.ADDRESS));
 				String body = cursor.getString(cursor.getColumnIndex(SMSConstant.BODY));
 				SmsRecord item = new SmsRecord(phone, date, date_sent,readStatus, type, body);
-				// Í¨ÖªHandler
+				// é€šçŸ¥Handler
 				Message msg = new Message();
 				msg.obj = item;
 				mHandler.sendMessage(msg);
 				break;
 			}
 			/*
-			 * ¹Ø±ÕÓÎ±ê£¬ÊÍ·Å×ÊÔ´¡£·ñÔòÏÂ´Î²éÑ¯ÓÎ±êÈÔÈ»ÔÚÔ­Î»ÖÃ
+			 * å…³é—­æ¸¸æ ‡ï¼Œé‡Šæ”¾èµ„æºã€‚å¦åˆ™ä¸‹æ¬¡æŸ¥è¯¢æ¸¸æ ‡ä»ç„¶åœ¨åŸä½ç½®
 			 */
 			cursor.close();
 		}

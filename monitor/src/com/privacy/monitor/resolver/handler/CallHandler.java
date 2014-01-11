@@ -6,7 +6,7 @@ import android.os.Message;
 import android.widget.Toast;
 
 /**
- * 通话监听回调处理
+ * 閫氳瘽鐩戝惉鍥炶皟澶勭悊
  */
 public class CallHandler extends Handler {
 	private Context mContext;
@@ -21,6 +21,6 @@ public class CallHandler extends Handler {
 		
 		//CallRecord item=(CallRecord)msg.obj;  
 		
-		Toast.makeText(mContext, "添加了一条通话记录",Toast.LENGTH_LONG).show();
+		Toast.makeText(mContext, "娣诲姞浜嗕竴鏉￠�氳瘽璁板綍",Toast.LENGTH_LONG).show();
 	}
 }

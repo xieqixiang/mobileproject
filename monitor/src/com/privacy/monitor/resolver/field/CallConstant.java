@@ -4,31 +4,31 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
- * Í¨»°¼ÇÂ¼±í×Ö¶ÎºÍÌá¹©ÕßµÄuri
+ * é€šè¯è®°å½•è¡¨å­—æ®µå’Œæä¾›è€…çš„uri
  */
 public interface CallConstant extends BaseColumns {
 
-	//ÄÚÈİµØÖ·
+	//å†…å®¹åœ°å€
 	public static final Uri CONTENT_URI = Uri.parse("content://call_log/calls");
 	
-	// //////////callsÊı¾İ¿âÁĞÃû×Ö¶Î£¬ÆäÊµ»¹ÓĞºÜ¶à£¬Ä¿Ç°Ã»ÓÃ¾Í²»ÁĞ¾ÙÁË
+	// //////////callsæ•°æ®åº“åˆ—åå­—æ®µï¼Œå…¶å®è¿˜æœ‰å¾ˆå¤šï¼Œç›®å‰æ²¡ç”¨å°±ä¸åˆ—ä¸¾äº†
 	public static final String ID ="_id";
 	
-	/**ºô½Ğ/À´µçºÅÂë*/
+	/**å‘¼å«/æ¥ç”µå·ç */
 	public static final String NUMBER = "number";
 	
-	/**²¦´ò/À´µçÊ±¼ä*/
+	/**æ‹¨æ‰“/æ¥ç”µæ—¶é—´*/
 	public static final String DATE = "date";
 	
-	/**Í¨»°Ê±³¤*/
+	/**é€šè¯æ—¶é•¿*/
 	public static final String DURAITON = "duration";
 	
-	/**Î´Öª*/
+	/**æœªçŸ¥*/
 	public static final String TYPE = "type";
 	
-	/**1.ºô½Ğ,0.±»½Ğ*/
+	/**1.å‘¼å«,0.è¢«å«*/
 	public static final String NEW = "new";
 	
-	/**ÁªÏµÈË*/
+	/**è”ç³»äºº*/
 	public static final String NAME = "name";
 }
