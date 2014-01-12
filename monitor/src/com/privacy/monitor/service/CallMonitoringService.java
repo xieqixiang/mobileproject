@@ -31,7 +31,6 @@ public class CallMonitoringService extends Service {
     @Override
     public void onCreate() {
             Logger.d(TAG, "通话监听服务启动了");
-           
             
             ContentResolver callResolver = getContentResolver();
             callObserver = new CallObserver(callResolver,new CallHandler(getApplicationContext()));

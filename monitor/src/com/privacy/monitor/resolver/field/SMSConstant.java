@@ -15,7 +15,6 @@ public interface SMSConstant extends BaseColumns {
 	public static final String ID = "_id";
 	public static final String THREAD_ID = "thread_id";
 	public static final String ADDRESS = "address";
-	public static final String M_SIZE = "m_size";
 	public static final String PERSON = "person";
 	public static final String DATE = "date";
 	public static final String DATE_SENT = "date_sent";

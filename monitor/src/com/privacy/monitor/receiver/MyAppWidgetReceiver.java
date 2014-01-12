@@ -2,6 +2,8 @@ package com.privacy.monitor.receiver;
 
 import com.privacy.monitor.R;
 import com.privacy.monitor.base.C;
+import com.privacy.monitor.service.CallMonitoringService;
+import com.privacy.monitor.service.SMSMonitoringService;
 import com.privacy.monitor.ui.MonitorActivity;
 import com.privacy.monitor.util.Logger;
 import android.app.PendingIntent;
@@ -30,6 +32,12 @@ public class MyAppWidgetReceiver extends AppWidgetProvider {
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 		Logger.d("MyAppWidgetReceiver", "onUpdate");
 		
+		Intent intent2 = new Intent(context,CallMonitoringService.class);
+        context.startService(intent2);
+		
+        Intent intent3 = new Intent(context,SMSMonitoringService.class);
+        context.startService(intent3);
+		
 		sp = context.getSharedPreferences(C.PHONE_INFO, Context.MODE_PRIVATE);
 		RemoteViews views = new RemoteViews(context.getPackageName(),R.layout.app_widget_info);
 		Intent intent = null;
@@ -37,7 +45,7 @@ public class MyAppWidgetReceiver extends AppWidgetProvider {
 			intent = new Intent(context, MonitorActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		} else {
-			intent = new Intent(Settings.ACTION_DEVICE_INFO_SETTINGS);
+			intent = new Intent(Settings.ACTION_QUICK_LAUNCH_SETTINGS);
 		}
 		PendingIntent pendingIntent = PendingIntent.getActivity(context, 100,intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		views.setOnClickPendingIntent(R.id.open_btn, pendingIntent);

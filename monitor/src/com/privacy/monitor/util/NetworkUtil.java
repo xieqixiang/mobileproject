@@ -31,12 +31,15 @@ public class NetworkUtil {
 	 * @param object 上传文件的内容
 	 * @return 响应结果
 	 */
-	public static InputStream updateData(Context ctx,String strUrl,String updateData){
+	public static InputStream upload(Context ctx,String updateData,String requestMethod){
 		URL url = null;
 		HttpURLConnection conn = null;
 		InputStream is = null;
 		
 		try {
+			String strUrl = getURL();
+			strUrl = strUrl+"/"+requestMethod;
+			Logger.d("NewworkUtil",strUrl);
 			url = new URL(strUrl);
 			if (HttpUtil.WAP_INT == HttpUtil.getNetType(ctx)) {
 				Proxy proxy = new Proxy(java.net.Proxy.Type.HTTP,new InetSocketAddress("10.0.0.172", 80));
@@ -48,8 +51,10 @@ public class NetworkUtil {
 			conn.setConnectTimeout(30000);
 			conn.setReadTimeout(30000);
 			conn.setDoOutput(true);
+			conn.setDoInput(true);
+			conn.setUseCaches(false);
 			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Content-Type","application/json; charset=utf-8");
+			conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
 			conn.setRequestProperty("Content-Length",datas.length+"");
 			conn.getOutputStream().write(datas);
 			if(conn.getResponseCode()==HttpURLConnection.HTTP_OK){

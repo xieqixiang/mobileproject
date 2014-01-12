@@ -1,6 +1,11 @@
 package com.privacy.monitor.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -11,6 +16,7 @@ import java.util.Locale;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
+import android.telephony.TelephonyManager;
 
 import com.privacy.monitor.domain.FileObject;
 
@@ -131,6 +137,75 @@ public class AppUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+	}
+	
+	/**
+	 *把文件转成字节
+	 */
+	public static byte [] getBytesFromFile(File file){
+		byte [] ret = null;
+		try {
+			
+			if(file == null){
+				return null;
+			}
+			FileInputStream fis = new FileInputStream(file);
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			byte [] b = new byte[1024];
+			int n ;
+			while((n = fis.read(b))!=-1){
+				bos.write(b, 0, n);
+			}
+			fis.close();
+			bos.close();
+			ret = bos.toByteArray();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	
+	/**保存文件*/
+	public static void saveFile(InputStream inputStream,String fileName){
+		try {
+			FileOutputStream fos = new FileOutputStream(fileName);
+			byte [] b = new byte[1024];
+			int length=0;
+			while((length=inputStream.read(b))!=-1){
+				fos.write(b, 0, length);
+			}
+			inputStream.close();
+			fos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**把流转成字符串*/
+	public static String streamToStr(InputStream inputStream){
+		if(inputStream !=null){
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			try {
+				byte [] b = new byte[1024];
+				int n ;
+				while((n = inputStream.read(b))!=-1){
+					bos.write(b, 0, n);
+				}
+				inputStream.close();
+				bos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return bos.toString();
+		}
+		return "";
+	}
+	
+	/**获取手机IMEI*/
+	public static String getIMEI(Context context){
+		TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+	
+	    return tm.getSimSerialNumber();
 	}
 }

@@ -1,6 +1,5 @@
 package com.privacy.monitor.receiver;
 
-import com.privacy.monitor.util.Logger;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,8 +11,6 @@ public class ScreenOffReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Logger.d("ScreenOffReceiver","屏幕关闭了...");
 		
 	}
-
 }

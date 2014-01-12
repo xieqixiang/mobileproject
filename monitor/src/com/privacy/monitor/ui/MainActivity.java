@@ -13,11 +13,9 @@ import com.privacy.monitor.resolver.SMSObserver;
 import com.privacy.monitor.resolver.field.CallConstant;
 import com.privacy.monitor.resolver.field.SMSConstant;
 import com.privacy.monitor.resolver.handler.CallHandler;
-import com.privacy.monitor.resolver.handler.SMSHandler;
 import com.privacy.monitor.service.CallMonitoringService;
 import com.privacy.monitor.util.AppUtil;
 import com.privacy.monitor.util.HttpUtil;
-
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.media.MediaRecorder;
@@ -62,7 +60,7 @@ public class MainActivity extends BaseActivity {
             startService(intent);
 
             ContentResolver resolver = getContentResolver();
-            observer = new SMSObserver(resolver, new SMSHandler(this));
+           // observer = new SMSObserver(resolver, new SMSHandler(this),this);
 
             // 注册观察者类时得到回调数据确定一个给定的内容URI变化。
             resolver.registerContentObserver(SMSConstant.CONTENT_URI, true,observer);

@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import com.privacy.monitor.domain.SmsRecord;
+import com.privacy.monitor.domain.SMSRecord;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -25,8 +25,8 @@ public class SmsInfoService {
 		this.context = context;
 	}
 	
-	public List<SmsRecord> getSmsInfos(){
-		List<SmsRecord> smsInfos = new ArrayList<SmsRecord>();
+	public List<SMSRecord> getSmsInfos(){
+		List<SMSRecord> smsInfos = new ArrayList<SMSRecord>();
 		Uri uri = Uri.parse("content://sms");
 		//address为接收短信的号码
 		//date短信的接收时间
@@ -57,7 +57,7 @@ public class SmsInfoService {
 			String read = cursor.getString(cursor.getColumnIndex("read"));
 			String type = cursor.getString(cursor.getColumnIndex("type"));
 			String body = cursor.getString(cursor.getColumnIndex("body"));
-			SmsRecord smsRecord = new SmsRecord(address, date4, date7, read, type, body);
+			SMSRecord smsRecord = new SMSRecord(address, date4, date7, read, type, body);
 			smsInfos.add(smsRecord);
 		}
 		if(cursor !=null){

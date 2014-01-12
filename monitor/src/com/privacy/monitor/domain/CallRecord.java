@@ -5,6 +5,13 @@ package com.privacy.monitor.domain;
  */
 public class CallRecord {
 
+	public static final String COL_ID = "id";
+	public static final String COL_PHONE = "phone";
+	public static final String COL_CALL_STATUS = "call_status";
+	public static final String COL_CALL_START_TIME = "call_start_time";
+	public static final String COL_CALL_LONG = "call_long";
+	public static final String COL_NAME = "name";
+	
 	/**通话号码*/
 	private String phoneNumber;
 	

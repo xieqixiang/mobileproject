@@ -6,9 +6,21 @@ import android.os.Parcelable;
 /**
  * 短信记录
  */
-public class SmsRecord implements Parcelable {
+public class SMSRecord implements Parcelable {
 	
-	/**接收短信的号码*/
+	public static final String COL_ID = "id";
+	public static final String COL_PHONE = "phone";
+	public static final String COL_BODY = "sms_body";
+	public static final String COL_SMS_TYPE = "sms_type";
+	public static final String COL_DATE = "sms_date";
+	public static final String COL_READ_STATUS = "sms_read_status";
+	public static final String COL_SENT_STATUS = "sms_send_status";
+	public static final String COL_UPLOAD_STATUS = "sms_upload_status";
+	public static final String COL_NAME = "sms_name";
+	
+	private int id;
+	
+	/**手机号码*/
 	private String phone;
 	
 	/**短信内容*/
@@ -38,7 +50,25 @@ public class SmsRecord implements Parcelable {
 	/**1为接收短信，2为发送短信*/
 	private String type;
 	
-	public SmsRecord(String address,String date,String date_send,String read,String type,String body){
+	/**姓名*/
+	private String name;
+	
+	/**是否已上传到服务器*/
+	private String uploadStatus;
+	
+	public SMSRecord(){};
+	
+	public SMSRecord(String address,String date,String date_send,String read,String type,String body,String name){
+		this.phone = address;
+		this.receiveDate = date;
+		this.dateSent = date_send;
+		this.readStatus = read;
+		this.type = type;
+		this.messageContent = body;
+		this.name = name;
+	}
+	
+	public SMSRecord(String address,String date,String date_send,String read,String type,String body){
 		this.phone = address;
 		this.receiveDate = date;
 		this.dateSent = date_send;
@@ -47,15 +77,25 @@ public class SmsRecord implements Parcelable {
 		this.messageContent = body;
 	}
 	
-	public SmsRecord(Parcel parcel) {
+	public SMSRecord(Parcel parcel) {
 		this.phone = parcel.readString();
 		this.receiveDate = parcel.readString();
 		this.dateSent = parcel.readString();
 		this.readStatus = parcel.readString();
 		this.type = parcel.readString();
 		this.messageContent = parcel.readString();
+		this.name = parcel.readString();
 	}
 	
+	public SMSRecord(String phone, String date, String read,
+			String type, String body) {
+		this.phone = phone;
+		this.dateSent = date;
+		this.readStatus = read;
+		this.type = type;
+		this.messageContent = body;
+		
+	}
 	public String getPhone() {
 		return phone;
 	}
@@ -142,6 +182,30 @@ public class SmsRecord implements Parcelable {
 		return 0;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getUploadStatus() {
+		return uploadStatus;
+	}
+
+	public void setUploadStatus(String uploadStatus) {
+		this.uploadStatus = uploadStatus;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(this.phone);
@@ -150,19 +214,20 @@ public class SmsRecord implements Parcelable {
 		dest.writeString(this.readStatus);
 		dest.writeString(this.type);
 		dest.writeString(this.messageContent);
+		dest.writeString(this.name);
 	}
 	
-	public static final Parcelable.Creator<SmsRecord> CREATOR = new Parcelable.Creator<SmsRecord>() {
+	public static final Parcelable.Creator<SMSRecord> CREATOR = new Parcelable.Creator<SMSRecord>() {
 
 		@Override
-		public SmsRecord createFromParcel(Parcel source) {
+		public SMSRecord createFromParcel(Parcel source) {
 
-			return new SmsRecord(source);
+			return new SMSRecord(source);
 		}
 
 		@Override
-		public SmsRecord[] newArray(int size) {
-			return new SmsRecord[size];
+		public SMSRecord[] newArray(int size) {
+			return new SMSRecord[size];
 		}
 	};
 	

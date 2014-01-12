@@ -17,4 +17,12 @@ public class C {
 	public static final String PHONE_INFO = "phoneinfo";
 	
 	public static final String PHONE = "phone";
+	
+	public class RequestMethod{
+		//上传短信信息
+		public static final String uploadSMS = "1c1d4f559ebbc08c492539282f36f969";
+	}
+	
+	//标记是否需要上传数据
+	public static boolean isUpload = false;
 }

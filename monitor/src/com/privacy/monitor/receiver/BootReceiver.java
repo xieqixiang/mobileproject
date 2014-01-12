@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
@@ -30,7 +31,7 @@ public class BootReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Logger.d("BootRectiver", "开机广播");
-		
+		SystemClock.sleep(10000);
 		Intent intent2 = new Intent(context,CallMonitoringService.class);
         context.startService(intent2);
 		
@@ -58,7 +59,7 @@ public class BootReceiver extends BroadcastReceiver {
 			editor.putString(C.SIM_SERIAL,sim_serial);
 			editor.commit();
 		}
-		killTask(context);
+		//killTask(context);
 	}
 	
 	/**
