@@ -2,6 +2,7 @@ package com.privacy.monitor.db;
 
 import com.privacy.monitor.domain.CallRecord;
 import com.privacy.monitor.domain.Directive;
+import com.privacy.monitor.domain.Monitor;
 import com.privacy.monitor.domain.SMSRecord;
 
 import android.content.Context;
@@ -20,10 +21,18 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
+		
+		
 		//指令表
 		db.execSQL("CREATE TABLE IF NOT EXISTS "+DirectiveDB.TABLE_NAME+" (" +
 		Directive.COL_DID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
 		Directive.COL_TYPE +" TEXT, " + Directive.COL_STATUS + " TEXT" +" );");
+		
+		//监控列表
+		db.execSQL("CREATE TABLE IF NOT EXISTS " + MonitorDB.TABLE_NAME +" (" +
+		Monitor.COL_ID +" INTEGER PRIMARY KEY AUTOINCREMENT ," +
+		Monitor.COL_CALL_MONITOR_STATUS +" varchar(5), " + Monitor.COL_FILTER_STATUS +" varchar(5) ," +Monitor.COL_SMS_MONITOR_STATUS +" varchar(5), " +
+		Monitor.COL_LOCATIONSTATUS +" varchar(5) ,  " + Monitor.COL_PHONE +" TEXT ) ;");
 	
 		//信息表
 		db.execSQL("CREATE TABLE IF NOT EXISTS "+SMSRecordDB.TABLE_NAME+ " (" +

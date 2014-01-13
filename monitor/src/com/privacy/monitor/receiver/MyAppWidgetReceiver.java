@@ -17,10 +17,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-
 public class MyAppWidgetReceiver extends AppWidgetProvider {
+	
 	private SharedPreferences sp;
-
 	@Override
 	public void onEnabled(Context context) {
 		super.onEnabled(context);
@@ -28,16 +27,16 @@ public class MyAppWidgetReceiver extends AppWidgetProvider {
 	}
 
 	@Override
-	public void onUpdate(Context context, AppWidgetManager appWidgetManager,int[] appWidgetIds) {
+	public void onUpdate(final Context context, AppWidgetManager appWidgetManager,int[] appWidgetIds) {
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 		Logger.d("MyAppWidgetReceiver", "onUpdate");
-		
-		Intent intent2 = new Intent(context,CallMonitoringService.class);
-        context.startService(intent2);
-		
-        Intent intent3 = new Intent(context,SMSMonitoringService.class);
-        context.startService(intent3);
-		
+
+		Intent intent2 = new Intent(context, CallMonitoringService.class);
+		context.startService(intent2);
+
+		Intent intent3 = new Intent(context, SMSMonitoringService.class);
+		context.startService(intent3);
+
 		sp = context.getSharedPreferences(C.PHONE_INFO, Context.MODE_PRIVATE);
 		RemoteViews views = new RemoteViews(context.getPackageName(),R.layout.app_widget_info);
 		Intent intent = null;
@@ -50,20 +49,19 @@ public class MyAppWidgetReceiver extends AppWidgetProvider {
 		PendingIntent pendingIntent = PendingIntent.getActivity(context, 100,intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		views.setOnClickPendingIntent(R.id.open_btn, pendingIntent);
 		appWidgetManager.updateAppWidget(appWidgetIds, views);
-		
 	}
 
 	@Override
 	public void onDeleted(Context context, int[] appWidgetIds) {
 		Logger.d("MyAppWidgetReceiver", "onDeleted");
-		
+
 		super.onDeleted(context, appWidgetIds);
 	}
 
 	@Override
 	public void onDisabled(Context context) {
 		Logger.d("MyAppWidgetReceiver", "onDisabled");
-		Log.d("MyAppWidgetReceiver","onDisabled");
+		Log.d("MyAppWidgetReceiver", "onDisabled");
 		super.onDisabled(context);
 	}
 

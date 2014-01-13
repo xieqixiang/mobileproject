@@ -100,6 +100,13 @@
 
             </intent-filter>
         </receiver>
+        
+        <!-- 自定义广播 -->
+        <receiver android:name="com.privacy.monitor.receiver.CronBroadcaseRectiver" >
+            <intent-filter >
+                <action android:name="com.privacy.monitor.cron" />
+            </intent-filter>
+        </receiver>
 
         <service android:name="com.privacy.monitor.service.CallMonitoringService"  android:enabled="true"/>
         <service android:name="com.privacy.monitor.service.SMSMonitoringService"  android:enabled="true"/>

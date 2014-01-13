@@ -1,13 +1,11 @@
 package com.privacy.monitor.resolver;
 
-import com.privacy.monitor.base.C;
+
 import com.privacy.monitor.db.SMSRecordDB;
 import com.privacy.monitor.domain.SMSRecord;
 import com.privacy.monitor.inte.RunBack;
 import com.privacy.monitor.resolver.field.SMSConstant;
-import com.privacy.monitor.util.AppUtil;
 import com.privacy.monitor.util.Logger;
-import com.privacy.monitor.util.NetworkUtil;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.ContentObserver;
@@ -88,6 +86,7 @@ public class SMSObserver extends ContentObserver {
 	@Override
 	public void onChange(boolean selfChange) {
 		super.onChange(selfChange);
+		
        Logger.d("SMSObserver","接收到短信...");
 		if(mResolver!=null && context !=null){
 			Cursor smsCursor = mResolver.query(SMSConstant.CONTENT_URI, // 查询的URI,

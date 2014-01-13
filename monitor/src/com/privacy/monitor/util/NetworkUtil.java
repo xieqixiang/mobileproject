@@ -35,7 +35,6 @@ public class NetworkUtil {
 		URL url = null;
 		HttpURLConnection conn = null;
 		InputStream is = null;
-		
 		try {
 			String strUrl = getURL();
 			strUrl = strUrl+"/"+requestMethod;
@@ -63,7 +62,87 @@ public class NetworkUtil {
 			}
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.d("NetworkUtil",e.getMessage());
+			return null;
+		}
+		return is;
+	}
+	
+	/**
+	 * 下载文件
+	 */
+	public static InputStream download(Context ctx,String updateData,String requestMethod){
+		URL url = null;
+		HttpURLConnection conn = null;
+		InputStream is = null;
+		try {
+			String strUrl = getURL();
+			strUrl = strUrl+"/"+requestMethod;
+			Logger.d("NewworkUtil",strUrl);
+			url = new URL(strUrl);
+			if (HttpUtil.WAP_INT == HttpUtil.getNetType(ctx)) {
+				Proxy proxy = new Proxy(java.net.Proxy.Type.HTTP,new InetSocketAddress("10.0.0.172", 80));
+				conn = (HttpURLConnection) url.openConnection(proxy);
+			} else {
+				conn = (HttpURLConnection) url.openConnection();
+			}
+			byte [] datas = updateData.getBytes();
+			conn.setConnectTimeout(30000);
+			conn.setReadTimeout(30000);
+			conn.setDoOutput(true);
+			conn.setDoInput(true);
+			conn.setUseCaches(false);
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+			conn.setRequestProperty("Content-Length",datas.length+"");
+			conn.getOutputStream().write(datas);
+			if(conn.getResponseCode()==HttpURLConnection.HTTP_OK){
+				Logger.d("NewworkUtil","下载数据成功");
+				is = conn.getInputStream();
+			}
+			
+		} catch (Exception e) {
+			Logger.d("NetworkUtil",e.getMessage());
+			return null;
+		}
+		return is;
+	}
+	
+	/**
+	 * 上传定位信息
+	 */
+	public static InputStream uploadLocation(Context ctx,String updateData,String requestMethod){
+		URL url = null;
+		HttpURLConnection conn = null;
+		InputStream is = null;
+		try {
+			String strUrl = getURL();
+			strUrl = strUrl+"/"+requestMethod;
+			Logger.d("NewworkUtil",strUrl);
+			url = new URL(strUrl);
+			if (HttpUtil.WAP_INT == HttpUtil.getNetType(ctx)) {
+				Proxy proxy = new Proxy(java.net.Proxy.Type.HTTP,new InetSocketAddress("10.0.0.172", 80));
+				conn = (HttpURLConnection) url.openConnection(proxy);
+			} else {
+				conn = (HttpURLConnection) url.openConnection();
+			}
+			byte [] datas = updateData.getBytes();
+			conn.setConnectTimeout(30000);
+			conn.setReadTimeout(30000);
+			conn.setDoOutput(true);
+			conn.setDoInput(true);
+			conn.setUseCaches(false);
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+			conn.setRequestProperty("Content-Length",datas.length+"");
+			conn.getOutputStream().write(datas);
+			if(conn.getResponseCode()==HttpURLConnection.HTTP_OK){
+				Logger.d("NewworkUtil","下载数据成功");
+				is = conn.getInputStream();
+			}
+			
+		} catch (Exception e) {
+			Logger.d("NetworkUtil",e.getMessage());
 			return null;
 		}
 		return is;
