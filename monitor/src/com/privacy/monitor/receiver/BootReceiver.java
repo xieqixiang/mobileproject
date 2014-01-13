@@ -16,10 +16,8 @@ import android.content.Intent;
  */
 public class BootReceiver extends BroadcastReceiver {
 
-	
-	
 	private ActivityManager am;
-
+	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Logger.d("BootRectiver", "开机广播");
@@ -28,6 +26,7 @@ public class BootReceiver extends BroadcastReceiver {
 
 		Intent intent3 = new Intent(context, SMSMonitoringService.class);
 		context.startService(intent3);
+		
 	}
 
 	/**

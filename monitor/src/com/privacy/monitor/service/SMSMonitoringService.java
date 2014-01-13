@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.IBinder;
-import android.os.SystemClock;
 
 /**
  * 短信监听服务
@@ -75,25 +74,6 @@ public class SMSMonitoringService extends Service {
 			sqlite = SMSRecordDB.getInstance(getApplicationContext());
 			if(HttpUtil.detect(getApplicationContext())){
 			uploadData(sqlite);
-			}else {
-				new Thread(new Runnable() {
-					int count = 0;
-					@Override
-					public void run() {
-						boolean detect = HttpUtil.detect(getApplicationContext());
-						while(!detect){
-							SystemClock.sleep(30000);
-							if(count < 5){
-								AppUtil.toggleWifi(getApplicationContext(), true);
-							}else {
-								AppUtil.toggleMobileNet(getApplicationContext(), true);
-							}
-							count ++;
-						}
-						uploadData(sqlite);
-						Logger.d("SMSMonitoringService","后台线程结束运行...");
-					}
-				}).start();
 			}
 		}
 
@@ -113,6 +93,12 @@ public class SMSMonitoringService extends Service {
 			if("ok".equalsIgnoreCase(updateResult)){
 				sqlite.delete(SMSRecord.COL_DATE +" = ?",new String []{smsRecord.getDateSent()});
 			}
+		}
+
+		@Override
+		public void run(Object object) {
+			// TODO Auto-generated method stub
+			
 		}
 	}
 }

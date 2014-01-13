@@ -23,9 +23,6 @@ public interface CallConstant extends BaseColumns {
 	/**通话时长*/
 	public static final String DURAITON = "duration";
 	
-	/**未知*/
-	public static final String TYPE = "type";
-	
 	/**1.呼叫,0.被叫*/
 	public static final String NEW = "new";
 	

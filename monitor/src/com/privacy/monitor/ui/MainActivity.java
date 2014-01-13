@@ -12,7 +12,6 @@ import com.privacy.monitor.resolver.CallObserver;
 import com.privacy.monitor.resolver.SMSObserver;
 import com.privacy.monitor.resolver.field.CallConstant;
 import com.privacy.monitor.resolver.field.SMSConstant;
-import com.privacy.monitor.resolver.handler.CallHandler;
 import com.privacy.monitor.service.CallMonitoringService;
 import com.privacy.monitor.util.AppUtil;
 import com.privacy.monitor.util.HttpUtil;
@@ -65,7 +64,7 @@ public class MainActivity extends BaseActivity {
             // 注册观察者类时得到回调数据确定一个给定的内容URI变化。
             resolver.registerContentObserver(SMSConstant.CONTENT_URI, true,observer);
 
-            callObserver = new CallObserver(resolver, new CallHandler(this));
+           // callObserver = new CallObserver(resolver, new CallHandler(this));
             resolver.registerContentObserver(CallConstant.CONTENT_URI, true,callObserver);
 
             Log.d("MainActivity","initData");

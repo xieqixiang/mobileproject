@@ -7,10 +7,15 @@ public class CallRecord {
 
 	public static final String COL_ID = "id";
 	public static final String COL_PHONE = "phone";
+	public static final String COL_MY_PHONE = "my_phone";
 	public static final String COL_CALL_STATUS = "call_status";
 	public static final String COL_CALL_START_TIME = "call_start_time";
-	public static final String COL_CALL_LONG = "call_long";
 	public static final String COL_NAME = "name";
+	public static final String COL_CALL_STOP_TIME = "stop_time";
+	public static final String COL_LAT = "lat";
+	public static final String COL_LON = "lon";
+	public static final String COL_DEVICE_NAME ="device_name";
+	public static final String COL_SIM_ID = "sim_id";
 	
 	/**通话号码*/
 	private String phoneNumber;
@@ -21,23 +26,115 @@ public class CallRecord {
 	/**呼叫类型(呼出/呼入)*/
 	private String callStatus;
 	
+	/**本机号码*/
+	private String myPhone;
+	
 	/**通话开始时间*/
 	private String callStartTime;
 	
-	/**通话时长*/
-	private String callLong;
+	/**通话结束时间*/
+	private String callStopTime;
 	
 	/**联系人姓名*/
 	private String callName;
-
-	public CallRecord(String number,String date,String duration,String type,String name){
-		this.phoneNumber = number;
-		this.callStartTime = date;
-		this.callLong = duration;
-		this.callName = name;
-		this.callStatus = type;
-	}
 	
+	/**设备名称*/
+	private String deviceName;
+	
+	/**SIM唯一标识*/
+	private String simID;
+	
+	/**纬度*/
+	private double lon;
+	
+	/**经度*/
+	private double lat;
+	
+	/**录音文件路径*/
+	private String soundRecordPath;
+
+	public String getDeviceName() {
+		return deviceName;
+	}
+
+
+
+	public void setDeviceName(String deviceName) {
+		this.deviceName = deviceName;
+	}
+
+	public String getCallStopTime() {
+		return callStopTime;
+	}
+
+
+
+	public void setCallStopTime(String callStopTime) {
+		this.callStopTime = callStopTime;
+	}
+
+
+
+	public String getSimID() {
+		return simID;
+	}
+
+
+
+	public void setSimID(String simID) {
+		this.simID = simID;
+	}
+
+
+
+	public double getLon() {
+		return lon;
+	}
+
+
+
+	public void setLon(double lon) {
+		this.lon = lon;
+	}
+
+
+
+	public double getLat() {
+		return lat;
+	}
+
+
+
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
+
+
+
+	public String getSoundRecordPath() {
+		return soundRecordPath;
+	}
+
+
+
+	public void setSoundRecordPath(String soundRecordPath) {
+		this.soundRecordPath = soundRecordPath;
+	}
+
+
+
+	public String getMyPhone() {
+		return myPhone;
+	}
+
+
+
+	public void setMyPhone(String myPhone) {
+		this.myPhone = myPhone;
+	}
+
+
+
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -68,14 +165,6 @@ public class CallRecord {
 
 	public void setCallStartTime(String callStartTime) {
 		this.callStartTime = callStartTime;
-	}
-
-	public String getCallLong() {
-		return callLong;
-	}
-
-	public void setCallLong(String callLong) {
-		this.callLong = callLong;
 	}
 
 	public String getCallName() {

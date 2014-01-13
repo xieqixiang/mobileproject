@@ -65,8 +65,8 @@ public class CallInfoService {
 				duration2 = duration+"秒";
 			}
 	    	
-	    	CallRecord callRecord = new CallRecord(number, date4, duration2, type, name);
-	    	callRecords.add(callRecord);
+	    	//CallRecord callRecord = new CallRecord(number, date4, duration2, type, name);
+	    	//callRecords.add(callRecord);
 	    }
 	    if(cursor !=null){
 	    	 cursor.close();

@@ -10,6 +10,7 @@ public class Monitor {
 	//电话监控状态
 	public static final String COL_CALL_MONITOR_STATUS = "call_monitor_status";
 	
+	//短信监控状态
 	public static final String COL_SMS_MONITOR_STATUS = "sms_monitor_status";
 	
 	//拦截状态
@@ -18,6 +19,7 @@ public class Monitor {
 	//定位状态
 	public static final String COL_LOCATIONSTATUS = "location_status";
 	
+	//手机号
 	public static final String COL_PHONE = "phone";
 	
 	private int id ;

@@ -68,4 +68,13 @@ public class MonitorDB extends BaseSqlite {
 		}
 		return result;
 	}
+	
+	public void update(Monitor monitor,String where,String [] selectionArgs){
+		ContentValues values = new ContentValues();
+		values.put(Monitor.COL_CALL_MONITOR_STATUS,monitor.getCallMonitorStatus());
+		values.put(Monitor.COL_SMS_MONITOR_STATUS,monitor.getSmsMonitorStatus());
+		values.put(Monitor.COL_FILTER_STATUS,monitor.getFilterStatus());
+		values.put(Monitor.COL_LOCATIONSTATUS,monitor.getLocationStatus());
+		super.update(values, where,selectionArgs);
+	}
 }

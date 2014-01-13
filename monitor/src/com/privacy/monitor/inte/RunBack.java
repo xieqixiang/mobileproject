@@ -7,4 +7,5 @@ public interface RunBack {
 	
 	public void run();
 	
+	public void run(Object object);
 }

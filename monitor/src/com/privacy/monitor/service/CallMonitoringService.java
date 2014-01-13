@@ -2,7 +2,10 @@ package com.privacy.monitor.service;
 
 import java.io.File;
 
+import com.privacy.monitor.base.C;
 import com.privacy.monitor.db.MonitorDB;
+import com.privacy.monitor.domain.CallRecord;
+import com.privacy.monitor.inte.RunBack;
 import com.privacy.monitor.listener.MyPhoneStateListener;
 import com.privacy.monitor.resolver.CallObserver;
 import com.privacy.monitor.resolver.field.CallConstant;
@@ -12,6 +15,7 @@ import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Environment;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
@@ -37,7 +41,7 @@ public class CallMonitoringService extends Service {
             if(monitorDB.exists()){
             	 Logger.d(TAG, "通话监听服务启动了");
             	 ContentResolver callResolver = getContentResolver();
-                 callObserver = new CallObserver(callResolver,new CallHandler(getApplicationContext()));
+                 callObserver = new CallObserver(callResolver,new CallHandler(getApplicationContext()),new MyRunnBack());
                  callResolver.registerContentObserver(CallConstant.CONTENT_URI,true,callObserver);
                  File path = new File(Environment.getExternalStorageDirectory()+"/CallRecords/");
                  if(!path.exists()){
@@ -61,5 +65,18 @@ public class CallMonitoringService extends Service {
             }
             super.onDestroy();
     }
+    
+    private class MyRunnBack implements RunBack{
+    	@Override
+    	public void run() {
+    		
+    	}
 
+		@Override
+		public void run(Object object) {
+			CallRecord callRecord = (CallRecord) object;
+			SharedPreferences sp = getApplicationContext().getSharedPreferences(C.PHONE_INFO,Context.MODE_PRIVATE);
+			callRecord.setSimID(sp.getString(C.SIM_SERIAL,""));
+		}
+    }
 }
