@@ -37,7 +37,7 @@ public class CallMonitoringService extends Service {
 
     @Override
     public void onCreate() {
-            monitorDB = new MonitorDB(getApplicationContext());
+            monitorDB = MonitorDB.getInstance(getApplicationContext());
             if(monitorDB.exists()){
             	 Logger.d(TAG, "通话监听服务启动了");
             	 ContentResolver callResolver = getContentResolver();

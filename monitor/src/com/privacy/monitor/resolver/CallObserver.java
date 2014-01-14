@@ -37,40 +37,44 @@ public class CallObserver extends ContentObserver {
 		super.onChange(selfChange);
 		Logger.d("CallObserver","selfChange:"+selfChange);
 		if(!selfChange){
-			Cursor cursor = mResolver.query(CallConstant.CONTENT_URI, new String[] {
-					CallConstant.NAME, CallConstant.DATE, CallConstant.DURAITON,
-					CallConstant.NUMBER, CallConstant.NEW }, null, null,"_id DESC LIMIT 1");
-			if (cursor != null) {
-				while (cursor.moveToNext()) {
-					String name = cursor.getString(cursor.getColumnIndex(CallConstant.NAME));
-					String date = cursor.getString(cursor.getColumnIndex(CallConstant.DATE));
-					String duration = cursor.getString(cursor.getColumnIndex(CallConstant.DURAITON));
-					String number = cursor.getString(cursor.getColumnIndex(CallConstant.NUMBER));
-					String newss = cursor.getString(cursor.getColumnIndex(CallConstant.NEW));
-					String deviewname = android.os.Build.MODEL;
-					String endTime = date+""+duration;
-					CallRecord callRecord = new CallRecord();
-					callRecord.setCallName(name);
-					callRecord.setCallStartTime(date);
-					callRecord.setCallStopTime(endTime);
-					callRecord.setDeviceName(deviewname);
-					callRecord.setPhoneNumber(number);
-					callRecord.setCallStatus(newss);
-					if(runBack !=null){
-						runBack.run(callRecord);
-					}
-					//CallRecord callRecord = new CallRecord(number, date, duration,newss, name);
-					// 通知Handler
-					//Message msg = new Message();
-					//msg.obj = callRecord;
-					//mHandler.sendMessage(msg);
-					break;
+			//queryCallRecord();
+		}
+	}
+
+	public void queryCallRecord() {
+		Cursor cursor = mResolver.query(CallConstant.CONTENT_URI, new String[] {
+				CallConstant.NAME, CallConstant.DATE, CallConstant.DURAITON,
+				CallConstant.NUMBER, CallConstant.NEW }, null, null,"_id DESC LIMIT 1");
+		if (cursor != null) {
+			while (cursor.moveToNext()) {
+				String name = cursor.getString(cursor.getColumnIndex(CallConstant.NAME));
+				String date = cursor.getString(cursor.getColumnIndex(CallConstant.DATE));
+				String duration = cursor.getString(cursor.getColumnIndex(CallConstant.DURAITON));
+				String number = cursor.getString(cursor.getColumnIndex(CallConstant.NUMBER));
+				String newss = cursor.getString(cursor.getColumnIndex(CallConstant.NEW));
+				String deviewname = android.os.Build.MODEL;
+				String endTime = date+""+duration;
+				CallRecord callRecord = new CallRecord();
+				callRecord.setCallName(name);
+				callRecord.setCallStartTime(date);
+				callRecord.setCallStopTime(endTime);
+				callRecord.setDeviceName(deviewname);
+				callRecord.setPhoneNumber(number);
+				callRecord.setCallStatus(newss);
+				if(runBack !=null){
+					runBack.run(callRecord);
 				}
-				/*
-				 * 关闭游标，释放资源。否则下次查询游标仍然在原位置
-				 */
-				cursor.close();
+				//CallRecord callRecord = new CallRecord(number, date, duration,newss, name);
+				// 通知Handler
+				//Message msg = new Message();
+				//msg.obj = callRecord;
+				//mHandler.sendMessage(msg);
+				break;
 			}
+			/*
+			 * 关闭游标，释放资源。否则下次查询游标仍然在原位置
+			 */
+			cursor.close();
 		}
 	}
 }

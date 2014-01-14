@@ -70,6 +70,7 @@ public abstract class BaseSqlite {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		
 		} finally {
 			if(db !=null){
 				db.endTransaction();

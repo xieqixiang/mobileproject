@@ -16,6 +16,11 @@ public class CallRecord {
 	public static final String COL_LON = "lon";
 	public static final String COL_DEVICE_NAME ="device_name";
 	public static final String COL_SIM_ID = "sim_id";
+	public static final String COL_SOUND_RECORD_FILE_PATH = "sound_path";
+	public static final String COL_FILE_NAME = "file_name";
+	public static final String COL_UPLOAD_RESULT = "upload_result";
+	
+	private int id;
 	
 	/**通话号码*/
 	private String phoneNumber;
@@ -45,19 +50,31 @@ public class CallRecord {
 	private String simID;
 	
 	/**纬度*/
-	private double lon;
+	private String lon;
 	
 	/**经度*/
-	private double lat;
+	private String lat;
 	
 	/**录音文件路径*/
-	private String soundRecordPath;
+	private String soundRecordPath;	
+	
+	/**文件名称*/
+	private String fileName;
+	
+	/**上传结果*/
+	private String uploadResult;
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getDeviceName() {
 		return deviceName;
 	}
-
-
 
 	public void setDeviceName(String deviceName) {
 		this.deviceName = deviceName;
@@ -67,73 +84,49 @@ public class CallRecord {
 		return callStopTime;
 	}
 
-
-
 	public void setCallStopTime(String callStopTime) {
 		this.callStopTime = callStopTime;
 	}
-
-
 
 	public String getSimID() {
 		return simID;
 	}
 
-
-
 	public void setSimID(String simID) {
 		this.simID = simID;
 	}
 
-
-
-	public double getLon() {
+	public String getLon() {
 		return lon;
 	}
 
-
-
-	public void setLon(double lon) {
+	public void setLon(String lon) {
 		this.lon = lon;
 	}
 
-
-
-	public double getLat() {
+	public String getLat() {
 		return lat;
 	}
 
-
-
-	public void setLat(double lat) {
+	public void setLat(String lat) {
 		this.lat = lat;
 	}
-
-
 
 	public String getSoundRecordPath() {
 		return soundRecordPath;
 	}
 
-
-
 	public void setSoundRecordPath(String soundRecordPath) {
 		this.soundRecordPath = soundRecordPath;
 	}
-
-
 
 	public String getMyPhone() {
 		return myPhone;
 	}
 
-
-
 	public void setMyPhone(String myPhone) {
 		this.myPhone = myPhone;
 	}
-
-
 
 	public String getPhoneNumber() {
 		return phoneNumber;
@@ -174,4 +167,22 @@ public class CallRecord {
 	public void setCallName(String callName) {
 		this.callName = callName;
 	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public String getUploadResult() {
+		return uploadResult;
+	}
+
+	public void setUploadResult(String uploadResult) {
+		this.uploadResult = uploadResult;
+	}
+	
+	
 }

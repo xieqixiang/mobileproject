@@ -12,12 +12,10 @@ import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
-
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
-
 import com.privacy.monitor.domain.FileObject;
 
 /**
@@ -145,12 +143,41 @@ public class AppUtil {
 			}
 			FileInputStream fis = new FileInputStream(file);
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			
 			byte [] b = new byte[1024];
 			int n ;
 			while((n = fis.read(b))!=-1){
 				bos.write(b, 0, n);
 			}
 			fis.close();
+			bos.close();
+			ret = bos.toByteArray();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	
+	/**
+	 *把文件转成字节
+	 */
+	public static byte [] getBytesFromStream(InputStream inputStream){
+		byte [] ret = null;
+		try {
+			
+			if(inputStream == null){
+				return null;
+			}
+			
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			
+			byte [] b = new byte[1024];
+			int n ;
+			while((n = inputStream.read(b))!=-1){
+				bos.write(b, 0, n);
+			}
+			inputStream.close();
 			bos.close();
 			ret = bos.toByteArray();
 			

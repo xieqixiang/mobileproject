@@ -1,18 +1,13 @@
 package com.privacy.monitor.location;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-import com.privacy.monitor.R;
+import com.privacy.monitor.inte.RunBack;
 
 /**
  * 使用百度提供的SDK，获取当前位置信息
@@ -23,13 +18,14 @@ public class LocationMan {
      private MyLocationListener myLocationListener = new MyLocationListener();
      private String strAddress;
      private String strTime;
-     private TextView tvAddress;
+     //private TextView tvAddress;
      private ProgressBar pBar;
-     private Button getCurrentPosi;
-     private Activity context;
-     private boolean isCancel;
-
-     public void setIsCancel(boolean isCancel) {
+     //private Button getCurrentPosi;
+     private Context context;
+    // private boolean isCancel;
+    private RunBack runBack;
+     
+    /* public void setIsCancel(boolean isCancel) {
              this.isCancel = isCancel;
      }
 
@@ -39,9 +35,13 @@ public class LocationMan {
 
      public void setTvAddress(TextView tvAddress) {
              this.tvAddress = tvAddress;
-     }
+     }*/
 
-     public void setpBar(ProgressBar pBar) {
+     public void setRunBack(RunBack runBack) {
+		this.runBack = runBack;
+	}
+
+	public void setpBar(ProgressBar pBar) {
              this.pBar = pBar;
      }
 
@@ -62,7 +62,7 @@ public class LocationMan {
              return myLocationListener;
      }
 
-     public LocationMan(Activity context) {
+     public LocationMan(Context context) {
              this.context = context;
              mLocationClient = new LocationClient(context);
              mLocationClient.registerLocationListener(myLocationListener);
@@ -81,23 +81,20 @@ public class LocationMan {
                              mLocationClient.requestLocation();
                              return;
                      }
-                     pBar.setVisibility(View.GONE);
-                     // getCurrentPosi.setVisibility(View.VISIBLE);
-                     strAddress = location.getAddrStr();
-                     strTime = location.getTime();
-                     if (strAddress == null || strAddress.trim().equals("")) {
-                             Toast.makeText(context, "无法定位，请检查网络环境", Toast.LENGTH_SHORT).show();
-                     } else {
-                             if(!isCancel){
-                                     tvAddress.setVisibility(View.VISIBLE);
-                                     tvAddress.setText(strAddress);
-                                     getCurrentPosi.setText(context.getText(R.string.location));
-                                     mLocationClient.unRegisterLocationListener(myLocationListener);
-                                     mLocationClient.stop();
-                                     mLocationClient = null;
-                             }
-                             
+                     if(pBar !=null && pBar.getVisibility() == View.VISIBLE){
+                    	 pBar.setVisibility(View.GONE);
                      }
+                    if(runBack !=null && location !=null){
+                    	String [] locationInfo = {location.getLatitude()+"",location.getLongitude()+""};
+                    	runBack.run(locationInfo);
+                    }
+                     // getCurrentPosi.setVisibility(View.VISIBLE);
+                    // strAddress = location.getAddrStr();
+                     //strTime = location.getTime();
+                     
+                     mLocationClient.unRegisterLocationListener(myLocationListener);
+                     mLocationClient.stop();
+                     mLocationClient = null;
              }
 
              @Override
@@ -105,22 +102,22 @@ public class LocationMan {
                      if (poiLocation == null) {
                              return;
                      }
-                     pBar.setVisibility(View.GONE);
+                    // pBar.setVisibility(View.GONE);
                      // getCurrentPosi.setVisibility(View.VISIBLE);
-                     strAddress = poiLocation.getAddrStr();
-                     strTime = poiLocation.getTime();
-                     if (strAddress == null || strAddress.trim().equals("")) {
-                             Toast.makeText(context, "无法定位，请检查网络环境", Toast.LENGTH_SHORT).show();
-                     } else {
-                             if(!isCancel){
-                                     tvAddress.setVisibility(View.VISIBLE);
-                                     tvAddress.setText(strAddress);
-                                     getCurrentPosi.setText(context.getText(R.string.location));
-                                     mLocationClient.unRegisterLocationListener(myLocationListener);
-                                     mLocationClient.stop();
-                                     mLocationClient = null;
-                             }
-                     }
+                    // strAddress = poiLocation.getAddrStr();
+                     //strTime = poiLocation.getTime();
+                    // if (strAddress == null || strAddress.trim().equals("")) {
+                     //        Toast.makeText(context, "无法定位，请检查网络环境", Toast.LENGTH_SHORT).show();
+                    // } else {
+                    //         if(!isCancel){
+                     //                tvAddress.setVisibility(View.VISIBLE);
+                     //                tvAddress.setText(strAddress);
+                      //               getCurrentPosi.setText(context.getText(R.string.location));
+                      //               mLocationClient.unRegisterLocationListener(myLocationListener);
+                      //               mLocationClient.stop();
+                      //               mLocationClient = null;
+                      //       }
+                    // }
              }
      }
 

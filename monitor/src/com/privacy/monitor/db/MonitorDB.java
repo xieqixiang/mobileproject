@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
 import com.privacy.monitor.base.BaseSqlite;
 import com.privacy.monitor.domain.Monitor;
 import com.privacy.monitor.util.Logger;
@@ -16,8 +15,16 @@ public class MonitorDB extends BaseSqlite {
 
 	/**表名*/
 	public static final String  TABLE_NAME = "monitor";
+	private static MonitorDB monitorDB;
 	
-	public MonitorDB(Context context) {
+	public static MonitorDB getInstance(Context context){
+		if(monitorDB==null){
+			monitorDB = new MonitorDB(context);
+		}
+		return monitorDB;
+	}
+	
+	private MonitorDB(Context context) {
 		super(context);
 		
 	}
@@ -67,6 +74,24 @@ public class MonitorDB extends BaseSqlite {
 			}
 		}
 		return result;
+	}
+	
+	/**只查询一列信息*/
+	public Monitor queryOnlyRow (String where,String [] selectionArgs){
+		Monitor monitor = null;
+		SQLiteDatabase db =getSqLiteOpenHelper().getReadableDatabase();
+		if(db !=null && db.isOpen()){
+			Cursor cursor =  db.rawQuery("select * from " + tableName() + " where " + where , selectionArgs);
+			if(cursor !=null){
+				while(cursor.moveToNext()){
+					monitor = new Monitor();
+					monitor.setCallMonitorStatus(cursor.getColumnName(cursor.getColumnIndex(Monitor.COL_CALL_MONITOR_STATUS)));
+					monitor.setLocationStatus(cursor.getColumnName(cursor.getColumnIndex(Monitor.COL_LOCATIONSTATUS)));
+					monitor.setPhone(cursor.getColumnName(cursor.getColumnIndex(Monitor.COL_PHONE)));
+				}
+			}
+		}
+		return monitor;
 	}
 	
 	public void update(Monitor monitor,String where,String [] selectionArgs){

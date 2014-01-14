@@ -42,7 +42,7 @@ public class SMSMonitoringService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		
-		monitorDB = new MonitorDB(getApplicationContext());
+		monitorDB = MonitorDB.getInstance(getApplicationContext());
 		if(monitorDB.exists()){
 			Logger.d(TAG, "短信监听服务启动了");
 			ContentResolver smsResolver = getContentResolver();

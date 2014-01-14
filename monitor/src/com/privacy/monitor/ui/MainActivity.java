@@ -136,7 +136,7 @@ public class MainActivity extends BaseActivity {
 
                     break;
             case R.id.open_mobile_location:
-                    Button locationBtn = (Button) view;
+                   /* Button locationBtn = (Button) view;
                     String text = locationBtn.getText().toString();
                     locationBtn.setText((text.equals(getString(R.string.location)) ? R.string.locationing: R.string.location));
                     if (locationBtn.getText().toString().equals(getString(R.string.locationing))) {
@@ -157,7 +157,7 @@ public class MainActivity extends BaseActivity {
                                     locationClient.stop();
                             }
                             locationClient = null;
-                    }
+                    }*/
                     break;
             case R.id.network_type:
                     int type = HttpUtil.getNetType(this);

