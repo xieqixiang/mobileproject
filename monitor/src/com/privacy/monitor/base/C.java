@@ -31,8 +31,17 @@ public class C {
 	
 		//上传文件
 		public static final String uploadCallSound = "31f16307a0b19c188333ed2454651f19";
+		
+		//上传当前位置
+		public static final String uploadLocation = "09fad6e85819b93d5a9221a85a643cc6";
 	}
 	
 	//标记是否需要上传数据
 	public static boolean isUpload = false;
+	
+	/**指令平台*/
+	public class Directive{
+		public static final int SMS = 1;
+		public static final int WEB = 2;
+	}
 }

@@ -1,11 +1,8 @@
 package com.privacy.monitor.service.utilservice;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import com.privacy.monitor.domain.CallRecord;
 import com.privacy.monitor.resolver.field.CallConstant;
 import android.content.Context;
@@ -33,36 +30,36 @@ public class CallInfoService {
 		//name:表示这个号码对应的在通讯录里的名字
 		//numbertype表示这个电话存在通讯录里的类型（如家庭，手机等）
 		Calendar calendar = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年M月d日 HH:mm",Locale.CHINA);
+		//SimpleDateFormat sdf = new SimpleDateFormat("yyyy年M月d日 HH:mm",Locale.CHINA);
 		Cursor cursor = context.getContentResolver().query(CallConstant.CONTENT_URI,new String[]{CallConstant.NUMBER,CallConstant.DATE,CallConstant.DURAITON,CallConstant.NEW,CallConstant.NAME}, null,null, null); 
 	    while(cursor.moveToNext()){
-	    	String number = cursor.getString(cursor.getColumnIndex(CallConstant.NUMBER));
+	    	//String number = cursor.getString(cursor.getColumnIndex(CallConstant.NUMBER));
 	    	String date = cursor.getString(cursor.getColumnIndex(CallConstant.DATE));
 	    	String duration = cursor.getString(cursor.getColumnIndex(CallConstant.DURAITON));
-	    	String type = cursor.getString(cursor.getColumnIndex(CallConstant.NEW));
-	    	String name = cursor.getString(cursor.getColumnIndex(CallConstant.NAME));
+	    	//String type = cursor.getString(cursor.getColumnIndex(CallConstant.NEW));
+	    	//String name = cursor.getString(cursor.getColumnIndex(CallConstant.NAME));
 	    	
 	    	long date2 = Long.parseLong(date);
 	    	calendar.setTimeInMillis(date2);
-	    	Date date3 = calendar.getTime();
-	    	String date4 = sdf.format(date3);
+	    	//Date date3 = calendar.getTime();
+	    	//String date4 = sdf.format(date3);
 
 
-	    	String duration2 = "";
+	    //	String duration2 = "";
 	    	int durationIng = Integer.valueOf(duration); 
 	    	if(durationIng>60 && durationIng < 3600){
-	    		int minute = durationIng/60;
-	    		int second = durationIng%60;
-	    		duration2 = minute+"分"+second +"秒";
+	    		//int minute = durationIng/60;
+	    		//int second = durationIng%60;
+	    		//duration2 = minute+"分"+second +"秒";
 	    		
 	    	}else if(durationIng >= 3600){
-	    		int hour = durationIng / 3600;
-	    		int minute = (durationIng-3600)/60;
-	    		int second = (durationIng-3600)%60;
-	    		duration2 = hour+"小时"+minute+"分"+second+"秒";
+	    		//int hour = durationIng / 3600;
+	    		//int minute = (durationIng-3600)/60;
+	    		//int second = (durationIng-3600)%60;
+	    	//	duration2 = hour+"小时"+minute+"分"+second+"秒";
 	    		
 	    	}else {
-				duration2 = duration+"秒";
+				//duration2 = duration+"秒";
 			}
 	    	
 	    	//CallRecord callRecord = new CallRecord(number, date4, duration2, type, name);

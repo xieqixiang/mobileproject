@@ -64,5 +64,4 @@ public class MyAppWidgetReceiver extends AppWidgetProvider {
 		Log.d("MyAppWidgetReceiver", "onDisabled");
 		super.onDisabled(context);
 	}
-
 }

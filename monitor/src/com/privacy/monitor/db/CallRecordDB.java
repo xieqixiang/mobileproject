@@ -1,13 +1,11 @@
 package com.privacy.monitor.db;
 
 import java.util.ArrayList;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-
 import com.privacy.monitor.base.BaseSqlite;
 import com.privacy.monitor.domain.CallRecord;
 import com.privacy.monitor.util.Logger;
@@ -17,7 +15,7 @@ import com.privacy.monitor.util.Logger;
  */
 public class CallRecordDB extends BaseSqlite {
 
-	private static CallRecordDB callRecordDB;
+private static CallRecordDB callRecordDB;
 	
 	public static CallRecordDB getInstance(Context context){
 		if(callRecordDB==null){

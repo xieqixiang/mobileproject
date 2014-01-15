@@ -6,16 +6,12 @@ import com.baidu.location.LocationClient;
 import com.privacy.monitor.R;
 import com.privacy.monitor.base.BaseActivity;
 import com.privacy.monitor.base.C;
-import com.privacy.monitor.location.LocationMan;
 import com.privacy.monitor.location.LocationMan.MyLocationListener;
 import com.privacy.monitor.resolver.CallObserver;
 import com.privacy.monitor.resolver.SMSObserver;
-import com.privacy.monitor.resolver.field.CallConstant;
-import com.privacy.monitor.resolver.field.SMSConstant;
 import com.privacy.monitor.service.CallMonitoringService;
 import com.privacy.monitor.util.AppUtil;
 import com.privacy.monitor.util.HttpUtil;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -26,8 +22,6 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends BaseActivity {
@@ -35,9 +29,9 @@ public class MainActivity extends BaseActivity {
 	private SMSObserver observer;
     private CallObserver callObserver;
     private MediaRecorder mediaRecorder;
-    private ProgressBar pb;
-    private TextView tvAddress;
-    private LocationMan locationMan;
+   // private ProgressBar pb;
+   // private TextView tvAddress;
+    //private LocationMan locationMan;
     private LocationClient locationClient;
     private MyLocationListener locationListener;
     private EditText edMessage;
@@ -51,32 +45,27 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initData() {
-            pb = getView(R.id.pb);
-            tvAddress = getView(R.id.locaiton_address);
-            edMessage = getView(R.id.editor_send_message);
+          //  pb = getView(R.id.pb);
+         //   tvAddress = getView(R.id.locaiton_address);
+           // edMessage = getView(R.id.editor_send_message);
 
             Intent intent = new Intent(this, CallMonitoringService.class);
             startService(intent);
 
-            ContentResolver resolver = getContentResolver();
-           // observer = new SMSObserver(resolver, new SMSHandler(this),this);
+            //ContentResolver resolver = getContentResolver();
+           // observer = new SMSObserver(resolver, this);
 
             // 注册观察者类时得到回调数据确定一个给定的内容URI变化。
-            resolver.registerContentObserver(SMSConstant.CONTENT_URI, true,observer);
+          //  resolver.registerContentObserver(SMSConstant.CONTENT_URI, true,observer);
 
-           // callObserver = new CallObserver(resolver, new CallHandler(this));
-            resolver.registerContentObserver(CallConstant.CONTENT_URI, true,callObserver);
+           //callObserver = new CallObserver(resolver, new CallHandler(this));
+           // resolver.registerContentObserver(CallConstant.CONTENT_URI, true,callObserver);
 
             Log.d("MainActivity","initData");
-            try {
-                    recordCallComment();
-            } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-            }
+            
 
-            locationMan = new LocationMan(this);
-            locationClient = locationMan.getmLocationClient();
+            //locationMan = new LocationMan(this);
+          //  locationClient = locationMan.getmLocationClient();
     }
 
     @Override

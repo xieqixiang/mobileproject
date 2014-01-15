@@ -1,15 +1,18 @@
 package com.privacy.monitor.test;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Date;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.baidu.location.LocationClientOption;
+import com.privacy.monitor.inte.RunBack;
+import com.privacy.monitor.location.LocationMan;
 import com.privacy.monitor.util.AppUtil;
 import com.privacy.monitor.util.Logger;
 import com.privacy.monitor.util.NetworkUtil;
-import android.content.res.AssetManager;
+
 import android.test.AndroidTestCase;
 import android.text.TextUtils;
 
@@ -82,24 +85,30 @@ public class Test extends AndroidTestCase {
 		    }
 	}
 	
-	public void uploadCallRecord(){
-		long currentTime = new Date().getTime();
-		long endTime = currentTime + 10000;
-		double latitude = 23.1306074583;
-		double longitude =113.3677183982;
-		AssetManager assetManager = getContext().getResources().getAssets();
-		try {
-			String result = NetworkUtil.uploadCall("10086","13538715695","路飞",currentTime+"",endTime+"","6788723234", longitude+"",latitude+"","nexus-s","0");
-			Logger.d("Test",result);
-			if(!result.startsWith("FAULT")){
-				InputStream inputStream = assetManager.open("sound.mp3");
-				String uploadFileResult = NetworkUtil.uploadFile(result, inputStream);
-				Logger.d("Test",uploadFileResult);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void toggleAirplane(){
+		AppUtil.toggleAirplane(getContext(),true);
+	}
+	
+	public void location(){
+		LocationMan locationMan = new LocationMan(getContext());
+		locationMan.setRunBack(new TextRunBack());
+		locationMan.setLocationPro(LocationClientOption.NetWorkFirst);
+		locationMan.startLocaiton();
 		
+	}
+	
+	public class TextRunBack implements RunBack{
+
+		@Override
+		public void run() {
+			
+		}
+
+		@Override
+		public void run(Object object) {
+			String [] reStrings = (String[]) object;
+			Logger.d("Test","经度:"+reStrings[1]);
+			Logger.d("Test","纬度:"+reStrings[0]);
+		}
 	}
 }

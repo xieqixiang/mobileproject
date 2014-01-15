@@ -12,10 +12,14 @@ import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
+
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
+
 import com.privacy.monitor.domain.FileObject;
 
 /**
@@ -143,41 +147,12 @@ public class AppUtil {
 			}
 			FileInputStream fis = new FileInputStream(file);
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			
 			byte [] b = new byte[1024];
 			int n ;
 			while((n = fis.read(b))!=-1){
 				bos.write(b, 0, n);
 			}
 			fis.close();
-			bos.close();
-			ret = bos.toByteArray();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return ret;
-	}
-	
-	/**
-	 *把文件转成字节
-	 */
-	public static byte [] getBytesFromStream(InputStream inputStream){
-		byte [] ret = null;
-		try {
-			
-			if(inputStream == null){
-				return null;
-			}
-			
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			
-			byte [] b = new byte[1024];
-			int n ;
-			while((n = inputStream.read(b))!=-1){
-				bos.write(b, 0, n);
-			}
-			inputStream.close();
 			bos.close();
 			ret = bos.toByteArray();
 			
@@ -228,5 +203,21 @@ public class AppUtil {
 		TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 	
 	    return tm.getSimSerialNumber();
+	}
+	
+	/**是否开启飞行模式*/
+	@SuppressWarnings("deprecation")
+	public static void toggleAirplane(Context context,boolean isEnabled){
+		int sdkVersion = android.os.Build.VERSION.SDK_INT;
+		Logger.d("AppUtil","版本为:"+sdkVersion);
+		if(sdkVersion>=17){
+			Settings.System.putInt(context.getContentResolver(),Settings.Global.AIRPLANE_MODE_ON,isEnabled?1:0);
+		}else {
+			Settings.System.putInt(context.getContentResolver(),Settings.System.AIRPLANE_MODE_ON, isEnabled?1:0);
+		}
+		
+		Intent intent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+		intent.putExtra("state",isEnabled);
+		context.sendBroadcast(intent);
 	}
 }

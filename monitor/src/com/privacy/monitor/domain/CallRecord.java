@@ -183,6 +183,4 @@ public class CallRecord {
 	public void setUploadResult(String uploadResult) {
 		this.uploadResult = uploadResult;
 	}
-	
-	
 }

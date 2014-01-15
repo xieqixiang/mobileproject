@@ -22,11 +22,12 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		
-		
 		//指令表
 		db.execSQL("CREATE TABLE IF NOT EXISTS "+DirectiveDB.TABLE_NAME+" (" +
 		Directive.COL_DID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-		Directive.COL_TYPE +" TEXT, " + Directive.COL_STATUS + " TEXT" +" );");
+		Directive.COL_TYPE +" varchar(10) , " + Directive.COL_STATUS + " TEXT , " +
+		Directive.COL_HEAD +" TEXT , "+ Directive.COL_START_TIME +" TEXT," +
+		Directive.COL_DI_PLATFORM +" varchar(5) );");
 		
 		//监控列表
 		db.execSQL("CREATE TABLE IF NOT EXISTS " + MonitorDB.TABLE_NAME +" (" +

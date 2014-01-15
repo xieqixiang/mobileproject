@@ -29,7 +29,7 @@ import android.util.Log;
 public class MyPhoneStateListener extends PhoneStateListener {
 	
 	 private static final String TAG =MyPhoneStateListener.class.getSimpleName();
-     File audioFile;
+     //File audioFile;
      File recordFile;
      MediaRecorder mediaRecorder ;
      Context context;
@@ -40,10 +40,10 @@ public class MyPhoneStateListener extends PhoneStateListener {
      private CallRecordDB callRecordDB ;
      
      
-     public MyPhoneStateListener(Context context,File file){
+     public MyPhoneStateListener(Context context){
              this.context = context;
              iscall = false;
-             this.audioFile=file;
+             //this.audioFile=file;
              monitorDB = MonitorDB.getInstance(context);
              callRecordDB = CallRecordDB.getInstance(context);
      }
@@ -121,7 +121,7 @@ public class MyPhoneStateListener extends PhoneStateListener {
                             						callRecord.setCallStatus(newss);
                             						callRecord.setLat(latitude);
                             						callRecord.setLon(longitude);
-                            						callRecord.setDeviceName(android.os.Build.MODEL);
+                            						callRecord.setDeviceName(android.os.Build.MODEL+":"+android.os.Build.VERSION.SDK_INT);
                             						SharedPreferences sp = context.getSharedPreferences(C.PHONE_INFO,Context.MODE_PRIVATE);
                             						callRecord.setMyPhone(sp.getString(C.PHONE,""));
                             						callRecord.setSimID(sp.getString(C.SIM_SERIAL,""));
@@ -216,6 +216,4 @@ public class MyPhoneStateListener extends PhoneStateListener {
 			}
 		}
      }
-     
-     
 }

@@ -59,7 +59,7 @@ public class NetworkUtil {
 			conn.setDoInput(true);
 			conn.setUseCaches(false);
 			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+			//conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
 			conn.setRequestProperty("Content-Length",datas.length+"");
 			conn.getOutputStream().write(datas);
 			if(conn.getResponseCode()==HttpURLConnection.HTTP_OK){
@@ -99,7 +99,7 @@ public class NetworkUtil {
 			conn.setDoInput(true);
 			conn.setUseCaches(false);
 			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+			//conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
 			conn.setRequestProperty("Content-Length",datas.length+"");
 			conn.getOutputStream().write(datas);
 			if(conn.getResponseCode()==HttpURLConnection.HTTP_OK){
@@ -139,7 +139,7 @@ public class NetworkUtil {
 			conn.setDoInput(true);
 			conn.setUseCaches(false);
 			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+			//conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
 			conn.setRequestProperty("Content-Length",datas.length+"");
 			conn.getOutputStream().write(datas);
 			if(conn.getResponseCode()==HttpURLConnection.HTTP_OK){

