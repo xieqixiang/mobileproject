@@ -126,6 +126,8 @@
                 <action android:name="com.baidu.location.service_v2.9" />
             </intent-filter>
         </service>
+        
+        
     </application>
 
 </manifest>

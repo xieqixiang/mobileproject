@@ -57,7 +57,7 @@ public class SMSObserver extends ContentObserver {
 	@Override
 	public void onChange(boolean selfChange) {
 		super.onChange(selfChange);
-		Logger.d("SMSObserver","selfChange:"+selfChange);
+		Logger.d("SMSObserver","selfChange11111111111111111111:"+selfChange);
 		if(mResolver!=null && context !=null && !selfChange){
 			Cursor smsCursor = mResolver.query(SMSConstant.CONTENT_URI, // 查询的URI,
 					PROJECTION, // 需要取得的列 ,

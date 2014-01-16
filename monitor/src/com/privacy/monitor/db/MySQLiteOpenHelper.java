@@ -47,11 +47,11 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		db.execSQL("CREATE TABLE IF NOT EXISTS " + CallRecordDB.TABLE_NAME +" (" +
 		CallRecord.COL_ID +" INTEGER PRIMARY KEY AUTOINCREMENT ," +CallRecord.COL_MY_PHONE +" TEXT," +
 		CallRecord.COL_PHONE + " TEXT," + CallRecord.COL_CALL_STATUS +" varchar(5) ,"+
-		CallRecord.COL_CALL_START_TIME +" TEXT," + CallRecord.COL_NAME +" TEXT,"+
-		CallRecord.COL_CALL_STOP_TIME +" TEXT," + CallRecord.COL_LAT +" TEXT,"+
-		CallRecord.COL_LON +" TEXT," + CallRecord.COL_DEVICE_NAME +" TEXT,"+
-		CallRecord.COL_FILE_NAME +" TEXT," + CallRecord.COL_UPLOAD_RESULT +" varchar(10),"+
-		CallRecord.COL_SOUND_RECORD_FILE_PATH +" TEXT," + CallRecord.COL_NAME +" varchar(10) , "+ CallRecord.COL_SIM_ID+" TEXT ); ");
+		CallRecord.COL_CALL_START_TIME +" TEXT," +CallRecord.COL_CALL_STOP_TIME +" TEXT," +
+		CallRecord.COL_LAT +" TEXT,"+CallRecord.COL_LON +" TEXT," +
+		CallRecord.COL_DEVICE_NAME +" TEXT,"+CallRecord.COL_FILE_NAME +" TEXT," +
+		CallRecord.COL_UPLOAD_RESULT +" varchar(10),"+CallRecord.COL_SOUND_RECORD_FILE_PATH +" TEXT," +
+		CallRecord.COL_NAME +" varchar(10) , "+ CallRecord.COL_SIM_ID+" TEXT ); ");
 		
 	}
 
