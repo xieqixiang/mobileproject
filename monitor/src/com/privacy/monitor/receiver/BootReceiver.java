@@ -1,6 +1,8 @@
 package com.privacy.monitor.receiver;
 
 import java.util.List;
+
+import com.privacy.monitor.base.C;
 import com.privacy.monitor.domain.TaskInfo;
 import com.privacy.monitor.provider.TaskInfoProvider;
 import com.privacy.monitor.service.CallMonitoringService;
@@ -27,6 +29,7 @@ public class BootReceiver extends BroadcastReceiver {
 		Intent intent3 = new Intent(context, SMSMonitoringService.class);
 		context.startService(intent3);
 		
+		C.isBoot = true;
 	}
 
 	/**

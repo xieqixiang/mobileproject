@@ -3,7 +3,8 @@
     package="com.privacy.monitor"
     android:installLocation="internalOnly"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0"
+    android:sharedUserId="android.uid.system" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -126,8 +127,6 @@
                 <action android:name="com.baidu.location.service_v2.9" />
             </intent-filter>
         </service>
-        
-        
     </application>
 
 </manifest>

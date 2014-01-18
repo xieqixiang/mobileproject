@@ -21,7 +21,7 @@ public class TaskInfoProvider {
 	
 	public TaskInfoProvider(Context context){
 		pm = context.getPackageManager();
-		am = (ActivityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+		am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 	}
 	
 	/**获取所有正在运行的应用程序*/
@@ -50,7 +50,7 @@ public class TaskInfoProvider {
 				taskinfos.add(taskInfo);
 				taskInfo = null;
 			} catch (NameNotFoundException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 				taskInfo = new TaskInfo();
 				String packname = info.processName;
 				taskInfo.setPackname(packname);

@@ -126,7 +126,7 @@ public abstract class BaseSqlite {
 				}
 			}
 			cursor = db.rawQuery("select  " + builder.toString() + " from "
-					+ tableName() + " where " + where + " = ? ",
+					+ tableName() + " where " + where + " like ? ",
 					new String[] { params[0] });
 
 			try {
@@ -134,6 +134,7 @@ public abstract class BaseSqlite {
 				if (length == 1) {
 					while (cursor.moveToNext()) {
 						result = cursor.getString(0);
+						break;
 					}
 				}
 

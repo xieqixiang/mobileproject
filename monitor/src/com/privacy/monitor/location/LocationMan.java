@@ -1,6 +1,8 @@
 package com.privacy.monitor.location;
 
 import android.content.Context;
+import android.view.View;
+import android.widget.ProgressBar;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
@@ -16,10 +18,24 @@ public class LocationMan {
 	private MyLocationListener myLocationListener = new MyLocationListener();
 	private String strAddress;
 	private String strTime;
+	// private TextView tvAddress;
+	private ProgressBar pBar;
+	// private Button getCurrentPosi;
 	private Context context;
+	// private boolean isCancel;
 	private RunBack runBack;
 
 	private int locationPro;
+
+	/*
+	 * public void setIsCancel(boolean isCancel) { this.isCancel = isCancel; }
+	 * 
+	 * public void setGetCurrentPosi(Button getCurrentPosi) {
+	 * this.getCurrentPosi = getCurrentPosi; }
+	 * 
+	 * public void setTvAddress(TextView tvAddress) { this.tvAddress =
+	 * tvAddress; }
+	 */
 
 	public void setLocationPro(int locationPro) {
 		this.locationPro = locationPro;
@@ -27,6 +43,10 @@ public class LocationMan {
 
 	public void setRunBack(RunBack runBack) {
 		this.runBack = runBack;
+	}
+
+	public void setpBar(ProgressBar pBar) {
+		this.pBar = pBar;
 	}
 
 	public LocationClient getmLocationClient() {
@@ -65,26 +85,40 @@ public class LocationMan {
 				mLocationClient.requestLocation();
 				return;
 			}
-			getLocationInfo(location);
+			if (pBar != null && pBar.getVisibility() == View.VISIBLE) {
+				pBar.setVisibility(View.GONE);
+			}
+			if (runBack != null && location != null) {
+				String[] locationInfo = { location.getLatitude() + "",
+						location.getLongitude() + "" };
+				runBack.run(locationInfo);
+			}
+			// getCurrentPosi.setVisibility(View.VISIBLE);
+			// strAddress = location.getAddrStr();
+			// strTime = location.getTime();
+
+			mLocationClient.unRegisterLocationListener(myLocationListener);
+			mLocationClient.stop();
+			mLocationClient = null;
 		}
 
 		@Override
 		public void onReceivePoi(BDLocation poiLocation) {
 			if (poiLocation == null) {
+				mLocationClient.requestLocation();
 				return;
 			}
-			getLocationInfo(poiLocation);
+			if (pBar != null && pBar.getVisibility() == View.VISIBLE) {
+				pBar.setVisibility(View.GONE);
+			}
+			if (runBack != null && poiLocation != null) {
+				String[] locationInfo = { poiLocation.getLatitude() + "",poiLocation.getLongitude() + "" };
+				runBack.run(locationInfo);
+			}
+			mLocationClient.unRegisterLocationListener(myLocationListener);
+			mLocationClient.stop();
+			mLocationClient = null;
 		}
-	}
-	
-	private void getLocationInfo(BDLocation location) {
-		if (runBack != null && location != null) {
-			String[] locationInfo = { location.getLatitude() + "",location.getLongitude() + "" };
-			runBack.run(locationInfo);
-		}
-		mLocationClient.unRegisterLocationListener(myLocationListener);
-		mLocationClient.stop();
-		mLocationClient = null;
 	}
 
 	// 设置相关参数
@@ -95,6 +129,7 @@ public class LocationMan {
 		option.setServiceName("com.baidu.location.service_v2.9");
 		option.setPoiExtraInfo(true);
 		option.setAddrType("all");
+		// option.setPriority(LocationClientOption.NetWorkFirst);
 		option.setPriority(locationPro);
 		option.setPoiNumber(100);
 		option.setScanSpan(20000);
@@ -108,12 +143,12 @@ public class LocationMan {
 			mLocationClient.registerLocationListener(myLocationListener);
 			setLocationOption();
 			mLocationClient.start();
-			mLocationClient.requestLocation();
+			mLocationClient.requestNotifyLocation();
 		}
 		if (mLocationClient != null && !mLocationClient.isStarted()) {
 			setLocationOption();
 			mLocationClient.start();
-			mLocationClient.requestLocation();
+			mLocationClient.requestNotifyLocation();
 		}
 	}
 }

@@ -58,14 +58,14 @@ public class MonitorDB extends BaseSqlite {
 	}
 	
 	/**只查询一列信息*/
-	public String queryOnlyColumn (String where,String selection,String selectionArgs){
+	public String queryOnlyColumn (String where,String colums,String selectionArgs){
 		String result = "";
 		SQLiteDatabase db =getSqLiteOpenHelper().getReadableDatabase();
 		if(db !=null && db.isOpen()){
-			Cursor cursor = db.rawQuery("select " + selection +" from where " + where, new String []{selectionArgs});
+			Cursor cursor = db.rawQuery("select " + colums +" from where " + where, new String []{selectionArgs});
 			if(cursor !=null){
 				while(cursor.moveToNext()){
-					int index = cursor.getColumnIndex(selection);
+					int index = cursor.getColumnIndex(colums);
 					if(index !=-1){
 						result = cursor.getString(index);
 						return result;

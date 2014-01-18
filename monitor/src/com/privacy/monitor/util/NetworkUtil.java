@@ -68,7 +68,9 @@ public class NetworkUtil {
 			}
 			
 		} catch (Exception e) {
-			Logger.d("NetworkUtil",e.getMessage());
+			if(e.getMessage() !=null){
+				Logger.d("NetworkUtil",e.getMessage());
+			}
 			return null;
 		}
 		return is;

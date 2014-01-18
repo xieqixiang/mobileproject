@@ -63,6 +63,7 @@ public class CallMonitoringService extends Service {
 			CallRecord callRecord = (CallRecord) object;
 			SharedPreferences sp = getApplicationContext().getSharedPreferences(C.PHONE_INFO,Context.MODE_PRIVATE);
 			callRecord.setSimID(sp.getString(C.SIM_SERIAL,""));
+			
 		}
     }
 }

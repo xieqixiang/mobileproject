@@ -2,6 +2,7 @@ package com.privacy.monitor.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -54,14 +55,38 @@ public class DirectiveDB extends BaseSqlite {
 	public void update(String set,String where,String [] selectionArgs){
 		MySQLiteOpenHelper mHelper = getSqLiteOpenHelper();
 		SQLiteDatabase db = mHelper.getWritableDatabase();
-		try {
-			db.beginTransaction();
-			db.execSQL("update " + tableName() +" set " + set +" where " + where, selectionArgs);
-			db.setTransactionSuccessful();
-		} catch (SQLException e) {
-			Logger.e("DirectiveDB",e.getMessage());
-		}finally{
-			db.endTransaction();
+		if(db !=null && db.isOpen()){
+			try {
+				db.beginTransaction();
+				db.execSQL("update " + tableName() +" set " + set +" where " + where, selectionArgs);
+				db.setTransactionSuccessful();
+			} catch (SQLException e) {
+				Logger.e("DirectiveDB",e.getMessage());
+			}finally{
+				db.endTransaction();
+			}
 		}
+		
+	}
+	
+	public Directive queryDir(String where, String[] selectionArgs,String[] colums){
+		MySQLiteOpenHelper sLiteOpenHelper = getSqLiteOpenHelper();
+		SQLiteDatabase db = sLiteOpenHelper.getReadableDatabase();
+		Directive directive =null;
+		
+		if(db !=null && db.isOpen()){
+			Cursor cursor= db.query(TABLE_NAME,colums,where,selectionArgs, null, null, null);
+			if(cursor !=null){
+				while(cursor.moveToNext()){
+					directive = new Directive();
+					String startTime = cursor.getColumnName(cursor.getColumnIndex(Directive.COL_START_TIME));
+					directive.setDirStartTime(startTime);
+					String status = cursor.getColumnName(cursor.getColumnIndex(Directive.COL_STATUS));
+					directive.setDirStatus(status);
+					break;
+				}
+			}
+		}
+		return directive;
 	}
 }

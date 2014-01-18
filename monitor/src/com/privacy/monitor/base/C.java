@@ -5,6 +5,9 @@ package com.privacy.monitor.base;
  */
 public class C {
 	
+	public static boolean isRecorder;
+	public static boolean isBoot;
+	
 	public static final int CALL_RECORD =1;
 	public static final int MESSAGE_RECORD = 2;
 	
@@ -19,6 +22,8 @@ public class C {
 	public static final String PHONE = "phone";
 	
 	public static final String CRON_ACTION = "com.privacy.monitor.cron";
+	
+	public static final String ENV_ACTION = "com.privacy.monitor.sr";
 	
 	public class RequestMethod{
 		//上传短信信息

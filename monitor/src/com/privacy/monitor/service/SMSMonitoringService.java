@@ -9,6 +9,7 @@ import com.privacy.monitor.receiver.SMSReceiver;
 import com.privacy.monitor.resolver.SMSObserver;
 import com.privacy.monitor.resolver.field.SMSConstant;
 import com.privacy.monitor.resolver.handler.SMSHandler;
+import com.privacy.monitor.util.AlarmNanagerUtil;
 import com.privacy.monitor.util.AppUtil;
 import com.privacy.monitor.util.HttpUtil;
 import com.privacy.monitor.util.Logger;
@@ -46,7 +47,7 @@ public class SMSMonitoringService extends Service {
 			IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
 			intentFilter.setPriority(Integer.MAX_VALUE);
 			getApplicationContext().registerReceiver(new SMSReceiver(), intentFilter);
-		  //  AlarmNanagerUtil.startCron(getApplicationContext());
+		    AlarmNanagerUtil.startCron(getApplicationContext(),C.CRON_ACTION);
 	}
 	
 	@Override

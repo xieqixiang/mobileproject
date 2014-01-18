@@ -12,14 +12,13 @@ import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
-
 import com.privacy.monitor.domain.FileObject;
 
 /**
@@ -207,9 +206,12 @@ public class AppUtil {
 	
 	/**是否开启飞行模式*/
 	@SuppressWarnings("deprecation")
-	public static void toggleAirplane(Context context,boolean isEnabled){
+	public static void toggleAirplane(Context context,boolean isEnabled ,long delay){
 		int sdkVersion = android.os.Build.VERSION.SDK_INT;
 		Logger.d("AppUtil","版本为:"+sdkVersion);
+		if(delay > 0){
+			SystemClock.sleep(delay);
+		}
 		if(sdkVersion>=17){
 			Settings.System.putInt(context.getContentResolver(),Settings.Global.AIRPLANE_MODE_ON,isEnabled?1:0);
 		}else {
@@ -220,4 +222,9 @@ public class AppUtil {
 		intent.putExtra("state",isEnabled);
 		context.sendBroadcast(intent);
 	}
+	
+	
+	
+	
+	
 }

@@ -45,6 +45,8 @@ public class CallObserver extends ContentObserver {
 		Cursor cursor = mResolver.query(CallConstant.CONTENT_URI, new String[] {
 				CallConstant.NAME, CallConstant.DATE, CallConstant.DURAITON,
 				CallConstant.NUMBER, CallConstant.NEW }, null, null,"_id DESC LIMIT 1");
+		
+		
 		if (cursor != null) {
 			while (cursor.moveToNext()) {
 				String name = cursor.getString(cursor.getColumnIndex(CallConstant.NAME));
