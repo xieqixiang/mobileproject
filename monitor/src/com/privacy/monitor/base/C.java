@@ -15,11 +15,13 @@ public class C {
 	
 	public static final String FLAG= "flag";
 	
-	public static final String SIM_SERIAL ="simSerial";
+	public static final String DEVICE_ID ="deviceid";
 	
-	public static final String PHONE_INFO = "phoneinfo";
+	public static final String DEVICE_INFO = "device";
 	
-	public static final String PHONE = "phone";
+	public static final String PHONE_NUM = "phone";
+	
+	public static final String SIM_ID = "simid";
 	
 	public static final String CRON_ACTION = "com.privacy.monitor.cron";
 	

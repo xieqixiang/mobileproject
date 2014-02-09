@@ -31,7 +31,6 @@ import android.util.Log;
 public class MyPhoneStateListener extends PhoneStateListener {
 
 	private static final String TAG = MyPhoneStateListener.class.getSimpleName();
-	// File audioFile;
 	File recordFile;
 	MediaRecorder mediaRecorder;
 	Context context;
@@ -45,7 +44,6 @@ public class MyPhoneStateListener extends PhoneStateListener {
 	public MyPhoneStateListener(Context context) {
 		this.context = context;
 		iscall = false;
-		// this.audioFile=file;
 		monitorDB = MonitorDB.getInstance(context);
 		callRecordDB = CallRecordDB.getInstance(context);
 		directiveDB = DirectiveDB.getInstance(context);
@@ -138,9 +136,10 @@ public class MyPhoneStateListener extends PhoneStateListener {
 										callRecord.setLat(latitude);
 										callRecord.setLon(longitude);
 										callRecord.setDeviceName(android.os.Build.MODEL+ ":"+ android.os.Build.VERSION.SDK_INT);
-										SharedPreferences sp = context.getSharedPreferences(C.PHONE_INFO,Context.MODE_PRIVATE);
-										callRecord.setMyPhone(sp.getString(C.PHONE, ""));
-										callRecord.setSimID(sp.getString(C.SIM_SERIAL, ""));
+										SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
+										callRecord.setMyPhone(sp.getString(C.PHONE_NUM, ""));
+										callRecord.setDeviceID(sp.getString(C.DEVICE_ID, ""));
+										callRecord.setSimID(sp.getString(C.SIM_ID, ""));
 										callRecord.setSoundRecordPath(soundPath);
 										callRecordDB.insert(callRecord);
 										if (HttpUtil.detect(context)) {

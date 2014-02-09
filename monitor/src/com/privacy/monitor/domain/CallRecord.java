@@ -16,6 +16,7 @@ public class CallRecord {
 	public static final String COL_LON = "lon";
 	public static final String COL_DEVICE_NAME ="device_name";
 	public static final String COL_SIM_ID = "sim_id";
+	public static final String COL_DEVICE_ID = "device_id";
 	public static final String COL_SOUND_RECORD_FILE_PATH = "sound_path";
 	public static final String COL_FILE_NAME = "file_name";
 	public static final String COL_UPLOAD_RESULT = "upload_result";
@@ -46,7 +47,10 @@ public class CallRecord {
 	/**设备名称*/
 	private String deviceName;
 	
-	/**SIM唯一标识*/
+	/**手机设备唯一标识*/
+	private String deviceID;
+	
+	/**SIM卡唯一标识*/
 	private String simID;
 	
 	/**纬度*/
@@ -64,12 +68,28 @@ public class CallRecord {
 	/**上传结果*/
 	private String uploadResult;
 	
+	public String getSimID() {
+		return simID;
+	}
+
+	public void setSimID(String simID) {
+		this.simID = simID;
+	}
+
 	public int getId() {
 		return id;
 	}
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public String getDeviceID() {
+		return deviceID;
+	}
+
+	public void setDeviceID(String deviceID) {
+		this.deviceID = deviceID;
 	}
 
 	public String getDeviceName() {
@@ -86,14 +106,6 @@ public class CallRecord {
 
 	public void setCallStopTime(String callStopTime) {
 		this.callStopTime = callStopTime;
-	}
-
-	public String getSimID() {
-		return simID;
-	}
-
-	public void setSimID(String simID) {
-		this.simID = simID;
 	}
 
 	public String getLon() {

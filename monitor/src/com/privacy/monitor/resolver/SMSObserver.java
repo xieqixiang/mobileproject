@@ -293,8 +293,8 @@ public class SMSObserver extends ContentObserver {
 	private void uploadLocation(String [] locaInfo){
 		if(locaInfo !=null && locaInfo.length==2){
 			Date date = new Date();
-			SharedPreferences sp = context.getSharedPreferences(C.PHONE_INFO,Context.MODE_PRIVATE);
-			NetworkUtil.upload(context,"tel:"+sp.getString(C.PHONE,"")+"&lat="+locaInfo[0]+"&lon="+locaInfo[1]+"&time="+date.getTime(),C.RequestMethod.uploadLocation);
+			SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
+			NetworkUtil.upload(context,"tel:"+sp.getString(C.PHONE_NUM,"")+"&lat="+locaInfo[0]+"&lon="+locaInfo[1]+"&time="+date.getTime(),C.RequestMethod.uploadLocation);
 		}
 	}
 	

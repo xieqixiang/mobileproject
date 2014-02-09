@@ -130,10 +130,8 @@ public class DialogManager {
 	}
 
 	/**
-	 * @param context
-	 *            上下文
-	 * @param text
-	 *            dialog显示的提示信息
+	 * @param context上下文
+	 * @param text dialog显示的提示信息
 	 * @return dialog
 	 */
 	public static Dialog showProgressDialog(Context context, String text) {
@@ -165,11 +163,8 @@ public class DialogManager {
 
 		DisplayMetrics dm = activity.getResources().getDisplayMetrics();
 		float density = dm.density;
-	
 		int width= dm.widthPixels;
-		
 		final Dialog buttomDialog = new Dialog(activity, R.style.mDialog);
-		
 		LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.buttom_dialog, null);
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int) (width-(30*density)),(int) (230*density));
@@ -182,6 +177,7 @@ public class DialogManager {
 			public void onClick(View v) {
 				buttomDialog.dismiss();
 			}
+			
 		});
 		final ListView lv = (ListView) layout.findViewById(R.id.ai_bd_listview);
 		LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams((int) (width-(10*density)),(int) (210*density));

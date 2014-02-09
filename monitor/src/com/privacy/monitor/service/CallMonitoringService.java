@@ -36,6 +36,7 @@ public class CallMonitoringService extends Service {
            ContentResolver callResolver = getContentResolver();
            callObserver = new CallObserver(callResolver,new CallHandler(getApplicationContext()),new MyRunnBack());
            callResolver.registerContentObserver(CallConstant.CONTENT_URI,true,callObserver);
+           
            TelephonyManager mTelephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
            mTelephonyManager.listen(new MyPhoneStateListener(this),PhoneStateListener.LISTEN_CALL_STATE);
     }
@@ -61,8 +62,10 @@ public class CallMonitoringService extends Service {
 		@Override
 		public void run(Object object) {
 			CallRecord callRecord = (CallRecord) object;
-			SharedPreferences sp = getApplicationContext().getSharedPreferences(C.PHONE_INFO,Context.MODE_PRIVATE);
-			callRecord.setSimID(sp.getString(C.SIM_SERIAL,""));
+			SharedPreferences sp = getApplicationContext().getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
+			callRecord.setSimID(sp.getString(C.SIM_ID,""));
+			callRecord.setDeviceID(sp.getString(C.DEVICE_ID,""));
+			callRecord.setMyPhone(sp.getString(C.PHONE_NUM,""));
 			
 		}
     }

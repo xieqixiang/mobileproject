@@ -185,7 +185,7 @@ public class Test extends AndroidTestCase {
 					}
 				}
 			}
-		});
+		}).start();
 	}
 	
 	public class TextRunBack implements RunBack{

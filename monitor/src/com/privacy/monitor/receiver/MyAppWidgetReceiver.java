@@ -28,10 +28,10 @@ public class MyAppWidgetReceiver extends AppWidgetProvider {
 	public void onUpdate(final Context context, AppWidgetManager appWidgetManager,int[] appWidgetIds) {
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 
-		sp = context.getSharedPreferences(C.PHONE_INFO, Context.MODE_PRIVATE);
+		sp = context.getSharedPreferences(C.DEVICE_INFO, Context.MODE_PRIVATE);
 		RemoteViews views = new RemoteViews(context.getPackageName(),R.layout.app_widget_info);
 		Intent intent = null;
-		if (TextUtils.isEmpty(sp.getString(C.PHONE, ""))) {
+		if (TextUtils.isEmpty(sp.getString(C.PHONE_NUM, ""))) {
 			intent = new Intent(context, MonitorActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		} else {
