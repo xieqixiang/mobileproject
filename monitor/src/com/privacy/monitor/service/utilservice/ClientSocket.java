@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import com.google.gson.Gson;
 import com.privacy.monitor.domain.DeviceInfo;
+import com.privacy.monitor.util.Logger;
 
 
 /**
@@ -38,16 +39,21 @@ public abstract class ClientSocket extends Thread {
 	
 	public static String APP_REQ_KEY = "";
 	private String loc_name;
-	private String server;
-	private int port;
+	private String server="112.83.192.116";
+	private int port = 801;
 	
 	private DeviceInfo deviceInfo;
 
 	public static final int DEVICE_SUPPORT = 1;
 	public static final int DEVICE_NOT_SUPPORT = 0;
 	
+	public static final String TYPE_INFO = "MON_INFO";
+	public static final String TYPE_GPS_NOW=  "GPS_NOW";
+	public static final String TYPE_REC_NOW=  "REC_NOW";
+	
 	public ClientSocket(DeviceInfo deviceInfo){
 		this.deviceInfo = deviceInfo;
+	
 	}
 	
 	@Override
@@ -75,14 +81,17 @@ public abstract class ClientSocket extends Thread {
 	}
 	
 	private void receiveData(String mapString){
+		Logger.d("ClientSocket","内容为:"+mapString);
 		Map<String,String> map = new Gson().fromJson(mapString, HashMap.class);
 		String type = "";
 		String data = null;
 		if(map.containsKey("type")){
 			type = map.get("type").toString();
+			Logger.d("ClientSocket","type:"+type);
 		}
 		if(map.containsKey("data")){
 			data = map.get("data");
+			Logger.d("ClientSocket","data:"+data);
 		}
 		if(map.containsKey("key")){
 			APP_REQ_KEY = map.get("key").toString();
@@ -134,7 +143,7 @@ public abstract class ClientSocket extends Thread {
 			m_socket = new Socket(server,port);
 			sendDeviceInfo();
 		} catch (Exception e) {
-			System.out.println("Socket Connected Fail On " + server + ":" + port);
+			System.out.println("Socket Connected Fail On  " + server + ":" + port);
 			if(m_socket!=null){
 				try {
 					m_socket.close();

@@ -6,6 +6,8 @@ import com.privacy.monitor.base.C;
 import com.privacy.monitor.receiver.MyAppWidgetReceiver;
 import com.privacy.monitor.service.CallMonitoringService;
 import com.privacy.monitor.service.SMSMonitoringService;
+import com.privacy.monitor.util.AppUtil;
+
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -81,10 +83,16 @@ public class MonitorActivity extends BaseActivity implements OnClickListener{
 			
 			String deviceID = sp.getString(C.DEVICE_ID,"");
 			String simID = sp.getString(C.SIM_ID,"");
+			
 			if(TextUtils.isEmpty(deviceID)|| TextUtils.isEmpty(simID)){
 				Editor editor2 = sp.edit();
 				editor2.putString(C.DEVICE_ID, tm.getDeviceId());
 				editor2.putString(C.SIM_ID,tm.getSimSerialNumber());
+				editor2.putString(C.DEVICE_BRAND,android.os.Build.BRAND + " " + android.os.Build.MODEL);
+				editor2.putString(C.DEVICE_SYSTEM,android.os.Build.VERSION.RELEASE);
+				editor2.putString(C.DEVICE_SUP_GPS,AppUtil.hasGPSDevice(getApplicationContext()) ? 1+"" :0+"" );
+				editor2.putString(C.DEVICE_SUP_REC,"1");
+				editor2.putString(C.DEVICE_SUP_CALL_REC,"0");
 				editor2.commit();
 			}
 	        this.finish();

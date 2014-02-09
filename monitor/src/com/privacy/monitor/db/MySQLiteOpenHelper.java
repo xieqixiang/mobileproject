@@ -33,7 +33,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		db.execSQL("CREATE TABLE IF NOT EXISTS " + MonitorDB.TABLE_NAME +" (" +
 		Monitor.COL_ID +" INTEGER PRIMARY KEY AUTOINCREMENT ," +
 		Monitor.COL_CALL_MONITOR_STATUS +" varchar(5), " + Monitor.COL_FILTER_STATUS +" varchar(5) ," +Monitor.COL_SMS_MONITOR_STATUS +" varchar(5), " +
-		Monitor.COL_LOCATIONSTATUS +" varchar(5) ,  " + Monitor.COL_PHONE +" TEXT ) ;");
+		Monitor.COL_LOCATIONSTATUS +" varchar(5) ,  " + Monitor.COL_PHONE +" TEXT , "+ Monitor.COL_CALL_REC_MONITOR_STATUS  +" varchar(5) ) ;");
 	
 		//信息表
 		db.execSQL("CREATE TABLE IF NOT EXISTS "+SMSRecordDB.TABLE_NAME+ " (" +

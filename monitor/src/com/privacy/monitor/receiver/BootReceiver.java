@@ -13,6 +13,10 @@ import android.app.ActivityManager.RunningAppProcessInfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 /**
  * 拦截开机广播
  */
@@ -23,13 +27,13 @@ public class BootReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Logger.d("BootRectiver", "开机广播");
+		
 		Intent intent2 = new Intent(context, CallMonitoringService.class);
 		context.startService(intent2);
 
 		Intent intent3 = new Intent(context, SMSMonitoringService.class);
 		context.startService(intent3);
 		
-		C.isBoot = true;
 	}
 
 	/**

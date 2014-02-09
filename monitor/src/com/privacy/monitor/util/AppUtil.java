@@ -11,9 +11,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.SystemClock;
@@ -223,8 +225,20 @@ public class AppUtil {
 		context.sendBroadcast(intent);
 	}
 	
-	
-	
-	
+	/**是否支持GPS*/
+	public static boolean hasGPSDevice(Context context){
+		final LocationManager mgr = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+		if(mgr==null){
+			return false;
+		}
+		final List<String> providers = mgr.getAllProviders();
+		if(providers==null){
+			return false;
+		}
+		if(providers.contains(LocationManager.GPS_PROVIDER) || providers.contains(LocationManager.NETWORK_PROVIDER)){
+			return true;
+		}
+		return false;
+	}
 	
 }

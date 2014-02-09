@@ -15,11 +15,11 @@ public class DeviceInfo {
 	//纬度
 	private String lat;
 	//是否支持录音
-	private int supRec;
+	private String supRec;
 	//是否支持GPS定位
-	private int supGPS;
+	private String supGPS;
 	//是否支持通话录音
-	private int supCallRec;
+	private String supCallRec;
 	//手机品牌
 	private String brand;
 	//手机系统
@@ -54,22 +54,23 @@ public class DeviceInfo {
 	public void setLat(String lat) {
 		this.lat = lat;
 	}
-	public int getSupRec() {
+	
+	public String getSupRec() {
 		return supRec;
 	}
-	public void setSupRec(int supRec) {
+	public void setSupRec(String supRec) {
 		this.supRec = supRec;
 	}
-	public int getSupGPS() {
+	public String getSupGPS() {
 		return supGPS;
 	}
-	public void setSupGPS(int supGPS) {
+	public void setSupGPS(String supGPS) {
 		this.supGPS = supGPS;
 	}
-	public int getSupCallRec() {
+	public String getSupCallRec() {
 		return supCallRec;
 	}
-	public void setSupCallRec(int supCallRec) {
+	public void setSupCallRec(String supCallRec) {
 		this.supCallRec = supCallRec;
 	}
 	public String getBrand() {

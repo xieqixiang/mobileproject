@@ -10,6 +10,9 @@ public class Monitor {
 	//电话监控状态
 	public static final String COL_CALL_MONITOR_STATUS = "call_monitor_status";
 	
+	//通话录音监控状态
+	public static final String COL_CALL_REC_MONITOR_STATUS = "call_rec_monitor_status";
+	
 	//短信监控状态
 	public static final String COL_SMS_MONITOR_STATUS = "sms_monitor_status";
 	
@@ -24,6 +27,7 @@ public class Monitor {
 	
 	private int id ;
 	private String callMonitorStatus ;
+	private String callRecMonitorStatus;
 	private String smsMonitorStatus ;
 	private String filterStatus;
 	private String locationStatus;
@@ -36,6 +40,12 @@ public class Monitor {
 		this.id = id;
 	}
 	
+	public String getCallRecMonitorStatus() {
+		return callRecMonitorStatus;
+	}
+	public void setCallRecMonitorStatus(String callRecMonitorStatus) {
+		this.callRecMonitorStatus = callRecMonitorStatus;
+	}
 	public String getCallMonitorStatus() {
 		return callMonitorStatus;
 	}

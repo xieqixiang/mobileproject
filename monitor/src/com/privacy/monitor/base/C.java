@@ -23,6 +23,18 @@ public class C {
 	
 	public static final String SIM_ID = "simid";
 	
+	public static final String DEVICE_BRAND = "brand";
+	
+	public static final String DEVICE_SYSTEM = "system";
+	
+	public static final String DEVICE_SUP_REC = "rec";
+	
+	public static final String DEVICE_SUP_CALL_REC = "callRec";
+	
+	public static final String DEVICE_SUP_GPS = "gps";
+	
+	public static final String IS_UPLOAD = "uploadStatus";
+	
 	public static final String CRON_ACTION = "com.privacy.monitor.cron";
 	
 	public static final String ENV_ACTION = "com.privacy.monitor.sr";

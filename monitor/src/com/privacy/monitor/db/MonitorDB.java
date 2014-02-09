@@ -86,6 +86,7 @@ public class MonitorDB extends BaseSqlite {
 				while(cursor.moveToNext()){
 					monitor = new Monitor();
 					monitor.setCallMonitorStatus(cursor.getColumnName(cursor.getColumnIndex(Monitor.COL_CALL_MONITOR_STATUS)));
+					monitor.setCallRecMonitorStatus(cursor.getColumnName(cursor.getColumnIndex(Monitor.COL_CALL_REC_MONITOR_STATUS)));
 					monitor.setLocationStatus(cursor.getColumnName(cursor.getColumnIndex(Monitor.COL_LOCATIONSTATUS)));
 					monitor.setPhone(cursor.getColumnName(cursor.getColumnIndex(Monitor.COL_PHONE)));
 				}
