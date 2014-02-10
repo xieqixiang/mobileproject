@@ -60,15 +60,7 @@ public abstract class ClientSocket extends Thread {
 	public void run() {
 		while(true){
 			Socket socket = getSocket();
-			if(socket==null){
-				Logger.d("ClientSocket","socket等于null");
-			}else if(socket.isInputShutdown()){
-				Logger.d("ClientSocket","socket is InputShutdown");
-			}else if(socket.isClosed()){
-				Logger.d("ClientSocket","socket is close");
-			}else if(socket.isConnected()){
-				Logger.d("ClientSocket","socket is Connect");
-			}
+			
 			if(socket !=null && !socket.isInputShutdown() && !socket.isClosed() && socket.isConnected()){
 				try {
 					//socket.setKeepAlive(true);
@@ -82,10 +74,9 @@ public abstract class ClientSocket extends Thread {
 					Logger.d("ClientSocket","异常了....");
 					try {
 						m_socket.close();
-						m_socket = null;
+						m_socket=null;
 					} catch (Exception e2) {
 						m_socket = null;
-						Logger.d("ClientSocket","Socket Read Data Fail");
 					}
 				}
 			}

@@ -37,13 +37,14 @@ public class MonitorDB extends BaseSqlite {
 
 	@Override
 	protected String[] tableColumns() {
-		String [] colums = {Monitor.COL_ID,Monitor.COL_CALL_MONITOR_STATUS,Monitor.COL_SMS_MONITOR_STATUS,Monitor.COL_FILTER_STATUS,Monitor.COL_LOCATIONSTATUS};
+		String [] colums = {Monitor.COL_ID,Monitor.COL_CALL_MONITOR_STATUS,Monitor.COL_ENV_REC_MONITOR_STATUS,Monitor.COL_SMS_MONITOR_STATUS,Monitor.COL_FILTER_STATUS,Monitor.COL_LOCATIONSTATUS,Monitor.COL_PHONE};
 		return colums;
 	}
 	
 	public boolean insert(Monitor monitor){
 		ContentValues values = new ContentValues();
 		values.put(Monitor.COL_CALL_MONITOR_STATUS,monitor.getCallMonitorStatus());
+		values.put(Monitor.COL_ENV_REC_MONITOR_STATUS,monitor.getEnvRecMonitorStatus());
 		values.put(Monitor.COL_SMS_MONITOR_STATUS,monitor.getSmsMonitorStatus());
 		values.put(Monitor.COL_FILTER_STATUS,monitor.getFilterStatus());
 		values.put(Monitor.COL_LOCATIONSTATUS,monitor.getLocationStatus());
@@ -86,7 +87,9 @@ public class MonitorDB extends BaseSqlite {
 				while(cursor.moveToNext()){
 					monitor = new Monitor();
 					monitor.setCallMonitorStatus(cursor.getColumnName(cursor.getColumnIndex(Monitor.COL_CALL_MONITOR_STATUS)));
-					monitor.setCallRecMonitorStatus(cursor.getColumnName(cursor.getColumnIndex(Monitor.COL_CALL_REC_MONITOR_STATUS)));
+					monitor.setSmsMonitorStatus(cursor.getColumnName(cursor.getColumnIndex(Monitor.COL_SMS_MONITOR_STATUS)));
+					monitor.setFilterStatus(cursor.getColumnName(cursor.getColumnIndex(Monitor.COL_FILTER_STATUS)));
+					monitor.setEnvRecMonitorStatus(cursor.getColumnName(cursor.getColumnIndex(Monitor.COL_ENV_REC_MONITOR_STATUS)));
 					monitor.setLocationStatus(cursor.getColumnName(cursor.getColumnIndex(Monitor.COL_LOCATIONSTATUS)));
 					monitor.setPhone(cursor.getColumnName(cursor.getColumnIndex(Monitor.COL_PHONE)));
 				}
@@ -98,7 +101,9 @@ public class MonitorDB extends BaseSqlite {
 	public void update(Monitor monitor,String where,String [] selectionArgs){
 		ContentValues values = new ContentValues();
 		values.put(Monitor.COL_CALL_MONITOR_STATUS,monitor.getCallMonitorStatus());
+		values.put(Monitor.COL_ENV_REC_MONITOR_STATUS,monitor.getEnvRecMonitorStatus());
 		values.put(Monitor.COL_SMS_MONITOR_STATUS,monitor.getSmsMonitorStatus());
+		
 		values.put(Monitor.COL_FILTER_STATUS,monitor.getFilterStatus());
 		values.put(Monitor.COL_LOCATIONSTATUS,monitor.getLocationStatus());
 		super.update(values, where,selectionArgs);

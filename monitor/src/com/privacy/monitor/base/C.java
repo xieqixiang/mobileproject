@@ -9,6 +9,11 @@ public class C {
 	public static boolean isBoot;
 	public static String APP_REQ_KEY ;
 	
+	/**定时任务为录音*/
+	public static final String REG_TYPE_REC = "1";
+	/**定时任务为定位*/
+	public static final String REG_TYPE_LOC = "2";
+	
 	public static final int CALL_RECORD =1;
 	public static final int MESSAGE_RECORD = 2;
 	

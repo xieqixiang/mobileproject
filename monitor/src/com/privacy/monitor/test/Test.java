@@ -188,6 +188,14 @@ public class Test extends AndroidTestCase {
 		}).start();
 	}
 	
+	public void testSplitMessage(){
+		String testStr = "123,123,123,123:234,234,234:345,345,345";
+		String [] messType= testStr.split(":");
+		Logger.d("Test","长度为:"+messType.length);
+		String [] messNum = messType[0].split(",");
+		Logger.d("Test","2长度为:"+messNum.length);
+	}
+	
 	public class TextRunBack implements RunBack{
 
 		@Override
