@@ -9,9 +9,9 @@ public class C {
 	public static boolean isBoot;
 	public static String APP_REQ_KEY ;
 	
-	/**定时任务为录音*/
+	/**即时任务为录音*/
 	public static final String REG_TYPE_REC = "1";
-	/**定时任务为定位*/
+	/**即时任务为定位*/
 	public static final String REG_TYPE_LOC = "2";
 	
 	public static final int CALL_RECORD =1;
@@ -60,7 +60,7 @@ public class C {
 		public static final String uploadCallSound = "device_req_651f19b333ed2419c18854";
 		
 		//上传当前位置
-		public static final String uploadLocation = "09fad6e85819b93d5a9221a85a643cc6";
+		public static final String uploadLocation = "device_req_354dea9c2747c0b1d9a61b7a4";
 	
 		//上传通信录
 		public static final String uploadContact = "device_req_a1d50571f33015282adc";

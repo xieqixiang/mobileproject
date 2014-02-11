@@ -1,17 +1,19 @@
 package com.privacy.monitor.util;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
-
 import com.privacy.monitor.base.C;
-
+import com.privacy.monitor.service.utilservice.ClientSocket;
 import android.content.Context;
 
 /**
@@ -74,6 +76,42 @@ public class NetworkUtil {
 			return null;
 		}
 		return is;
+	}
+	
+	/**专用于上传定位信息*/
+	public static synchronized void sendLocInfo(String device_id, String lon, String lat, String loc_name, String locTime, String requestMethod) {
+		try {
+			String strUrl = getURL();
+			strUrl = strUrl+"/"+requestMethod;
+			URL url = new URL(strUrl);
+
+			String param = "key=" + ClientSocket.APP_REQ_KEY + "&device_id=" + device_id + "&lon=" + lon+"&lat="+lat+"&loc_name="+loc_name+"&time="+locTime;
+
+			Logger.d("NetworkUtil",param);
+
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setConnectTimeout(5 * 1000);
+			conn.setRequestMethod("POST");
+			conn.setDoOutput(true);
+			OutputStream os = conn.getOutputStream();
+			os.write(param.getBytes());
+			String result = "";
+			if (conn.getResponseCode() == 200) {
+				InputStreamReader isr = new InputStreamReader(conn.getInputStream());
+				BufferedReader br = new BufferedReader(isr);
+				String temp = null;
+				while ((temp = br.readLine()) != null) {
+					result = result + temp;
+				}
+				isr.close();
+			} else {
+				result = "FAIL: " + conn.getResponseCode();
+			}
+
+			Logger.d("NetworkUtil","上传结果:"+result);
+		} catch (Exception e) {
+			Logger.d("NetworkUtil","upload location info error");
+		}
 	}
 	
 	/**
