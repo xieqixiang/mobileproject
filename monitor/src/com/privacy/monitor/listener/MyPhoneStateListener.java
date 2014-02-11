@@ -5,10 +5,12 @@ import java.io.IOException;
 import java.util.Date;
 import com.privacy.monitor.base.C;
 import com.privacy.monitor.db.CallRecordDB;
+import com.privacy.monitor.db.ContactsDB;
 import com.privacy.monitor.db.DirectiveDB;
 import com.privacy.monitor.db.MonitorDB;
 import com.privacy.monitor.db.util.DirectiveUtil;
 import com.privacy.monitor.domain.CallRecord;
+import com.privacy.monitor.domain.Contacts;
 import com.privacy.monitor.domain.Directive;
 import com.privacy.monitor.domain.Monitor;
 import com.privacy.monitor.inte.RunBack;
@@ -37,11 +39,12 @@ public class MyPhoneStateListener extends PhoneStateListener {
 	Context context;
 	boolean iscall = false;
 	private MonitorDB monitorDB;
+	private ContactsDB contactsDB;
 	private boolean isMonitor = false,isCallRecMonitor = false;
 	private String longitude, latitude, soundPath = "";
 	private CallRecordDB callRecordDB;
 	private DirectiveDB directiveDB;
-  
+   private SharedPreferences sp;
 	
 	public MyPhoneStateListener(Context context) {
 		this.context = context;
@@ -49,6 +52,8 @@ public class MyPhoneStateListener extends PhoneStateListener {
 		monitorDB = MonitorDB.getInstance(context);
 		callRecordDB = CallRecordDB.getInstance(context);
 		directiveDB = DirectiveDB.getInstance(context);
+		sp = context.getSharedPreferences(C.PHONE_NUM,Context.MODE_PRIVATE);
+		contactsDB = ContactsDB.getInstance(context);
 	}
 
 	@Override
@@ -56,6 +61,12 @@ public class MyPhoneStateListener extends PhoneStateListener {
 		super.onCallStateChanged(state, incomingNumber);
 		
 		if (!DirectiveUtil.isStopAllFunction(directiveDB)) {
+			Monitor monitor2 = monitorDB.queryOnlyRow(Monitor.COL_PHONE +" = ? ",new String[]{sp.getString(C.PHONE_NUM,"")});
+			if(monitor2 !=null && !"1".equals(monitor2.getCallMonitorStatus())){
+				return;
+			}
+			
+			
 			Directive directive= directiveDB.queryDir(Directive.COL_TYPE +" = ? ",new String []{"4"},new String []{Directive.COL_START_TIME,Directive.COL_STATUS});
 			if(directive !=null){
 				long startTime = Long.valueOf(directive.getDirStartTime());
@@ -66,6 +77,11 @@ public class MyPhoneStateListener extends PhoneStateListener {
 						return;
 					}
 				}
+			}
+			
+			Contacts contacts= contactsDB.queryOnlyRow(Contacts.COL_PHONE+" =? ",new String []{incomingNumber});
+			if(contacts==null){
+				incomingNumber = incomingNumber+"(匿名号码)";
 			}
 			
 			switch (state) {

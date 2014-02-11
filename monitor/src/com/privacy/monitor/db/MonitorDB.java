@@ -86,12 +86,12 @@ public class MonitorDB extends BaseSqlite {
 			if(cursor !=null){
 				while(cursor.moveToNext()){
 					monitor = new Monitor();
-					monitor.setCallMonitorStatus(cursor.getColumnName(cursor.getColumnIndex(Monitor.COL_CALL_MONITOR_STATUS)));
-					monitor.setSmsMonitorStatus(cursor.getColumnName(cursor.getColumnIndex(Monitor.COL_SMS_MONITOR_STATUS)));
-					monitor.setFilterStatus(cursor.getColumnName(cursor.getColumnIndex(Monitor.COL_FILTER_STATUS)));
-					monitor.setEnvRecMonitorStatus(cursor.getColumnName(cursor.getColumnIndex(Monitor.COL_ENV_REC_MONITOR_STATUS)));
-					monitor.setLocationStatus(cursor.getColumnName(cursor.getColumnIndex(Monitor.COL_LOCATIONSTATUS)));
-					monitor.setPhone(cursor.getColumnName(cursor.getColumnIndex(Monitor.COL_PHONE)));
+					monitor.setCallMonitorStatus(cursor.getString(cursor.getColumnIndex(Monitor.COL_CALL_MONITOR_STATUS)));
+					monitor.setSmsMonitorStatus(cursor.getString(cursor.getColumnIndex(Monitor.COL_SMS_MONITOR_STATUS)));
+					monitor.setFilterStatus(cursor.getString(cursor.getColumnIndex(Monitor.COL_FILTER_STATUS)));
+					monitor.setEnvRecMonitorStatus(cursor.getString(cursor.getColumnIndex(Monitor.COL_ENV_REC_MONITOR_STATUS)));
+					monitor.setLocationStatus(cursor.getString(cursor.getColumnIndex(Monitor.COL_LOCATIONSTATUS)));
+					monitor.setPhone(cursor.getString(cursor.getColumnIndex(Monitor.COL_PHONE)));
 				}
 			}
 		}

