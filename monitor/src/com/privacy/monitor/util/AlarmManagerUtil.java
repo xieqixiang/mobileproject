@@ -8,19 +8,46 @@ import android.content.Intent;
 /**
  * 定时任务
  */
-public class AlarmNanagerUtil {
+public class AlarmManagerUtil {
 
 	private static AlarmManager alarmManager;
 	
 	public static AlarmManager getAlarmManager(Context ctx){
 		if(alarmManager==null){
-			return alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+			 alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
 		}
 		return alarmManager;
 	}
 	
 	/**
-	 * 开启定时任务
+	 * 指定时间后进行定位
+	 * @param ctx
+	 */
+	public static void sendLocBroadcast(Context ctx,long startTime,String action){
+		alarmManager = getAlarmManager(ctx);
+		
+		Intent i = new Intent();
+		i.setAction(action);
+		PendingIntent pi = PendingIntent.getBroadcast(ctx, 5, i, PendingIntent.FLAG_CANCEL_CURRENT);
+		alarmManager.set(AlarmManager.RTC_WAKEUP, startTime, pi);
+	}
+	
+	/**
+	 * 指定时间后进行录音
+	 * @param ctx
+	 */
+	public static void sendSoundRecBroadcast(Context ctx,long startTime,String action){
+		alarmManager = getAlarmManager(ctx);
+		Intent i = new Intent();
+		i.setAction(action);
+		PendingIntent pi = PendingIntent.getBroadcast(ctx, 10, i, PendingIntent.FLAG_CANCEL_CURRENT);
+		alarmManager.set(AlarmManager.RTC_WAKEUP, startTime, pi);
+	}
+	
+	
+	
+	/**
+	 * 开启定时任务(循环执行)
 	 */
 	public static void startCron(Context context,String action){
 		Logger.d("AlarmNanagerUtil","开启定时任务");
@@ -33,7 +60,7 @@ public class AlarmNanagerUtil {
 	}
 	
 	/**
-	 * 开启定时任务
+	 * 开启定时任务(循环执行)
 	 */
 	public static void startCron(Context context,String action,long intervalMillis){
 		Logger.d("AlarmNanagerUtil","开始定时任务");

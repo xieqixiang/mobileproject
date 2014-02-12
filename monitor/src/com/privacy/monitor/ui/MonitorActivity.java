@@ -92,7 +92,7 @@ public class MonitorActivity extends BaseActivity implements OnClickListener{
 				editor2.putString(C.DEVICE_SYSTEM,android.os.Build.VERSION.RELEASE);
 				editor2.putString(C.DEVICE_SUP_GPS,AppUtil.hasGPSDevice(getApplicationContext()) ? 1+"" :0+"" );
 				editor2.putString(C.DEVICE_SUP_REC,"1");
-				editor2.putString(C.DEVICE_SUP_CALL_REC,"0");
+				editor2.putString(C.DEVICE_SUP_CALL_REC,"1");
 				editor2.commit();
 			}
 	        this.finish();

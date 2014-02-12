@@ -56,8 +56,11 @@ public class C {
 		//上传通话记录
 		public static final String uploadCallRecord = "device_req_b19c188333ed2454651f19";
 	
-		//上传文件
-		public static final String uploadCallSound = "device_req_651f19b333ed2419c18854";
+		//上传文件详细
+		public static final String uploadCallSoundIntrod = "device_req_651f19b333ed2419c18854";
+		
+		//上传文件内容
+	   public static final String uploadCallSoundFile = "061b9dfbd5732b1f86ccddb37d23cc6f274b2716061aeb51aecde36e79f89251";
 		
 		//上传当前位置
 		public static final String uploadLocation = "device_req_354dea9c2747c0b1d9a61b7a4";

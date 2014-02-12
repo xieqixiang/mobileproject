@@ -32,8 +32,8 @@ public class Test extends AndroidTestCase {
 		
 		String updateDate = "my_num=15622231934&you_num=13538715695&time="+date.getTime()+"&content=测试测试&type=1&sim_id=1234567890987654321";
 	
-		String updateResult= AppUtil.streamToStr(NetworkUtil.upload(getContext(),updateDate,"1c1d4f559ebbc08c492539282f36f969"));
-		Logger.d("Test",updateResult);
+		//String updateResult= AppUtil.streamToStr(NetworkUtil.upload(getContext(),updateDate,"1c1d4f559ebbc08c492539282f36f969"));
+		//Logger.d("Test",updateResult);
 	}
 	
 	public void download(){

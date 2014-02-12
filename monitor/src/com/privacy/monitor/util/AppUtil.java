@@ -10,7 +10,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import android.content.Context;
@@ -21,7 +20,6 @@ import android.net.wifi.WifiManager;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
-import com.privacy.monitor.domain.FileObject;
 
 /**
  *工具类
@@ -53,43 +51,6 @@ public class AppUtil {
 		strDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss",Locale.CHINA).format(date);
 		
 		return strDate;
-	}
-	
-	/**
-	 * 遍历所有录音文件
-	 * 
-	 * @param path
-	 *            要遍历的文件夹
-	 */
-	public static ArrayList<FileObject> fileList(String path) {
-
-		ArrayList<FileObject> fileList = new ArrayList<FileObject>();
-
-		File dir = new File(path);
-		
-		if (dir.exists()) {
-
-			File[] files = dir.listFiles();
-			
-			for (int i = 0; i < files.length; i++) {
-				
-				File file = files[i];
-				String fileName = file.getName();
-				String fileSize = (file.length() / 1024) + "KB";
-				String fileTime = AppUtil.getCurrebtDate(file.lastModified());
-				String filePath = file.getAbsolutePath();
-
-				FileObject fileObject = new FileObject(fileName, fileSize,fileTime, filePath);
-
-				fileList.add(fileObject);
-			}
-
-			return fileList;
-
-		} else {
-			
-			return fileList;
-		}
 	}
 	
 	/**WIFI网络开关*/

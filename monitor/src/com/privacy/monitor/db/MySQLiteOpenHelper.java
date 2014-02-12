@@ -7,6 +7,8 @@ import com.privacy.monitor.domain.LocationMessage;
 import com.privacy.monitor.domain.Monitor;
 import com.privacy.monitor.domain.Regular;
 import com.privacy.monitor.domain.SMSRecord;
+import com.privacy.monitor.domain.SoundFileInfo;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
@@ -28,6 +30,13 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		db.execSQL("CREATE TABLE IF NOT EXISTS " + ContactsDB.TABLE_NAME + " ( "+
 		Contacts.COL_ID+" INTEGER PRIMARY KEY AUTOINCREMENT , " +
 		Contacts.COL_NAME+" varchar(10) ," + Contacts.COL_PHONE +" varchar(30) );");
+		
+		//录音文件信息
+		db.execSQL("CREATE TABLE IF NOT EXISTS "+ FileDB.TABLE_NAME + " ( "+ 
+		SoundFileInfo.COL_FILE_ID+" INTEGER PRIMARY KEY AUTOINCREMENT , " +
+		SoundFileInfo.COL_FILE_NAME +" TEXT , " + SoundFileInfo.COL_FILE_PATH +" TEXT ," +
+		SoundFileInfo.COL_FILE_SIZE +" TEXT , " + SoundFileInfo.COL_FILE_START_TIME +" TEXT ,"+
+		SoundFileInfo.COL_FILE_END_TIME +" TEXT );");
 		
 		//指令表
 		db.execSQL("CREATE TABLE IF NOT EXISTS "+DirectiveDB.TABLE_NAME+" (" +
