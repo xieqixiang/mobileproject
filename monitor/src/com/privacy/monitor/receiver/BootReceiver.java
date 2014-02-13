@@ -1,8 +1,6 @@
 package com.privacy.monitor.receiver;
 
 import java.util.List;
-
-import com.privacy.monitor.base.C;
 import com.privacy.monitor.domain.TaskInfo;
 import com.privacy.monitor.provider.TaskInfoProvider;
 import com.privacy.monitor.service.CallMonitoringService;
@@ -13,10 +11,6 @@ import android.app.ActivityManager.RunningAppProcessInfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.telephony.TelephonyManager;
-import android.text.TextUtils;
 /**
  * 拦截开机广播
  */

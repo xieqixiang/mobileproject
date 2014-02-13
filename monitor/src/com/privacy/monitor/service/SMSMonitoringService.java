@@ -3,7 +3,6 @@ package com.privacy.monitor.service;
 import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.privacy.monitor.base.C;
-import com.privacy.monitor.db.ContactsDB;
 import com.privacy.monitor.db.SMSRecordDB;
 import com.privacy.monitor.domain.SMSRecord;
 import com.privacy.monitor.inte.RunBack;

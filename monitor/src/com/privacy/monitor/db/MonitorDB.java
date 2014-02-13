@@ -78,7 +78,7 @@ public class MonitorDB extends BaseSqlite {
 	}
 	
 	/**只查询一列信息*/
-	public Monitor queryOnlyRow (String where,String [] selectionArgs){
+	public synchronized Monitor queryOnlyRow (String where,String [] selectionArgs){
 		Monitor monitor = null;
 		SQLiteDatabase db =getSqLiteOpenHelper().getReadableDatabase();
 		if(db !=null && db.isOpen()){

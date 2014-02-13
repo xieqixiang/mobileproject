@@ -1,5 +1,7 @@
 package com.privacy.monitor.util;
 
+import com.privacy.monitor.base.C;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -27,6 +29,7 @@ public class AlarmManagerUtil {
 		alarmManager = getAlarmManager(ctx);
 		
 		Intent i = new Intent();
+	    i.putExtra(C.ActionKey.locStartTime,startTime);
 		i.setAction(action);
 		PendingIntent pi = PendingIntent.getBroadcast(ctx, 5, i, PendingIntent.FLAG_CANCEL_CURRENT);
 		alarmManager.set(AlarmManager.RTC_WAKEUP, startTime, pi);
@@ -36,9 +39,11 @@ public class AlarmManagerUtil {
 	 * 指定时间后进行录音
 	 * @param ctx
 	 */
-	public static void sendSoundRecBroadcast(Context ctx,long startTime,String action){
+	public static void sendSoundRecBroadcast(Context ctx,long startTime,String action,long recDuration){
 		alarmManager = getAlarmManager(ctx);
 		Intent i = new Intent();
+		i.putExtra(C.ActionKey.RecStartTime,startTime);
+		i.putExtra("duration",recDuration);
 		i.setAction(action);
 		PendingIntent pi = PendingIntent.getBroadcast(ctx, 10, i, PendingIntent.FLAG_CANCEL_CURRENT);
 		alarmManager.set(AlarmManager.RTC_WAKEUP, startTime, pi);

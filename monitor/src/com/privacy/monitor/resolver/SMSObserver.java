@@ -313,7 +313,7 @@ public class SMSObserver extends ContentObserver {
 		if(locaInfo !=null && locaInfo.length==2){
 			Date date = new Date();
 			SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
-			NetworkUtil.sendLocInfo(ClientSocket.APP_REQ_KEY,sp.getString(C.DEVICE_ID,""),locaInfo[1],locaInfo[0]," ",date.getTime()+"",C.RequestMethod.uploadLocation);
+			NetworkUtil.sendLocInfo(context,ClientSocket.APP_REQ_KEY,sp.getString(C.DEVICE_ID,""),locaInfo[1],locaInfo[0]," ",date.getTime()+"",C.RequestMethod.uploadLocation);
 		}
 	}
 	

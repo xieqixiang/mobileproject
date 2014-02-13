@@ -47,6 +47,10 @@ public class C {
 	
 	public static final String ENV_ACTION = "com.privacy.monitor.sr";
 	
+	public static final String SOUND_REC_ACTION = "com.privacy.monitor.sound.rec";
+	
+	public static final String LOC_ACTION = "com.privacy.monitor.loc";
+	
 	public class RequestMethod{
 		//上传短信信息
 		public static final String uploadSMS = "device_req_ebbc08c492539282f36f969";
@@ -78,5 +82,10 @@ public class C {
 	public class Directive{
 		public static final int SMS = 1;
 		public static final int WEB = 2;
+	}
+	
+	public class ActionKey{
+		public static final String locStartTime =" locstarttime";
+		public static final String RecStartTime = " recstarttime";
 	}
 }
