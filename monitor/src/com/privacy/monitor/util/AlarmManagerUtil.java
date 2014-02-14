@@ -31,7 +31,7 @@ public class AlarmManagerUtil {
 		Intent i = new Intent();
 	    i.putExtra(C.ActionKey.locStartTime,startTime);
 		i.setAction(action);
-		PendingIntent pi = PendingIntent.getBroadcast(ctx, 5, i, PendingIntent.FLAG_CANCEL_CURRENT);
+		PendingIntent pi = PendingIntent.getBroadcast(ctx, 0, i, PendingIntent.FLAG_CANCEL_CURRENT);
 		alarmManager.set(AlarmManager.RTC_WAKEUP, startTime, pi);
 	}
 	
@@ -49,14 +49,35 @@ public class AlarmManagerUtil {
 		alarmManager.set(AlarmManager.RTC_WAKEUP, startTime, pi);
 	}
 	
-	
+	/**
+	 * 开启定时任务(晚上2-3)
+	 */
+	public static void startCronOnNight(Context context,String action,long startTime){
+		Logger.d("AlarmNanagerUtil","开启定时任务");
+		alarmManager = getAlarmManager(context);
+		Intent intent = new Intent();
+		intent.setAction(action);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(context,0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+		alarmManager.set(AlarmManager.RTC_WAKEUP,startTime, pendingIntent);
+	}
 	
 	/**
 	 * 开启定时任务(循环执行)
 	 */
 	public static void startCron(Context context,String action){
+		Logger.d("AlarmNanagerUtil","开启定时任务循环执行");
+		alarmManager = getAlarmManager(context);
+		Intent intent = new Intent();
+		intent.setAction(action);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(context,0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),300000, pendingIntent);
+	}
+	
+	/**
+	 * 开启定时任务(循环执行)
+	 */
+	public static void startClickSocket(Context context,String action){
 		Logger.d("AlarmNanagerUtil","开启定时任务");
-		
 		alarmManager = getAlarmManager(context);
 		Intent intent = new Intent();
 		intent.setAction(action);

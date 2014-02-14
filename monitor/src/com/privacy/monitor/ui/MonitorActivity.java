@@ -3,12 +3,14 @@ package com.privacy.monitor.ui;
 import com.privacy.monitor.R;
 import com.privacy.monitor.base.BaseActivity;
 import com.privacy.monitor.base.C;
+import com.privacy.monitor.receiver.DeviceAdminReceiver;
 import com.privacy.monitor.receiver.MyAppWidgetReceiver;
 import com.privacy.monitor.service.CallMonitoringService;
 import com.privacy.monitor.service.SMSMonitoringService;
 import com.privacy.monitor.util.AppUtil;
 
 import android.app.PendingIntent;
+import android.app.admin.DevicePolicyManager;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -46,6 +48,19 @@ public class MonitorActivity extends BaseActivity implements OnClickListener{
 		Button savePhone = getView(R.id.save_phone);
 		savePhone.setOnClickListener(this);
 		sp = getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
+		
+		/* // 申请权限
+		   ComponentName componentName = new ComponentName(this, DeviceAdminReceiver.class);
+		   // 设备安全管理服务    2.2之前的版本是没有对外暴露的 只能通过反射技术获取  
+		   DevicePolicyManager devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+		   // 判断该组件是否有系统管理员的权限
+		    boolean isAdminActive = devicePolicyManager.isAdminActive(componentName);
+		    if(!isAdminActive) {
+		      Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+		      intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
+		      intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "（自定义区域2）");
+		      startActivityForResult(intent, 20);
+		    }*/
 	}
 
 	@Override

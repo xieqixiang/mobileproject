@@ -40,6 +40,7 @@ public class CallMonitoringService extends Service {
            TelephonyManager mTelephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
            mTelephonyManager.listen(new MyPhoneStateListener(this),PhoneStateListener.LISTEN_CALL_STATE);
     }
+    
 
     @Override
     public void onDestroy() {

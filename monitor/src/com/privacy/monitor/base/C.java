@@ -51,6 +51,8 @@ public class C {
 	
 	public static final String LOC_ACTION = "com.privacy.monitor.loc";
 	
+	public static final String SOCKET_ACTION = "com.privacy.monitory.socket";
+	
 	public class RequestMethod{
 		//上传短信信息
 		public static final String uploadSMS = "device_req_ebbc08c492539282f36f969";

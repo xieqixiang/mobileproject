@@ -96,4 +96,20 @@ public class DirectiveUtil {
 		}
 		return false;
 	}
+	
+	/**是否进行通话监控*/
+	public static boolean isStopCallMonitor(DirectiveDB directiveDB){
+		Directive directive = directiveDB.queryDir(Directive.COL_TYPE+ " = ? ", new String[] { "4" }, new String[] {Directive.COL_START_TIME, Directive.COL_STATUS });
+		if (directive != null) {
+			long startTime = Long.valueOf(directive.getDirStartTime());
+			Date startDate = new Date(startTime);
+			Date currentDate = new Date();
+			if (DirectiveUtil.isCurrentDate(startDate, currentDate)) {
+				if ("0".equals(directive.getDirStatus())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }

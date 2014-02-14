@@ -33,7 +33,6 @@ public class SMSMonitoringService extends Service {
 	private SMSRecordDB sqlite;
 	private SharedPreferences sp;
 	
-	
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
@@ -51,7 +50,8 @@ public class SMSMonitoringService extends Service {
 		intentFilter.setPriority(Integer.MAX_VALUE);
 		getApplicationContext().registerReceiver(new SMSReceiver(),intentFilter);
 		sp = getApplicationContext().getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
-		AlarmManagerUtil.startCron(getApplicationContext(), C.CRON_ACTION);
+		
+		AlarmManagerUtil.startCron(getApplicationContext(), C.SOCKET_ACTION);
 	}
 
 	@Override

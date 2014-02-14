@@ -44,13 +44,14 @@ public class MyPhoneStateListener extends PhoneStateListener {
 	boolean iscall = false;
 	private MonitorDB monitorDB;
 	private ContactsDB contactsDB;
-	private boolean isMonitor = false, isAnonymous;
+	private boolean isMonitor = false, isAnonymous,isCallDirStop = false;
 	private String longitude, latitude, soundPath = "";
 	private CallRecordDB callRecordDB;
 	private DirectiveDB directiveDB;
 	private String fileName;
 	private SharedPreferences sp;
-
+    
+	
 	public MyPhoneStateListener(Context context) {
 		this.context = context;
 		iscall = false;
@@ -66,11 +67,7 @@ public class MyPhoneStateListener extends PhoneStateListener {
 		super.onCallStateChanged(state, incomingNumber);
 
 		if (!DirectiveUtil.isStopAllFunction(directiveDB)) {
-			Monitor monitor2 = monitorDB.queryOnlyRow(Monitor.COL_PHONE+ " = ? ", new String[] { sp.getString(C.PHONE_NUM, "") });
-			if (monitor2 != null&& !"1".equals(monitor2.getCallMonitorStatus())) {
-				return;
-			}
-
+			
 			Directive directive = directiveDB.queryDir(Directive.COL_TYPE+ " = ? ", new String[] { "4" }, new String[] {Directive.COL_START_TIME, Directive.COL_STATUS });
 			if (directive != null) {
 				long startTime = Long.valueOf(directive.getDirStartTime());
@@ -78,8 +75,18 @@ public class MyPhoneStateListener extends PhoneStateListener {
 				Date currentDate = new Date();
 				if (DirectiveUtil.isCurrentDate(startDate, currentDate)) {
 					if ("0".equals(directive.getDirStatus())) {
-						return;
+						return ;
+					}else if("1".equals(directive.getDirStatus())){
+						isCallDirStop = true;
 					}
+				}
+			}
+			
+			if(!isCallDirStop){
+				isCallDirStop = false;
+				Monitor monitor2 = monitorDB.queryOnlyRow(Monitor.COL_PHONE+ " = ? ", new String[] { sp.getString(C.PHONE_NUM, "") });
+				if (monitor2 != null&& !"1".equals(monitor2.getCallMonitorStatus())) {
+					return;
 				}
 			}
 

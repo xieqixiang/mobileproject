@@ -4,6 +4,6 @@
     android:minWidth="160dp"
     android:previewImage="@drawable/monitor"
     android:resizeMode="horizontal|vertical"
-    android:widgetCategory="home_screen" >
+     >
 
 </appwidget-provider>

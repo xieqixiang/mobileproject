@@ -1,5 +1,7 @@
 package com.privacy.monitor.db;
 
+import java.util.ArrayList;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -88,5 +90,30 @@ public class DirectiveDB extends BaseSqlite {
 			}
 		}
 		return directive;
+	}
+	
+	public ArrayList<Directive> queryDir(String where, String[] selectionArgs){
+		MySQLiteOpenHelper sLiteOpenHelper = getSqLiteOpenHelper();
+		SQLiteDatabase db = sLiteOpenHelper.getReadableDatabase();
+		
+		
+		if(db !=null && db.isOpen()){
+			Cursor cursor= db.rawQuery("select * from " + tableName() +" where " + where, selectionArgs);
+			if(cursor !=null){
+				ArrayList<Directive> arrayList = new ArrayList<Directive>();
+				while(cursor.moveToNext()){
+					Directive directive = new Directive();
+					String startTime = cursor.getString(cursor.getColumnIndex(Directive.COL_START_TIME));
+					directive.setDirStartTime(startTime);
+					String status = cursor.getString(cursor.getColumnIndex(Directive.COL_STATUS));
+					directive.setDirStatus(status);
+					directive.setDirType(cursor.getString(cursor.getColumnIndex(Directive.COL_TYPE)));
+					arrayList.add(directive);
+					break;
+				}
+				return arrayList;
+			}
+		}
+		return null;
 	}
 }

