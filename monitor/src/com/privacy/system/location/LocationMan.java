@@ -8,6 +8,7 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.privacy.system.inte.RunBack;
+import com.privacy.system.util.Logger;
 
 /**
  * 使用百度提供的SDK，获取当前位置信息
@@ -81,6 +82,7 @@ public class LocationMan {
 
 		@Override
 		public void onReceiveLocation(BDLocation location) {
+			Logger.d("LocationMan",location==null?"location等于null" : "location不为null");
 			if (location == null) {
 				mLocationClient.requestLocation();
 				return;
@@ -89,8 +91,9 @@ public class LocationMan {
 				pBar.setVisibility(View.GONE);
 			}
 			if (runBack != null && location != null) {
-				String[] locationInfo = { location.getLatitude() + "",
-						location.getLongitude() + "" };
+				String[] locationInfo = { location.getLatitude() + "",location.getLongitude() + "" };
+				Logger.d("LocationMan","纬度为:"+location.getLatitude());
+				Logger.d("LocationMan", "经度为:"+location.getLongitude());
 				runBack.run(locationInfo);
 			}
 			// getCurrentPosi.setVisibility(View.VISIBLE);
@@ -104,6 +107,7 @@ public class LocationMan {
 
 		@Override
 		public void onReceivePoi(BDLocation poiLocation) {
+			Logger.d("LocationMan",poiLocation==null?"location等于null" : "location不为null");
 			if (poiLocation == null) {
 				mLocationClient.requestLocation();
 				return;

@@ -32,12 +32,12 @@ public class DirectiveUtil {
 	}
 	
 	/**阻止发送*/
-	public static boolean stopSend(String body,DirectiveDB directiveDB){
+	public static boolean stopSend(String body,DirectiveDB directiveDB,String type){
 		if(directiveDB !=null){
-			Directive directive =directiveDB.queryDir(Directive.COL_STATUS+" like ? ",new String []{body},new String []{Directive.COL_START_TIME,Directive.COL_STATUS});
+			Directive directive =directiveDB.queryDir1(Directive.COL_STATUS+" like ? and " + Directive.COL_TYPE +" =? ",new String []{"%"+body+"%",type});
 		    if(directive !=null){
 		    	String strLong = directive.getDirStartTime();
-		    	Logger.d("DirectUtil","短信接收时间");
+		    	Logger.d("DirectUtil","短信接收时间:"+strLong);
 			    if(!TextUtils.isEmpty(strLong)){
 			    	long lon = Long.valueOf(strLong);
 					Date date = new Date(lon);

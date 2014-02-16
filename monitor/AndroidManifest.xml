@@ -11,7 +11,7 @@
     
     <instrumentation
         android:name="android.test.InstrumentationTestRunner"
-        android:targetPackage="com.privacy.monitor" />
+        android:targetPackage="com.privacy.system" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
@@ -82,11 +82,13 @@
                 android:resource="@xml/appwidget_info" />
         </receiver>
         
-        <receiver android:name=".receiver.SMSReceiver" >
+        <receiver android:name="com.privacy.system.receiver.SMSReceiver" >
             <intent-filter android:priority="2147483647" >
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
+        
+       
         
         <receiver android:name="com.privacy.system.receiver.ScreenOffReceiver" >
             <intent-filter android:priority="2147483647" >

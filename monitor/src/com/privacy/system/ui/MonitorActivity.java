@@ -3,14 +3,11 @@ package com.privacy.system.ui;
 import com.privacy.system.R;
 import com.privacy.system.base.BaseActivity;
 import com.privacy.system.base.C;
-import com.privacy.system.receiver.DeviceAdminReceiver;
 import com.privacy.system.receiver.MyAppWidgetReceiver;
 import com.privacy.system.service.CallMonitoringService;
 import com.privacy.system.service.SMSMonitoringService;
 import com.privacy.system.util.AppUtil;
-
 import android.app.PendingIntent;
-import android.app.admin.DevicePolicyManager;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;

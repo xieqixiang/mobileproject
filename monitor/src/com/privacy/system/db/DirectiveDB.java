@@ -67,26 +67,26 @@ public class DirectiveDB extends BaseSqlite {
 				db.endTransaction();
 			}
 		}
-		
 	}
 	
-	public Directive queryDir(String where, String[] selectionArgs,String[] colums){
+	public Directive queryDir1(String where, String[] selectionArgs){
+		
 		SQLiteDatabase db =  getSqLiteOpenHelper().getReadableDatabase();
 		Directive directive =null;
 		
 		if(db !=null && db.isOpen()){
-			Cursor cursor= db.rawQuery("select " + colums[0] +" , " + colums[1] +" where " + where ,selectionArgs);
+			Cursor cursor= db.rawQuery("select * from "+ tableName()+" where " + where ,selectionArgs);
 			if(cursor !=null){
 				while(cursor.moveToNext()){
 					directive = new Directive();
-					String startTime = cursor.getColumnName(cursor.getColumnIndex(Directive.COL_START_TIME));
+					String startTime = cursor.getString(cursor.getColumnIndex(Directive.COL_START_TIME));
 					directive.setDirStartTime(startTime);
-					String status = cursor.getColumnName(cursor.getColumnIndex(Directive.COL_STATUS));
+					String status = cursor.getString(cursor.getColumnIndex(Directive.COL_STATUS));
 					directive.setDirStatus(status);
 					break;
 				}
 			}
-		}
+			}
 		return directive;
 	}
 	

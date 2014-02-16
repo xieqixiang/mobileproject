@@ -5,14 +5,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.SystemClock;
+import android.text.TextUtils;
+
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.privacy.system.base.C;
 import com.privacy.system.domain.DeviceInfo;
 import com.privacy.system.util.Logger;
@@ -66,54 +70,84 @@ public abstract class ClientSocket extends Thread {
 	@Override
 	public void run() {
 		while(true){
-			Socket socket = getSocket();
-			if(socket !=null && !socket.isInputShutdown() && !socket.isClosed() && socket.isConnected()){
-				
-				try {
-					//socket.setKeepAlive(true);
-					BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(),FONT_CODE));
-					String data = "";
-					Logger.d("ClientSocket","socket进来了....");
-					while((data=br.readLine()) != null){
-						Logger.d("ClientSocket",data);
-						receiveData(data);
-					}
-				} catch (Exception e) {
-					Logger.d("ClientSocket","异常了....");
-					try {
-						m_socket.close();
-					} catch (IOException e1) {
-						m_socket = null;
-					}
-				}
+			sleep();
+			if(m_socket==null || m_socket.isClosed()){
+				createSocket();
+				sendDeviceInfo();
+			}
+			if(m_socket !=null && !m_socket.isInputShutdown()){
+				readData() ;
 			}
 		}
 	}
 	
+	//读取数据
+	private void readData(){
+		try {
+			BufferedReader	br = new BufferedReader(new InputStreamReader(m_socket.getInputStream(), FONT_CODE), 8192);
+			
+			while (br != null && m_socket != null && !m_socket.isClosed() && !m_socket.isInputShutdown()) {
+				String data = null;
+				data = br.readLine();
+				//如果读取数据失败，说明socket已经失去连接了
+				if(data==null){
+					br.close();
+					br = null;
+					Logger.d("ClientSocket","socket read data fail");
+				}else{
+					receiveData(data);
+					continue;
+				}
+		}
+		} catch (Exception e) {
+			Logger.d("ClientSocket","读取数据失败");
+		}
+		try {
+			m_socket.close();
+		} catch (IOException e) {
+			Logger.d("ClientSocket","socket close error");
+		}
+		m_socket = null;
+	}
+	
+	@SuppressWarnings("unchecked")
 	private void receiveData(String mapString){
 		Logger.d("ClientSocket","内容为:"+mapString);
-		Map<String,String> map = new Gson().fromJson(mapString, HashMap.class);
+		Map<String, String> map = null;
+		try {
+			map = new Gson().fromJson(mapString, HashMap.class);
+		} catch (JsonSyntaxException e) {
+			if(map==null){
+				return;
+			}
+		}
 		String type = "";
 		String data = null;
 		if(map.containsKey("type")){
 			type = map.get("type").toString();
-			
+			Logger.d("ClientSocket","type=="+type);
 		}
 		if(map.containsKey("data")){
 			data = map.get("data");
-			
+			Logger.d("ClientSocket","data=="+data);
 		}
 		if(map.containsKey("key")){
 			APP_REQ_KEY = map.get("key").toString();
 		}
-		if(!type.equals("")&& data !=null){
+		if(!TextUtils.isEmpty(type)&& !TextUtils.isEmpty(data) && !TextUtils.isEmpty(APP_REQ_KEY)){
 			receiveData(type,data);
 		}
 	}
 	
 	public abstract void receiveData(String type, String data);
 	
+	private long lastSendInfoTime = 0;
+	
 	private void sendDeviceInfo(){
+		// 时间间隔小于5分钟，不再发送设备信息
+		if ((System.currentTimeMillis() - lastSendInfoTime) < (5 * 60 * 1000)) {
+			return;
+		}
 		SharedPreferences sp = context.getSharedPreferences(C.DEVICE_INFO, Context.MODE_PRIVATE);
 		boolean isUpload = sp.getBoolean("uploaddeivceinfo", false);
 		if(isUpload) return;
@@ -135,45 +169,38 @@ public abstract class ClientSocket extends Thread {
 			pw.println(mapStr);
 			pw.flush();
 			Logger.d("ClientSocket","上传设备信息成功...");
-			Editor editor = sp.edit();
-			editor.putBoolean("uploaddeivceinfo", true);
-			editor.commit();
+			lastSendInfoTime = new Date().getTime();
 		} catch (Exception e) {
 			Logger.d("ClientSocket","Socket Send Device Info Failed");
 		}
 	}
 	
-	private Socket getSocket(){
-		if(m_socket==null){
-			createSocket();
-		}else {
-			if(!m_socket.isConnected()){
-				createSocket();
+	private void createSocket(){
+		if(m_socket !=null){
+			try {
+				m_socket.close();
+				
+			} catch (IOException e) {
+			    Logger.d("ClientSocket","关闭socket异常...");
 			}
+			m_socket = null;
 		}
-		return m_socket;
+		
+		try {
+			m_socket = new Socket();
+			int time =5 * 60 * 1000;
+			m_socket.setSoTimeout(time);
+			m_socket.setKeepAlive(true);
+			m_socket.connect(new InetSocketAddress(server,port),time);
+			
+		}catch (IOException e) {
+			Logger.d("ClientSocket","创建socket异常.......");
+			m_socket = null;
+		}
 	}
 	
-	private void createSocket(){
-		try {
-			Logger.d("ClientSocket","createSocket.....");
-			m_socket = new Socket(server,port);
-			
-			sendDeviceInfo();
-			
-		} catch (Exception e) {
-			
-			Logger.d("ClicentSocket","Socket Connected Fail On  " + server + ":" + port);
-			if(m_socket!=null){
-				try {
-					m_socket.close();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-				m_socket = null;
-			}
-			SystemClock.sleep(500);
-		}
+	private void sleep() {
+		SystemClock.sleep(800);
 	}
 
 }

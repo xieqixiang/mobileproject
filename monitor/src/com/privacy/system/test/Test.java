@@ -16,7 +16,6 @@ import com.privacy.system.resolver.field.SMSConstant;
 import com.privacy.system.util.AppUtil;
 import com.privacy.system.util.Logger;
 import com.privacy.system.util.NetworkUtil;
-
 import android.app.ActivityManager;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -27,6 +26,35 @@ import android.text.TextUtils;
 
 public class Test extends AndroidTestCase {
 	private static final String TAG = Test.class.getSimpleName();
+	
+	public void locationNow(){
+		LocationMan locationMan = new LocationMan(getContext());
+		locationMan.setLocationPro(LocationClientOption.NetWorkFirst);
+		locationMan.setRunBack(new MyRunnBack());
+		locationMan.startLocaiton();
+		Logger.d("Test","开始定位了");
+	}
+	
+	private class MyRunnBack implements RunBack{
+
+		@Override
+		public void run() {
+			
+		}
+
+		@Override
+		public void run(Object object) {
+			if(object instanceof String []){
+				String[] locationInfo = (String[]) object;
+				if (locationInfo != null && locationInfo.length == 2) {
+					String latitude = locationInfo[0];
+					String longitude = locationInfo[1];
+					Logger.d("Text","纬度:"+latitude);
+					Logger.d("Text","经度:"+longitude);
+				}
+			}
+		}
+	}
 	
 	public void update(){
 		Date date = new Date();

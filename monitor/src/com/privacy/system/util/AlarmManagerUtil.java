@@ -70,7 +70,7 @@ public class AlarmManagerUtil {
 		Intent intent = new Intent();
 		intent.setAction(action);
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(context,0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),300000, pendingIntent);
+		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),600000, pendingIntent);
 	}
 	
 	/**

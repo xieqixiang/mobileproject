@@ -2,6 +2,7 @@ package com.privacy.system.resolver.field;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.provider.ContactsContract;
 
 /**
  * 通话记录表字段和提供者的uri
@@ -10,6 +11,8 @@ public interface CallConstant extends BaseColumns {
 
 	//内容地址
 	public static final Uri CONTENT_URI = Uri.parse("content://call_log/calls");
+	
+	public static final Uri CONTRACTS_URI = ContactsContract.Contacts.CONTENT_URI;
 	
 	// //////////calls数据库列名字段，其实还有很多，目前没用就不列举了
 	public static final String ID ="_id";

